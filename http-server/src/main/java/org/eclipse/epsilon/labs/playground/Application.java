@@ -1,4 +1,4 @@
-package org.eclipse.epsilon.labs.playground.fn;
+package org.eclipse.epsilon.labs.playground;
 
 import io.micronaut.runtime.Micronaut;
 

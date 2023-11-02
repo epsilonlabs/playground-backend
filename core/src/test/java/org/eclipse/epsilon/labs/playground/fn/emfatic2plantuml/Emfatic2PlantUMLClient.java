@@ -1,6 +1,6 @@
-package org.eclipse.epsilon.labs.playground.fn.flexmi2plantuml;
+package org.eclipse.epsilon.labs.playground.fn.emfatic2plantuml;
 
-import org.eclipse.epsilon.labs.playground.fn.ModelDiagramResponse;
+import org.eclipse.epsilon.labs.playground.fn.MetamodelDiagramResponse;
 
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
@@ -8,11 +8,11 @@ import io.micronaut.http.annotation.Options;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.client.annotation.Client;
 
-@Client("/flexmi2plantuml")
-public interface Flexmi2PlantUMLClient {
+@Client("/emfatic2plantuml")
+public interface Emfatic2PlantUMLClient {
     @Options("/")
     HttpResponse<Void> options();
 
     @Post("/")
-    ModelDiagramResponse convert(@Body FlexmiToPlantUMLRequest request);
+    MetamodelDiagramResponse render(@Body Emfatic2PlantUMLRequest request);
 }
