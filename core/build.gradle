@@ -1,10 +1,10 @@
 plugins {
-    id("io.micronaut.application") version "4.1.2"
+    id("io.micronaut.library") version "4.1.2"
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 version = "0.1"
-group = "org.eclipse.epsilon.labs.playground.fn.flexmi2plantuml"
+group = "org.eclipse.epsilon.labs.playground.micronaut"
 def epsilon_version = "2.4.0"
 
 repositories {
@@ -18,17 +18,11 @@ dependencies {
     annotationProcessor("io.micronaut.serde:micronaut-serde-processor")
     implementation("io.micronaut.serde:micronaut-serde-jackson")
 
-    // For using regular Micronaut @Controller annotations to specify functions
-    implementation("io.micronaut.gcp:micronaut-gcp-function-http")
-    developmentOnly("com.google.cloud.functions:functions-framework-api")
-
-    // To try out the functions locally via a Netty HTTP server
-    developmentOnly("io.micronaut:micronaut-http-server-netty")
-
     // Basic logging
     runtimeOnly("ch.qos.logback:logback-classic")
 
-    testImplementation("com.google.cloud.functions:functions-framework-api")
+    // For testing the functions through the declarative HTTP client
+    testImplementation("io.micronaut:micronaut-http-server-netty")
     testImplementation("io.micronaut:micronaut-http-client")
 
     // Epsilon dependencies
@@ -36,24 +30,20 @@ dependencies {
     implementation("org.eclipse.emf:org.eclipse.emf.ecore:2.23.0")
     implementation("org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.16.0")
     implementation("org.eclipse.emfatic:org.eclipse.emfatic.core:1.1.0-SNAPSHOT")
-	implementation("net.sourceforge.plantuml:plantuml:1.2022.14")
+    implementation("net.sourceforge.plantuml:plantuml:1.2022.14")
 }
 
-
-application {
-    mainClass.set("org.eclipse.epsilon.labs.playground.fn.Application")
-}
 java {
     sourceCompatibility = JavaVersion.toVersion("17")
     targetCompatibility = JavaVersion.toVersion("17")
 }
 
 micronaut {
-    runtime("google_function")
+    runtime("netty")
     testRuntime("junit5")
     processing {
         incremental(true)
-        annotations("org.eclipse.epsilon.labs.playground.fn.flexmi2plantuml.*")
+        annotations("org.eclipse.epsilon.labs.playground.fn.*")
     }
 }
 

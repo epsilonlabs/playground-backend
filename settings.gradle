@@ -1,3 +1,6 @@
 
-rootProject.name="playground-fn-flexmi2plantuml"
+rootProject.name="playground-micronaut"
 
+include 'core'
+include 'http-server'
+include 'gcp-function'

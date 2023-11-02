@@ -1,0 +1,42 @@
+plugins {
+    id("io.micronaut.library") version "4.1.2"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
+}
+
+version = "0.1"
+group = "org.eclipse.epsilon.labs.playground.micronaut"
+def epsilon_version = "2.4.0"
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots"
+    }
+}
+
+dependencies {
+    implementation(project(":core"))
+
+    // For using regular Micronaut @Controller annotations to specify functions
+    implementation("io.micronaut.gcp:micronaut-gcp-function-http")
+    runtimeOnly("com.google.cloud.functions:functions-framework-api")
+
+    testImplementation("com.google.cloud.functions:functions-framework-api")
+}
+
+java {
+    sourceCompatibility = JavaVersion.toVersion("17")
+    targetCompatibility = JavaVersion.toVersion("17")
+}
+
+micronaut {
+    runtime("google_function")
+    testRuntime("junit5")
+    processing {
+        incremental(true)
+        annotations("org.eclipse.epsilon.labs.playground.fn.*")
+    }
+}
+
+
+

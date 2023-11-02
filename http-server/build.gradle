@@ -1,0 +1,42 @@
+plugins {
+    id("io.micronaut.application") version "4.1.2"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
+}
+
+version = "0.1"
+group = "org.eclipse.epsilon.labs.playground.micronaut"
+def epsilon_version = "2.4.0"
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots"
+    }
+}
+
+dependencies {
+    implementation(project(":core"))
+
+    // To try out the functions locally via a Netty HTTP server
+    developmentOnly("io.micronaut:micronaut-http-server-netty")
+}
+
+application {
+    mainClass = "org.eclipse.epsilon.labs.playground.fn.Application"
+}
+java {
+    sourceCompatibility = JavaVersion.toVersion("17")
+    targetCompatibility = JavaVersion.toVersion("17")
+}
+
+micronaut {
+    runtime("netty")
+    testRuntime("junit5")
+    processing {
+        incremental(true)
+        annotations("org.eclipse.epsilon.labs.playground.fn.*")
+    }
+}
+
+
+
