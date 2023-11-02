@@ -26,3 +26,7 @@ micronaut {
         annotations("org.eclipse.epsilon.labs.playground.fn.*")
     }
 }
+
+tasks.named("dockerfile") {
+  baseImage = "eclipse-temurin:17-alpine"
+}
