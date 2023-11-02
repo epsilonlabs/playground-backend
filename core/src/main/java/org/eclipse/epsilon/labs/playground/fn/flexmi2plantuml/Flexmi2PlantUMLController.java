@@ -27,7 +27,7 @@ public class Flexmi2PlantUMLController extends AbstractPlaygroundController {
     public ModelDiagramResponse convert(@Body FlexmiToPlantUMLRequest request) {
         try {
             return generateModelDiagram(modelLoader.getInMemoryFlexmiModel(request.getFlexmi(), request.getEmfatic()));
-        } catch (Exception e) {
+        } catch (Throwable e) {
             var response = new ModelDiagramResponse();
             response.setError(e.getMessage());
             response.setOutput(e.getMessage());

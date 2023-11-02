@@ -27,7 +27,7 @@ public class Emfatic2PlantUMLController {
         try {
             String plantuml = run(request.getEmfatic());
             response.setMetamodelDiagram(plantuml);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             response.setError(e.getMessage());
             response.setOutput(e.getMessage());
         }
