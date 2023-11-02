@@ -8,6 +8,7 @@ import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.emf.emfatic.core.EmfaticResource;
 import org.eclipse.epsilon.emc.emf.InMemoryEmfModel;
 import org.eclipse.epsilon.flexmi.FlexmiResourceFactory;
@@ -35,6 +36,18 @@ public class ModelLoader {
         model.setName("M");
         return model;
     }
+
+	public InMemoryEmfModel getBlankInMemoryModel(String emfatic) throws Exception {
+		ResourceSet resourceSet = new ResourceSetImpl();
+		EPackage ePackage = getEPackage(emfatic);
+		resourceSet.getPackageRegistry().put(ePackage.getNsURI(), ePackage);
+		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
+		Resource resource = resourceSet.createResource(URI.createURI("xmi.xmi"));
+
+		InMemoryEmfModel model = new InMemoryEmfModel(resource);
+		model.setName("M");
+		return model;
+	}
 
     public EPackage getEPackage(String emfatic) throws Exception {
         if (emfatic == null || emfatic.trim().isEmpty())

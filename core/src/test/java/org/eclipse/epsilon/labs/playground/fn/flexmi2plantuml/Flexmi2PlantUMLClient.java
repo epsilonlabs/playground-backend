@@ -1,7 +1,5 @@
 package org.eclipse.epsilon.labs.playground.fn.flexmi2plantuml;
 
-import org.eclipse.epsilon.labs.playground.fn.ModelDiagramResponse;
-
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Options;

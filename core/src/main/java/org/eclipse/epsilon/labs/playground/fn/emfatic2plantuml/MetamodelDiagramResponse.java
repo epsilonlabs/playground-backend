@@ -1,4 +1,6 @@
-package org.eclipse.epsilon.labs.playground.fn;
+package org.eclipse.epsilon.labs.playground.fn.emfatic2plantuml;
+
+import org.eclipse.epsilon.labs.playground.fn.AbstractPlaygroundResponse;
 
 import io.micronaut.serde.annotation.Serdeable;
 

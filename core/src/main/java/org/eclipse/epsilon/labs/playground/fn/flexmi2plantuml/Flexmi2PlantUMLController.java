@@ -7,7 +7,6 @@ import org.eclipse.epsilon.egl.EglTemplateFactoryModuleAdapter;
 import org.eclipse.epsilon.emc.emf.InMemoryEmfModel;
 import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.eclipse.epsilon.labs.playground.fn.AbstractPlaygroundController;
-import org.eclipse.epsilon.labs.playground.fn.ModelDiagramResponse;
 import org.eclipse.epsilon.labs.playground.fn.ModelLoader;
 
 import io.micronaut.http.annotation.Body;
@@ -27,7 +26,7 @@ public class Flexmi2PlantUMLController extends AbstractPlaygroundController {
     @Post("/")
     public ModelDiagramResponse convert(@Body FlexmiToPlantUMLRequest request) {
         try {
-            return run(modelLoader.getInMemoryFlexmiModel(request.getFlexmi(), request.getEmfatic()));
+            return generateModelDiagram(modelLoader.getInMemoryFlexmiModel(request.getFlexmi(), request.getEmfatic()));
         } catch (Exception e) {
             var response = new ModelDiagramResponse();
             response.setError(e.getMessage());
@@ -36,7 +35,7 @@ public class Flexmi2PlantUMLController extends AbstractPlaygroundController {
         }
     }
 
-    public ModelDiagramResponse run(InMemoryEmfModel model, Variable... variables) throws Exception {
+    public ModelDiagramResponse generateModelDiagram(InMemoryEmfModel model, Variable... variables) throws Exception {
         EglTemplateFactoryModuleAdapter module = new EglTemplateFactoryModuleAdapter();
         module.parse(Flexmi2PlantUMLController.class.getResource("/flexmi2plantuml.egl").toURI());
         model.setName("M");

@@ -5,7 +5,6 @@ import java.io.File;
 import java.nio.charset.Charset;
 
 import org.eclipse.epsilon.egl.EglTemplateFactoryModuleAdapter;
-import org.eclipse.epsilon.labs.playground.fn.MetamodelDiagramResponse;
 import org.eclipse.epsilon.labs.playground.fn.ModelLoader;
 
 import io.micronaut.http.annotation.Body;
