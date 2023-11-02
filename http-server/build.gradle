@@ -37,6 +37,3 @@ micronaut {
         annotations("org.eclipse.epsilon.labs.playground.fn.*")
     }
 }
-
-
-
