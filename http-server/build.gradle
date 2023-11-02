@@ -3,17 +3,6 @@ plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
-version = "0.1"
-group = "org.eclipse.epsilon.labs.playground.micronaut"
-def epsilon_version = "2.4.0"
-
-repositories {
-    mavenCentral()
-    maven {
-        url "https://oss.sonatype.org/content/repositories/snapshots"
-    }
-}
-
 dependencies {
     implementation(project(":core"))
 
@@ -22,7 +11,7 @@ dependencies {
 }
 
 application {
-    mainClass = "org.eclipse.epsilon.labs.playground.fn.Application"
+    mainClass = "org.eclipse.epsilon.labs.playground.Application"
 }
 java {
     sourceCompatibility = JavaVersion.toVersion("17")

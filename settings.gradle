@@ -4,3 +4,12 @@ rootProject.name="playground-micronaut"
 include 'core'
 include 'http-server'
 include 'gcp-function'
+
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://oss.sonatype.org/content/repositories/snapshots"
+        }
+    }
+}

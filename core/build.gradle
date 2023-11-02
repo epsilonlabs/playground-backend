@@ -3,21 +3,11 @@ plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
-version = "0.1"
-group = "org.eclipse.epsilon.labs.playground.micronaut"
-def epsilon_version = "2.4.0"
-
-repositories {
-    mavenCentral()
-    maven {
-        url "https://oss.sonatype.org/content/repositories/snapshots"
-    }
-}
-
 dependencies {
     annotationProcessor("io.micronaut.serde:micronaut-serde-processor")
-    annotationProcessor("io.micronaut.validation:micronaut-validation-processor")
     implementation("io.micronaut.serde:micronaut-serde-jackson")
+
+    annotationProcessor("io.micronaut.validation:micronaut-validation-processor")
     implementation("io.micronaut.validation:micronaut-validation")
 
     // Basic logging
@@ -28,22 +18,22 @@ dependencies {
     testImplementation("io.micronaut:micronaut-http-client")
 
     // Epsilon dependencies - Flexmi, Ecore and PlantUML
-    implementation("org.eclipse.epsilon:org.eclipse.epsilon.flexmi:${epsilon_version}")
+    implementation("org.eclipse.epsilon:org.eclipse.epsilon.flexmi:${epsilonVersion}")
     implementation("org.eclipse.emf:org.eclipse.emf.ecore:2.23.0")
     implementation("org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.16.0")
     implementation("org.eclipse.emfatic:org.eclipse.emfatic.core:1.1.0-SNAPSHOT")
     implementation("net.sourceforge.plantuml:plantuml:1.2022.14")
 
     // Epsilon languages
-    implementation("org.eclipse.epsilon:org.eclipse.epsilon.eol.engine:${epsilon_version}")
-    implementation("org.eclipse.epsilon:org.eclipse.epsilon.etl.engine:${epsilon_version}")
-    implementation("org.eclipse.epsilon:org.eclipse.epsilon.evl.engine:${epsilon_version}")
-    implementation("org.eclipse.epsilon:org.eclipse.epsilon.ecl.engine:${epsilon_version}")
-    implementation("org.eclipse.epsilon:org.eclipse.epsilon.epl.engine:${epsilon_version}")
-    implementation("org.eclipse.epsilon:org.eclipse.epsilon.erl.engine:${epsilon_version}")
-    implementation("org.eclipse.epsilon:org.eclipse.epsilon.flock.engine:${epsilon_version}")
-    implementation("org.eclipse.epsilon:org.eclipse.epsilon.egl.engine:${epsilon_version}")
-    implementation("org.eclipse.epsilon:org.eclipse.epsilon.eml.engine:${epsilon_version}")
+    implementation("org.eclipse.epsilon:org.eclipse.epsilon.eol.engine:${epsilonVersion}")
+    implementation("org.eclipse.epsilon:org.eclipse.epsilon.etl.engine:${epsilonVersion}")
+    implementation("org.eclipse.epsilon:org.eclipse.epsilon.evl.engine:${epsilonVersion}")
+    implementation("org.eclipse.epsilon:org.eclipse.epsilon.ecl.engine:${epsilonVersion}")
+    implementation("org.eclipse.epsilon:org.eclipse.epsilon.epl.engine:${epsilonVersion}")
+    implementation("org.eclipse.epsilon:org.eclipse.epsilon.erl.engine:${epsilonVersion}")
+    implementation("org.eclipse.epsilon:org.eclipse.epsilon.flock.engine:${epsilonVersion}")
+    implementation("org.eclipse.epsilon:org.eclipse.epsilon.egl.engine:${epsilonVersion}")
+    implementation("org.eclipse.epsilon:org.eclipse.epsilon.eml.engine:${epsilonVersion}")
 }
 
 java {

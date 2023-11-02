@@ -3,16 +3,11 @@ plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
-version = "0.1"
-group = "org.eclipse.epsilon.labs.playground.micronaut"
-def epsilon_version = "2.4.0"
-
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     implementation(project(":core"))
+
+    annotationProcessor("io.micronaut.serde:micronaut-serde-processor")
+    implementation("io.micronaut.serde:micronaut-serde-jackson")
 
     // For using regular Micronaut @Controller annotations to specify functions
     implementation("io.micronaut.gcp:micronaut-gcp-function-http")
