@@ -1,0 +1,137 @@
+[%import "shared.eol";%]
+@startuml
+hide circle
+skinparam roundCorner 0
+hide empty methods
+skinparam classBorderThickness 1
+!pragma layout smetana
+skinparam classFontName system-ui
+
+[%
+var colors = getColors();
+%]
+
+[%for (c in EClass.all){%]
+[%if(c.isAbstract){%]abstract [%}%]class [%=c.name%] #[%=colors.get(c.eContainer().eContents().indexOf(c).mod(colors.size()))%] {
+	[%for (f in c.eStructuralFeatures){%]
+	[%=f.getLabel()%]
+	[%}%]
+}
+[%for (s in c.eSuperTypes){%]
+[%=c.getEdge(s)%]
+[%}%]
+[%}%]
+
+[%for (r in getUnidirectionalReferences().includingAll(getBidirectionalReferences())){%]
+[%=r.getEdge()%]
+[%}%]
+@enduml
+[*%out.toString().println();%*]
+[%
+
+operation EClass getEdge(supertype : EClass) {
+	var direction = self.getAnnotationValue("diagram","inheritance.direction");
+	if (direction == null) direction = "up";
+	
+	switch (direction) {
+		case "up": return supertype.name + " <|-- " + self.name;
+		case "down": return self.name + " --|> " +  supertype.name;
+		case "right": return self.name + " -|> " +  supertype.name;
+		case "left": return supertype.name + " <|- " + self.name;
+	}
+}
+
+operation EClass getExtends() {
+	if (self.eSuperTypes.isEmpty()) return "";
+	else return "extends " + self.eSuperTypes.name.concat(", ");
+}
+
+operation EReference getEdge() {
+	
+	var direction = self.getAnnotationValue("diagram","direction");
+	if (direction == null) direction = self.isContainment ? "down" : "right";
+	
+	var selfLeftEnd = self.isContainment ? "*" : (self.eOpposite.isDefined() ? "<" : "");
+	var selfRightEnd = self.isContainment ? "*" : (self.eOpposite.isDefined() ? ">" : "");
+	var otherLeftEnd = self.eOpposite.isDefined() ? (self.eOpposite.isContainment ? "*" : "<") : "<" ;
+	var otherRightEnd = self.eOpposite.isDefined() ? (self.eOpposite.isContainment ? "*" : ">") : ">" ;
+	
+	var edge = "";
+	
+	switch (direction) {
+		case "up": edge = self.eType.name + " " + otherLeftEnd + "--" + selfRightEnd + " " + self.eContainer().name;
+		case "down": edge = self.eContainer().name + " " +  selfLeftEnd + "--" + otherRightEnd + " " +  self.eType.name;
+		case "right": edge = self.eContainer().name + " " +  selfLeftEnd + "-" + otherRightEnd + " " +  self.eType.name;
+		case "left": edge = self.eType.name + " " +  otherLeftEnd + "-" + selfRightEnd + " " +  self.eContainer().name;
+	}
+	
+	edge += ': "\t"';
+	return edge;
+	
+}
+
+operation EStructuralFeature getLabel() {
+	var label = self.name;
+	if (self.isDerived()) label = "/" + label;
+	if (self.eType.isDefined()) label += " : " + self.eType.name;
+	label += self.getMultiplicityLabel();
+	label += "  ";
+	return label; 
+}
+
+operation EStructuralFeature getMultiplicityLabel() {
+	var label = "";
+	if (self.isMany) {
+		label += "[";
+		if (self.lowerBound <> 0) label += self.lowerBound + "..";
+		if (self.upperBound == -1) {
+			label += "*";
+		}
+		else {
+			label += self.upperBound;
+		}
+		label += "]";
+	}
+	return label;
+}
+
+@cached
+operation getUnidirectionalReferences() {
+	var bidirectionalReferences = getBidirectionalReferences();
+	return getVisibleReferences().excludingAll(bidirectionalReferences).
+		excludingAll(bidirectionalReferences.eOpposite);
+}
+
+@cached
+operation getBidirectionalReferences() {
+	var references = getVisibleReferences();
+	return references.select(r|r.eOpposite.isDefined() and references.indexOf(r) < references.indexOf(r.eOpposite));
+}
+
+@cached
+operation getVisibleReferences() { 
+	return EReference.all;
+}
+
+operation EModelElement getAnnotationValue(name : String, detail : String) : Any {
+	var ann := self.eAnnotations.selectOne(a|a.source = name);
+	var det;
+
+	if (ann.isDefined()) {
+		det := ann.details.selectOne(d|d.key = detail);
+	}
+
+	if (det.isDefined()) {
+		return det.value;
+	}
+	else if (self.isTypeOf(EClass)) {
+		for (s in self.eSuperTypes) {
+			var sann := s.getAnnotationValue(name, detail);
+			if (sann.isDefined()) {
+				return sann;
+			}
+		}
+	}
+	return det;	
+}
+%]

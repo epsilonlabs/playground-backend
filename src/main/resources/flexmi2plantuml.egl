@@ -1,0 +1,109 @@
+[%import "shared.eol";%]
+@startuml
+skinparam roundCorner 0
+skinparam objectBorderThickness 1
+!pragma layout smetana
+skinparam classFontName system-ui
+
+[%
+var elements = M.allInstances();
+var colors = getColors();
+%]
+
+[%for (e in elements) { %]
+object "[%=e.getNodeLabel()%]" as [%=e.getNodeId()%] #[%=colors.get(e.eClass().eContainer().eContents().indexOf(e.eClass()).mod(colors.size()))%] {
+	[%var attributes = e.eClass().getEAllAttributes().select(attr|e.eIsSet(attr));%]
+	[%for (attr in attributes){%]
+	[%=attr.name%] = [%=e.getAttributeValue(attr)%]
+	[%}%]
+}
+[%}%]
+
+[*Generate an edge for every reference between elements omitting opposites*]
+[%for (e in elements) {%]
+[%for (r in e.getReferenced()) {%]
+[%for (v in r.at(0).select(r|M.allInstances().includes(r))){%]
+[%if (r.at(1).eOpposite.isUndefined() or r.at(1).eOpposite.name.compareTo(r.at(1).name) > 0){%]
+
+[%=e.getNodeId()%] --> [%=v.getNodeId()%] [%=getReferenceLabel(e, v, r.at(1))%]
+[%}}}}%]
+
+[*Generate validation nodes*]
+[%if (unsatisfiedConstraints.isDefined()){%]
+[%for (uc in unsatisfiedConstraints){%]
+note top of [%=uc.getInstance().getNodeId()%] #[%=uc.getConstraint().getConstraintColour()%]
+  [%=uc.getMessage()%]
+end note
+[%}%]
+[%}%]
+
+[*Generate pattern nodes*]
+[%if (matches.isDefined()){%]
+[%for (match in matches){%]
+[%var matchNodeId = "match" + loopCount;%]
+note "[%=match.pattern.name%]" as [%=matchNodeId%] #gold
+
+[%for (key in match.roleBindings.keySet()){%]
+[%var values = match.roleBindings.get(key).asSequence();%]
+[%for (value in values){%]
+[%=matchNodeId%] .. [%=value.getNodeId()%]: [%=key%]
+[%}%]
+[%}%]
+[%}%]
+[%}%]
+	
+@enduml
+[%
+operation Any getNodeId() {
+	return "N" + M.allInstances().indexOf(self);
+}
+operation Any getNodeLabel() {
+	return ":" + self.eClass().name + " ";
+}
+
+operation Any getAttributeValue(attr) {
+	var value = self.eGet(attr) + "";
+	value = value.escapeXml();
+	var chopped = false;
+	if (value.indexOf("\n").asVar("newLineIndex") > -1) {
+		value = value.substring(0, newLineIndex);
+		chopped = true;
+	}
+	if (value.length() > 25) { 
+		value = value.substring(0, 25);
+		chopped = true;
+	}
+	if (chopped) value += " ...";
+	return value;
+}
+
+operation Any getReferenced() {
+
+	if (self.isUndefined()) return Sequence{};
+
+	var c = self.eClass();
+	var referenced : Sequence;
+	for (r in c.getEAllReferences()) {
+		referenced.add(Sequence{self.eGet(r).asSequence(), r});
+	}
+	return referenced;
+}
+operation getReferenceLabel(s, t, r) {
+	
+	for (ref in s.eClass().getEAllReferences()) {
+		if (ref.eType.isSuperTypeOf(t.eClass()) and r <> ref) {
+			return " : " + r.name;
+		}
+	}
+	return "";
+}
+
+operation Integer mod(i : Integer) {
+return self - (self/i * i);
+}
+
+operation Any getConstraintColour() {
+	if (self.isCritique()) return "khaki";
+	else return "mistyrose";
+}
+%]
