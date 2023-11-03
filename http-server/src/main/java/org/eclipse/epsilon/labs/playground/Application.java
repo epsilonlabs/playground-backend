@@ -15,7 +15,8 @@ public class Application {
             builder.defaultEnvironments("", "http");
         }
     }
-     public static void main(String[] args) {
+
+    public static void main(String[] args) {
         Micronaut.run(Application.class, args);
     }
 }
