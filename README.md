@@ -12,13 +12,13 @@ The project is divided into three modules:
 
 ## Endpoints
 
+The endpoints are [CORS](https://fetch.spec.whatwg.org/)-aware: they allow requests from any origin with any headers and a `Max-Age` set to 1 hour, but only with the methods listed below.
+
 ### Core endpoints
 
 * `POST /emfatic2plantuml`: transforms a metamodel written in [Emfatic](https://eclipse.dev/emfatic/) to a [PlantUML class diagram](https://plantuml.com/class-diagram).
 * `POST /flexmi2plantuml`: transforms a model written in [Flexmi](https://eclipse.dev/epsilon/doc/flexmi/) that conforms to a metamodel written in Emfatic to a PlantUML class diagram.
 * `POST /epsilon`: runs an Epsilon script against a given set of metamodels (written in Emfatic) and models (written in Flexmi).
-
-These endpoints accept the `OPTIONS` method as well.
 
 ### Additional endpoints for the HTTP server
 
@@ -27,8 +27,6 @@ These endpoints accept the `OPTIONS` method as well.
 ### Additional endpoints for the Google Cloud Function
 
 * `POST /shorturl`: allows for storing work in Google Cloud Storage and retrieving it later.
-
-These endpoints accept the `OPTIONS` method as well.
 
 ## Building the project
 
