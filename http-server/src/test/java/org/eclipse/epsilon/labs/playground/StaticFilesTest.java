@@ -11,7 +11,7 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import reactor.core.publisher.Flux;
 
-@MicronautTest
+@MicronautTest(environments = "http")
 public class StaticFilesTest {
 
     @Client("/")
