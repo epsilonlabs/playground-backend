@@ -20,6 +20,10 @@ The project is divided into three modules:
 
 These endpoints accept the `OPTIONS` method as well.
 
+### Additional endpoints for the HTTP server
+
+* `GET /tools`: returns a JSON document according to the [MDENet Education Platform tool specification](https://github.com/mdenet/educationplatform/wiki/Adding-a-Tool).
+
 ### Additional endpoints for the Google Cloud Function
 
 * `POST /shorturl`: allows for storing work in Google Cloud Storage and retrieving it later.
