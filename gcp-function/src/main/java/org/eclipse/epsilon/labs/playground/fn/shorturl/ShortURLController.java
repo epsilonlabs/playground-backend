@@ -3,8 +3,6 @@ package org.eclipse.epsilon.labs.playground.fn.shorturl;
 import java.io.FileInputStream;
 import java.util.UUID;
 
-import org.eclipse.epsilon.labs.playground.fn.AbstractPlaygroundController;
-
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
@@ -17,7 +15,7 @@ import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
 
 @Controller("/shorturl")
-public class ShortURLController extends AbstractPlaygroundController {
+public class ShortURLController {
 
 	@Post("/")
 	public ShortURLMessage shorten(@Body ShortURLMessage request) {

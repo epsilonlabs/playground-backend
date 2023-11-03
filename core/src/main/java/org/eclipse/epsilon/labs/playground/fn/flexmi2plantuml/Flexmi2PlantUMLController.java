@@ -6,7 +6,6 @@ import java.nio.charset.Charset;
 import org.eclipse.epsilon.egl.EglTemplateFactoryModuleAdapter;
 import org.eclipse.epsilon.emc.emf.InMemoryEmfModel;
 import org.eclipse.epsilon.eol.execute.context.Variable;
-import org.eclipse.epsilon.labs.playground.fn.AbstractPlaygroundController;
 import org.eclipse.epsilon.labs.playground.fn.ModelLoader;
 
 import io.micronaut.http.annotation.Body;
@@ -17,8 +16,9 @@ import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
 
-@Controller("/flexmi2plantuml")
-public class Flexmi2PlantUMLController extends AbstractPlaygroundController {
+@Controller(Flexmi2PlantUMLController.PATH)
+public class Flexmi2PlantUMLController {
+    public static final String PATH = "/flexmi2plantuml";
 
     @Inject
     ModelLoader modelLoader;

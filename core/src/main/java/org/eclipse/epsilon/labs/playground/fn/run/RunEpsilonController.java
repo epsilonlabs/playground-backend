@@ -22,7 +22,6 @@ import org.eclipse.epsilon.epl.EplModule;
 import org.eclipse.epsilon.etl.EtlModule;
 import org.eclipse.epsilon.evl.EvlModule;
 import org.eclipse.epsilon.flock.FlockModule;
-import org.eclipse.epsilon.labs.playground.fn.AbstractPlaygroundController;
 import org.eclipse.epsilon.labs.playground.fn.ModelLoader;
 import org.eclipse.epsilon.labs.playground.fn.flexmi2plantuml.Flexmi2PlantUMLController;
 import org.eclipse.epsilon.labs.playground.fn.run.EpsilonExecutionResponse.GeneratedFile;
@@ -33,8 +32,9 @@ import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
 import jakarta.inject.Inject;
 
-@Controller("/epsilon")
-public class RunEpsilonController extends AbstractPlaygroundController {
+@Controller(RunEpsilonController.PATH)
+public class RunEpsilonController {
+	public static final String PATH = "/epsilon";
 
 	@Inject
 	ModelLoader loader;

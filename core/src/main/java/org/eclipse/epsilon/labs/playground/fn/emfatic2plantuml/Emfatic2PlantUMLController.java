@@ -15,8 +15,10 @@ import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
 
-@Controller("/emfatic2plantuml")
+@Controller(Emfatic2PlantUMLController.PATH)
 public class Emfatic2PlantUMLController {
+    public static final String PATH = "/emfatic2plantuml";
+
     @Inject
     ModelLoader loader;
 
