@@ -33,7 +33,7 @@ The endpoints are [CORS](https://fetch.spec.whatwg.org/)-aware: they allow reque
 
 * `GET /tools`: returns a JSON document according to the [MDENet Education Platform tool specification](https://github.com/mdenet/educationplatform/wiki/Adding-a-Tool).
 
-The HTTP server includes static assets for providing [ACE](https://ace.c9.io/)-based syntax highlighting and icons.
+The HTTP server includes static assets for providing [Ace](https://ace.c9.io/)-based syntax highlighting and icons.
 
 ### Additional endpoints for the Google Cloud Function
 
