@@ -1,7 +1,6 @@
 package org.eclipse.epsilon.labs.playground.fn.emfatic2plantuml;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.nio.charset.Charset;
 
 import org.eclipse.epsilon.egl.EglTemplateFactoryModuleAdapter;
