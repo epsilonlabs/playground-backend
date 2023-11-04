@@ -2,6 +2,13 @@
 
 This project provides an alternative [Micronaut](https://micronaut.io/)-based implementation of the microservices needed for the [Playground](https://github.com/epsilonlabs/playground) of the [Eclipse Epsilon](https://eclipse.org/epsilon) project.
 
+## Dependencies
+
+To build this project, you will need:
+
+- [Java 17](https://adoptium.net/) (for Micronaut 4.x)
+- [Node.js 16](https://nodejs.org/en) (for packing the JavaScript files in `http-server`)
+
 ## Structure
 
 The project is divided into three modules:
@@ -23,6 +30,8 @@ The endpoints are [CORS](https://fetch.spec.whatwg.org/)-aware: they allow reque
 ### Additional endpoints for the HTTP server
 
 * `GET /tools`: returns a JSON document according to the [MDENet Education Platform tool specification](https://github.com/mdenet/educationplatform/wiki/Adding-a-Tool).
+
+The HTTP server includes static assets for providing [ACE](https://ace.c9.io/)-based syntax highlighting and icons.
 
 ### Additional endpoints for the Google Cloud Function
 
