@@ -96,7 +96,7 @@
             },
 
             {
-                "id": "function-flexmi2plantuml",
+                "id": "function-emfatic2plantuml",
                 "name": "EmfaticToPlantUML",
                 "parameters": [ {"name":"emfatic", "type":"emfatic"} ],
                 "returnType": "diagram",
