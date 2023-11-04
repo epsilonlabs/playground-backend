@@ -37,7 +37,7 @@ public class Flexmi2PlantUMLController {
 
     public ModelDiagramResponse generateModelDiagram(InMemoryEmfModel model, Variable... variables) throws Exception {
         EglTemplateFactoryModuleAdapter module = new EglTemplateFactoryModuleAdapter();
-        module.parse(Flexmi2PlantUMLController.class.getResource("/flexmi2plantuml.egl").toURI());
+        module.parse(getClass().getResource("/flexmi2plantuml.egl").toURI());
         model.setName("M");
         module.getContext().getModelRepository().addModel(model);
         module.getContext().getFrameStack().put(variables);

@@ -39,7 +39,7 @@ public class Emfatic2PlantUMLController {
 
    	protected String run(String emfatic) throws Exception {
 		EglTemplateFactoryModuleAdapter module = new EglTemplateFactoryModuleAdapter();
-		module.parse(new File("src/main/resources/emfatic2plantuml.egl"));
+		module.parse(getClass().getResource("/emfatic2plantuml.egl").toURI());
 		module.getContext().getModelRepository().addModel(loader.getInMemoryEmfaticModel(emfatic));
 		String plantUml = module.execute() + "";
 		
