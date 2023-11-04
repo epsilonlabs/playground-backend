@@ -237,7 +237,15 @@
                       "hint": "Emfatic Website"
                     }
                 ]
+            },
+
+            {
+                "id": "emfgraph",
+                "name": "emfgraphviz",
+                "panelclass": "OutputPanel",
+                "icon": "diagram"
             }
+
         ]
     }
 
