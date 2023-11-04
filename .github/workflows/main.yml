@@ -1,4 +1,4 @@
-name: Push to Container Registry
+name: Main branch
 
 on:
   push:
