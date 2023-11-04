@@ -9,6 +9,8 @@ To build this project, you will need:
 - [Java 17](https://adoptium.net/) (for Micronaut 4.x)
 - [Node.js 16](https://nodejs.org/en) (for packing the JavaScript files in `http-server`)
 
+Alternatively, you can open this project in [VS Code](https://code.visualstudio.com/) and use the provided [development container](https://code.visualstudio.com/docs/devcontainers/containers), which includes both.
+
 ## Structure
 
 The project is divided into three modules:
