@@ -38,6 +38,10 @@ tasks.named("dockerfile") {
   baseImage = "eclipse-temurin:17-alpine"
 }
 
+tasks.named("dockerBuild") {
+    images = ["ghcr.io/epsilonlabs/playground-micronaut:$project.version"]
+}
+
 // Webpack for syntax highlighting
 
 def webpackBuildDir = "build/webpack"
