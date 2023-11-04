@@ -53,7 +53,7 @@ task webpack(type: Exec) {
     outputs.dir(webpackBuildDir)
     outputs.cacheIf { true }
 
-    commandLine "$projectDir/node_modules/.bin/webpack"
+    commandLine 'sh', '-c', "npm ci && node_modules/.bin/webpack"
 }
 
 sourceSets {
