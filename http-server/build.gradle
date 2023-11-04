@@ -38,3 +38,33 @@ micronaut {
 tasks.named("dockerfile") {
   baseImage = "eclipse-temurin:17-alpine"
 }
+
+// Webpack for syntax highlighting
+
+def webpackBuildDir = "build/webpack"
+
+task webpack(type: Exec) {
+    inputs.file("package-lock.json").withPathSensitivity(PathSensitivity.RELATIVE)
+    inputs.dir("src/main/js").withPathSensitivity(PathSensitivity.RELATIVE)
+    inputs.file("webpack.config.js")
+    outputs.dir(webpackBuildDir)
+    outputs.cacheIf { true }
+
+    commandLine "$projectDir/node_modules/.bin/webpack"
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDir webpackBuildDir
+        }
+    }
+}
+
+tasks.named('processResources') {
+    dependsOn webpack
+}
+
+tasks.named('inspectRuntimeClasspath') {
+    dependsOn webpack
+}

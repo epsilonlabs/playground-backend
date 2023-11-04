@@ -1,0 +1,13 @@
+{
+  "name": "http-server",
+  "version": "0.1.0",
+  "description": "HTTP server for Playground microservices",
+  "author": "Epsilon Labs",
+  "license": "EPL-2.0",
+  "dependencies": {
+    "ace-builds": "^1.14.0"
+  },
+  "devDependencies": {
+    "webpack-cli": "^5.1.4"
+  }
+}
