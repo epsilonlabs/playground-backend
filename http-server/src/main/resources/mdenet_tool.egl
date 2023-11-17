@@ -246,8 +246,14 @@
                 "name": "emfgraphviz",
                 "panelclass": "OutputPanel",
                 "icon": "diagram"
-            }
+            },
 
+            {
+                    "id": "code",
+                    "name": "code",
+                    "panelclass": "OutputPanel",
+                    "icon": "editor"
+            }
         ]
     }
 
