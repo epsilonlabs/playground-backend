@@ -205,8 +205,8 @@
                 "language": "flexmi",
                 "buttons" : [
                     {
-                      "id": "refresh-button",
-                      "icon": "refresh",
+                      "id": "render-button",
+                      "icon": "diagram",
                       "actionfunction": "function-flexmi2plantuml",
                       "hint": "Render the model object diagram"
                     },
@@ -227,8 +227,8 @@
                 "language": "emfatic",
                 "buttons" : [
                     {
-                      "id": "refresh-button",
-                      "icon": "refresh",
+                      "id": "render-button",
+                      "icon": "diagram",
                       "actionfunction": "function-emfatic2plantuml",
                       "hint": "Render the model object diagram"
                     },
@@ -249,10 +249,10 @@
             },
 
             {
-                    "id": "code",
-                    "name": "code",
-                    "panelclass": "OutputPanel",
-                    "icon": "editor"
+                "id": "code",
+                "name": "code",
+                "panelclass": "OutputPanel",
+                "icon": "editor"
             }
         ]
     }
