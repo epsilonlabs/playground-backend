@@ -66,6 +66,12 @@ To run the HTTP server locally, run:
 ./gradlew run
 ```
 
+To customise the port used for the HTTP server, you can use the `MICRONAUT_SERVER_PORT` environment variable:
+
+```bash
+MICRONAUT_SERVER_PORT=8010 ./gradlew run
+```
+
 ### From the Docker image
 
 This project publishes [a Docker image](https://github.com/epsilonlabs/playground-micronaut/pkgs/container/playground-micronaut) to the Github Container Registry from its `main` branch.
