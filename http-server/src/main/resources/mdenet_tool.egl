@@ -66,6 +66,25 @@
             },
 
             {
+                "id": "function-egx",
+                "name": "egx",
+                "parameters": [ {"name":"language", "type":"text"},
+                                {"name":"outputType", "type":"text"},
+                                {"name":"outputLanguage", "type":"text"},
+                                {"name":"program", "type":"egx"},
+                                {"name":"secondProgram", "type":"egl"},
+                                {"name":"emfatic", "type":"emfatic"},
+                                {"name":"flexmi", "type":"flexmi", "instanceOf": "emfatic"},
+                                {"name":"secondEmfatic", "type":"emfatic"},
+                                {"name":"secondFlexmi", "type":"flexmi", "instanceOf": "secondEmfatic"},
+                                {"name":"thirdEmfatic", "type":"emfatic"},
+                                {"name":"thirdFlexmi", "type":"flexmi", "instanceOf": "thirdEmfatic"}
+                    ],
+                "returnType": "text",
+                "path": "[%= urls.get("epsilon") %]"
+            },
+
+            {
                 "id": "function-evl",
                 "name": "evl",
                 "parameters": [ {"name":"language", "type":"text"},
@@ -171,6 +190,29 @@
                       "icon": "info",
                       "url": "https://www.eclipse.org/epsilon/doc/egl/",
                       "hint": "EGL Language Reference"
+                    }
+                ]
+            },
+
+            {
+                "id": "egx",
+                "name": "egx",
+                "panelclass": "ProgramPanel",
+                "icon": "egx",
+                "help": "https://www.eclipse.org/epsilon/doc/egx/",
+                "language": "egx",
+                "buttons" : [
+                    {
+                      "id": "action-button",
+                      "icon": "run",
+                      "actionfunction": "function-egx",
+                      "hint": "Run the program"
+                    },
+                    {
+                      "id": "help-button",
+                      "icon": "info",
+                      "url": "https://www.eclipse.org/epsilon/doc/egx/",
+                      "hint": "EGX Language Reference"
                     }
                 ]
             },
