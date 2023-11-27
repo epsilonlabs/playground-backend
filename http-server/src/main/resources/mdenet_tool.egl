@@ -295,6 +295,14 @@
                 "name": "code",
                 "panelclass": "OutputPanel",
                 "icon": "editor"
+            },
+
+            {
+                "id": "multicode",
+                "name": "code",
+                "panelclass": "OutputPanel",
+                "icon": "editor",
+                "language": "multi"
             }
         ]
     }
