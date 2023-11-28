@@ -143,7 +143,7 @@
                       "id": "action-button",
                       "icon": "run",
                       "actionfunction": "function-eol",
-                      "hint": "Run the program (Ctrl/Cmd+S)"
+                      "hint": "Run the program"
                     },
                     {
                       "id": "help-button",
@@ -165,7 +165,7 @@
                       "id": "action-button",
                       "icon": "run",
                       "actionfunction": "function-etl",
-                      "hint": "Run the program (Ctrl/Cmd+S)"
+                      "hint": "Run the program"
                     },
                     {
                       "id": "help-button",
@@ -188,7 +188,7 @@
                       "id": "action-button",
                       "icon": "run",
                       "actionfunction": "function-egl",
-                      "hint": "Run the program (Ctrl/Cmd+S)"
+                      "hint": "Run the program"
                     },
                     {
                       "id": "help-button",
@@ -233,7 +233,7 @@
                       "id": "action-button",
                       "icon": "run",
                       "actionfunction": "function-evl",
-                      "hint": "Run the program (Ctrl/Cmd+S)"
+                      "hint": "Run the program"
                     },
                     {
                       "id": "help-button",
