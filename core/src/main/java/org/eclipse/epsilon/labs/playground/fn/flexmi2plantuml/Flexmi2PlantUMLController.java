@@ -3,8 +3,8 @@ package org.eclipse.epsilon.labs.playground.fn.flexmi2plantuml;
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.Charset;
 
-import org.eclipse.epsilon.egl.EglTemplateFactoryModuleAdapter;
 import org.eclipse.epsilon.emc.emf.InMemoryEmfModel;
+import org.eclipse.epsilon.egl.EglModule;
 import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.eclipse.epsilon.labs.playground.fn.ModelLoader;
 
@@ -35,8 +35,8 @@ public class Flexmi2PlantUMLController {
         }
     }
 
-    public ModelDiagramResponse generateModelDiagram(InMemoryEmfModel model, Variable... variables) throws Exception {
-        EglTemplateFactoryModuleAdapter module = new EglTemplateFactoryModuleAdapter();
+    public ModelDiagramResponse generateModelDiagram(Model model, Variable... variables) throws Exception {
+        EglModule module = new EglModule();
         module.parse(getClass().getResource("/flexmi2plantuml.egl").toURI());
         model.setName("M");
         module.getContext().getModelRepository().addModel(model);

@@ -3,7 +3,7 @@ package org.eclipse.epsilon.labs.playground.fn.emfatic2plantuml;
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.Charset;
 
-import org.eclipse.epsilon.egl.EglTemplateFactoryModuleAdapter;
+import org.eclipse.epsilon.egl.EglModule;
 import org.eclipse.epsilon.labs.playground.fn.ModelLoader;
 
 import io.micronaut.http.annotation.Body;
@@ -37,7 +37,7 @@ public class Emfatic2PlantUMLController {
     }
 
    	protected String run(String emfatic) throws Exception {
-		EglTemplateFactoryModuleAdapter module = new EglTemplateFactoryModuleAdapter();
+		EglModule module = new EglModule();
 		module.parse(getClass().getResource("/emfatic2plantuml.egl").toURI());
 		module.getContext().getModelRepository().addModel(loader.getInMemoryEmfaticModel(emfatic));
 		String plantUml = module.execute() + "";

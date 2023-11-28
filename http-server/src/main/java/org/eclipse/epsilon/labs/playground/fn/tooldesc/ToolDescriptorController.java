@@ -2,7 +2,7 @@ package org.eclipse.epsilon.labs.playground.fn.tooldesc;
 
 import java.util.HashMap;
 
-import org.eclipse.epsilon.egl.EglTemplateFactoryModuleAdapter;
+import org.eclipse.epsilon.egl.EglModule;
 import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.eclipse.epsilon.labs.playground.fn.emfatic2plantuml.Emfatic2PlantUMLController;
 import org.eclipse.epsilon.labs.playground.fn.flexmi2plantuml.Flexmi2PlantUMLController;
@@ -29,7 +29,7 @@ public class ToolDescriptorController {
     @Get("/")
     public HttpResponse<String> render(HttpRequest<?> request) {
         try {
-            EglTemplateFactoryModuleAdapter module = new EglTemplateFactoryModuleAdapter();
+            EglModule module = new EglModule();
             module.parse(getClass().getResource("/mdenet_tool.egl").toURI());
 
             var urls = new HashMap<String, String>();

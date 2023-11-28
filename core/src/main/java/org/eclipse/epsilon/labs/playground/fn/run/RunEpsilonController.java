@@ -10,7 +10,7 @@ import java.util.Map.Entry;
 
 import org.eclipse.epsilon.ecl.EclModule;
 import org.eclipse.epsilon.ecl.trace.MatchTrace;
-import org.eclipse.epsilon.egl.EglTemplateFactoryModuleAdapter;
+import org.eclipse.epsilon.egl.EglModule;
 import org.eclipse.epsilon.egl.EgxModule;
 import org.eclipse.epsilon.egl.IEglModule;
 import org.eclipse.epsilon.emc.emf.InMemoryEmfModel;
@@ -243,7 +243,7 @@ public class RunEpsilonController {
 			case "epl":
 				return new EplModule();
 			case "egl":
-				return new EglTemplateFactoryModuleAdapter();
+				return new EglModule();
 			case "egx":
 				return new EgxModule(new StringGeneratingTemplateFactory());
 			case "eml":
