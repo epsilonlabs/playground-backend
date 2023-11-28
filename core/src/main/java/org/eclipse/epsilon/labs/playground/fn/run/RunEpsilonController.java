@@ -232,9 +232,10 @@ public class RunEpsilonController {
 	}
 
 	protected Model getFirstModel(RunEpsilonRequest request) throws Exception {
-		if (request.getFlexmi() != null) {
+		// The MDENet EP and Playground originally sent "undefined" as default value across all parameters
+		if (request.getFlexmi() != null && !"undefined".equals(request.getFlexmi())) {
 			return loader.getInMemoryFlexmiModel(request.getFlexmi(), request.getEmfatic());
-		} else if (request.getJson() != null) {
+		} else if (request.getJson() != null && !"undefined".equals(request.getJson())) {
 			return loader.getInMemoryJsonModel(request.getJson());
 		} else {
 			throw new IllegalArgumentException("Request does not have a valid first model (either flexmi + emfatic or json)");
