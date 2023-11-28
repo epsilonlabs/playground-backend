@@ -12,11 +12,9 @@ public class RunEpsilonRequest {
     @NotBlank
     private String program;
 
-    @NotBlank
     private String flexmi;
-
-    @NotBlank
     private String emfatic;
+    private String json;
 
     private String secondProgram, secondFlexmi, secondEmfatic;
 
@@ -92,5 +90,13 @@ public class RunEpsilonRequest {
 
     public void setThirdEmfatic(String thirdEmfatic) {
         this.thirdEmfatic = thirdEmfatic;
+    }
+
+    public String getJson() {
+        return json;
+    }
+
+    public void setJson(String json) {
+        this.json = json;
     }
 }

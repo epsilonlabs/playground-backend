@@ -18,6 +18,7 @@ import org.eclipse.epsilon.eml.EmlModule;
 import org.eclipse.epsilon.eol.EolModule;
 import org.eclipse.epsilon.eol.IEolModule;
 import org.eclipse.epsilon.eol.execute.context.Variable;
+import org.eclipse.epsilon.eol.models.Model;
 import org.eclipse.epsilon.epl.EplModule;
 import org.eclipse.epsilon.etl.EtlModule;
 import org.eclipse.epsilon.evl.EvlModule;
@@ -60,7 +61,6 @@ public class RunEpsilonController {
 	}
 
 	public void run(RunEpsilonRequest request, OutputStream outputStream, EpsilonExecutionResponse response) throws Exception {
-
 		final String language = request.getLanguage();
 
 		IEolModule module = createModule(language);
@@ -101,7 +101,6 @@ public class RunEpsilonController {
 	}
 
 	protected void runEml(EmlModule module, RunEpsilonRequest request, EpsilonExecutionResponse response) throws Exception {
-
 		EclModule eclModule = new EclModule();
 
 		eclModule.parse(request.getSecondProgram(), new File("/program.ecl"));
@@ -110,7 +109,7 @@ public class RunEpsilonController {
 			return;
 		}
 
-		InMemoryEmfModel leftModel = loader.getInMemoryFlexmiModel(request.getFlexmi(), request.getEmfatic());
+		Model leftModel = getFirstModel(request);
 		leftModel.setName("Left");
 		leftModel.getAliases().add("Source");
 
@@ -138,7 +137,7 @@ public class RunEpsilonController {
 	}
 
 	protected void runEtl(EtlModule module, RunEpsilonRequest request, EpsilonExecutionResponse response) throws Exception {
-		InMemoryEmfModel sourceModel = loader.getInMemoryFlexmiModel(request.getFlexmi(), request.getEmfatic());
+		Model sourceModel = getFirstModel(request);
 		sourceModel.setName("Source");
 		InMemoryEmfModel targetModel = loader.getBlankInMemoryModel(request.getSecondEmfatic());
 		targetModel.setName("Target");
@@ -153,7 +152,7 @@ public class RunEpsilonController {
 
 	protected void runFlock(FlockModule module, RunEpsilonRequest request, EpsilonExecutionResponse response) throws Exception {
 
-		InMemoryEmfModel originalModel = loader.getInMemoryFlexmiModel(request.getFlexmi(), request.getEmfatic());
+		Model originalModel = getFirstModel(request);
 		originalModel.setName("Original");
 		InMemoryEmfModel migratedModel = loader.getBlankInMemoryModel(request.getSecondEmfatic());
 		migratedModel.setName("Migrated");
@@ -170,7 +169,7 @@ public class RunEpsilonController {
 	}
 
 	protected void runEvl(EvlModule module, RunEpsilonRequest request, EpsilonExecutionResponse response) throws Exception {
-		InMemoryEmfModel model = loader.getInMemoryFlexmiModel(request.getFlexmi(), request.getEmfatic());
+		Model model = getFirstModel(request);
 		model.setName("M");
 		module.getContext().getModelRepository().addModel(model);
 		module.execute();
@@ -183,7 +182,7 @@ public class RunEpsilonController {
 
 	protected void runEpl(EplModule module, RunEpsilonRequest request, EpsilonExecutionResponse response)
 			throws Exception {
-		InMemoryEmfModel model = loader.getInMemoryFlexmiModel(request.getFlexmi(), request.getEmfatic());
+		Model model = getFirstModel(request);
 		model.setName("M");
 		module.getContext().getModelRepository().addModel(model);
 		module.execute();
@@ -196,7 +195,7 @@ public class RunEpsilonController {
 
 	protected void runEgl(IEglModule module, RunEpsilonRequest request, EpsilonExecutionResponse response)
 			throws Exception {
-		InMemoryEmfModel model = loader.getInMemoryFlexmiModel(request.getFlexmi(), request.getEmfatic());
+		Model model = getFirstModel(request);
 		model.setName("M");
 		module.getContext().getModelRepository().addModel(model);
 		String generatedText = module.execute() + "";
@@ -204,7 +203,7 @@ public class RunEpsilonController {
 	}
 
 	protected void runEgx(EgxModule module, RunEpsilonRequest request, EpsilonExecutionResponse response) throws Exception {
-		InMemoryEmfModel model = loader.getInMemoryFlexmiModel(request.getFlexmi(), request.getEmfatic());
+		Model model = getFirstModel(request);
 		model.setName("M");
 		module.getContext().getModelRepository().addModel(model);
 
@@ -226,10 +225,20 @@ public class RunEpsilonController {
 	}
 
 	protected void runEol(EolModule module, RunEpsilonRequest request) throws Exception {
-		InMemoryEmfModel model = loader.getInMemoryFlexmiModel(request.getFlexmi(), request.getEmfatic());
+		Model model = getFirstModel(request);
 		model.setName("M");
 		module.getContext().getModelRepository().addModel(model);
 		module.execute();
+	}
+
+	protected Model getFirstModel(RunEpsilonRequest request) throws Exception {
+		if (request.getFlexmi() != null) {
+			return loader.getInMemoryFlexmiModel(request.getFlexmi(), request.getEmfatic());
+		} else if (request.getJson() != null) {
+			return loader.getInMemoryJsonModel(request.getJson());
+		} else {
+			throw new IllegalArgumentException("Request does not have a valid first model (either flexmi + emfatic or json)");
+		}
 	}
 
 	protected IEolModule createModule(String language) {

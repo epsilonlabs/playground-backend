@@ -1,3 +1,10 @@
+repositories {
+    mavenCentral()
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots"
+    }
+}
+
 subprojects {
     group = "org.eclipse.epsilon.labs.playground.micronaut"
     version = "0.1"

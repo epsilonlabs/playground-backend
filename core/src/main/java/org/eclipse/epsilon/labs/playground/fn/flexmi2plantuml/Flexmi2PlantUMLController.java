@@ -3,9 +3,9 @@ package org.eclipse.epsilon.labs.playground.fn.flexmi2plantuml;
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.Charset;
 
-import org.eclipse.epsilon.emc.emf.InMemoryEmfModel;
 import org.eclipse.epsilon.egl.EglModule;
 import org.eclipse.epsilon.eol.execute.context.Variable;
+import org.eclipse.epsilon.eol.models.Model;
 import org.eclipse.epsilon.labs.playground.fn.ModelLoader;
 
 import io.micronaut.http.annotation.Body;

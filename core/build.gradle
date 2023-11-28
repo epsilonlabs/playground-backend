@@ -24,6 +24,9 @@ dependencies {
     implementation("org.eclipse.emfatic:org.eclipse.emfatic.core:1.1.0-SNAPSHOT")
     implementation("net.sourceforge.plantuml:plantuml:1.2022.14")
 
+    // JSON EMC driver
+    implementation("org.eclipse.epsilon:org.eclipse.epsilon.emc.json:${epsilonVersion}")
+
     // Epsilon languages
     implementation("org.eclipse.epsilon:org.eclipse.epsilon.eol.engine:${epsilonVersion}")
     implementation("org.eclipse.epsilon:org.eclipse.epsilon.etl.engine:${epsilonVersion}")

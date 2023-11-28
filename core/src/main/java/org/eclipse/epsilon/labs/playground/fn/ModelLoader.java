@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.emf.emfatic.core.EmfaticResource;
 import org.eclipse.epsilon.emc.emf.InMemoryEmfModel;
+import org.eclipse.epsilon.emc.json.JsonModel;
 import org.eclipse.epsilon.flexmi.FlexmiResourceFactory;
 
 import jakarta.inject.Singleton;
@@ -60,5 +61,11 @@ public class ModelLoader {
         } else {
             return (EPackage) emfaticResource.getContents().get(0);
         }
+    }
+
+    public JsonModel getInMemoryJsonModel(String json) throws Exception {
+        JsonModel model = new JsonModel();
+        model.setJsonContent(json);
+        return model;
     }
 }
