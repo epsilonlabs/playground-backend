@@ -289,6 +289,14 @@
             },
 
             {
+                "id": "json",
+                "name": "json",
+                "panelclass": "ProgramPanel",
+                "icon": "json",
+                "language": "json"
+            },
+
+            {
                 "id": "emfgraph",
                 "name": "emfgraphviz",
                 "panelclass": "OutputPanel",

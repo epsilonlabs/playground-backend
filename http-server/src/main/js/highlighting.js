@@ -8,3 +8,4 @@ import './egl.js';
 import './egx.js';
 import './flexmi.js';
 import './emfatic.js';
+import './json.js';

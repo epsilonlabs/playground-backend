@@ -33,3 +33,7 @@
 .mif-emfatic::before {
     content: url("./icons/emfatic.png");
 }
+
+.mif-json::before {
+	content: url("./icons/json.png");
+}
