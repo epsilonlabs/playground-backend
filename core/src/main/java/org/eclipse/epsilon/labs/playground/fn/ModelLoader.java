@@ -37,6 +37,19 @@ public class ModelLoader {
         model.setName("M");
         return model;
     }
+    
+    public InMemoryEmfModel getInMemoryXmiModel(String xmi, String emfatic) throws Exception {
+        ResourceSet resourceSet = new ResourceSetImpl();
+        EPackage ePackage = getEPackage(emfatic);
+        resourceSet.getPackageRegistry().put(ePackage.getNsURI(), ePackage);
+        resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
+        Resource resource = resourceSet.createResource(URI.createURI("xmi.xmi"));
+        resource.load(new ByteArrayInputStream(xmi.getBytes()), null);
+
+        InMemoryEmfModel model = new InMemoryEmfModel(resource);
+        model.setName("M");
+        return model;
+    }
 
 	public InMemoryEmfModel getBlankInMemoryModel(String emfatic) throws Exception {
 		ResourceSet resourceSet = new ResourceSetImpl();
