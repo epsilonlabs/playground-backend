@@ -12,7 +12,7 @@ var colors = getColors();
 
 [%for (e in elements) { %]
 object "[%=e.getNodeLabel()%]" as [%=e.getNodeId()%] #[%=colors.get(e.eClass().eContainer().eContents().indexOf(e.eClass()).mod(colors.size()))%] {
-	[%var attributes = e.eClass().getEAllAttributes().select(attr|e.eIsSet(attr));%]
+	[%var attributes = e.eClass().getEAllAttributes().select(attr|e.eIsSet(attr) or not attr.isUnsettable());%]
 	[%for (attr in attributes){%]
 	[%=attr.name%] = [%=e.getAttributeValue(attr)%]
 	[%}%]
