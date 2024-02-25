@@ -18,11 +18,14 @@
                                 {"name":"secondProgram", "type":"eol"},
                                 {"name":"emfatic", "type":"emfatic"},
                                 {"name":"flexmi", "type":"flexmi", "instanceOf": "emfatic"},
+                                {"name":"xmi", "type":"xmi", "instanceOf": "emfatic"},
                                 {"name":"json", "type":"json"},
                                 {"name":"secondEmfatic", "type":"emfatic"},
                                 {"name":"secondFlexmi", "type":"flexmi", "instanceOf": "secondEmfatic"},
+                                {"name":"secondXmi", "type":"xmi", "instanceOf": "secondEmfatic"},
                                 {"name":"thirdEmfatic", "type":"emfatic"},
-                                {"name":"thirdFlexmi", "type":"flexmi", "instanceOf": "thirdEmfatic"}
+                                {"name":"thirdFlexmi", "type":"flexmi", "instanceOf": "thirdEmfatic"},
+                                {"name":"thirdXmi", "type":"xmi", "instanceOf": "thirdEmfatic"}
                     ],
                 "returnType": "text",
                 "path": "[%= urls.get("epsilon") %]"
@@ -61,11 +64,14 @@
                                 {"name":"secondProgram", "type":"egl"},
                                 {"name":"emfatic", "type":"emfatic"},
                                 {"name":"flexmi", "type":"flexmi", "instanceOf": "emfatic"},
+                                {"name":"xmi", "type":"xmi", "instanceOf": "emfatic"},
                                 {"name":"json", "type":"json"},
                                 {"name":"secondEmfatic", "type":"emfatic"},
                                 {"name":"secondFlexmi", "type":"flexmi", "instanceOf": "secondEmfatic"},
+                                {"name":"secondXmi", "type":"xmi", "instanceOf": "secondEmfatic"},
                                 {"name":"thirdEmfatic", "type":"emfatic"},
-                                {"name":"thirdFlexmi", "type":"flexmi", "instanceOf": "thirdEmfatic"}
+                                {"name":"thirdFlexmi", "type":"flexmi", "instanceOf": "thirdEmfatic"},
+                                {"name":"thirdXmi", "type":"xmi", "instanceOf": "thirdEmfatic"}
                     ],
                 "returnType": "text",
                 "path": "[%= urls.get("epsilon") %]"
@@ -81,11 +87,14 @@
                                 {"name":"secondProgram", "type":"egl"},
                                 {"name":"emfatic", "type":"emfatic"},
                                 {"name":"flexmi", "type":"flexmi", "instanceOf": "emfatic"},
+                                {"name":"xmi", "type":"xmi", "instanceOf": "emfatic"},
                                 {"name":"json", "type":"json"},
                                 {"name":"secondEmfatic", "type":"emfatic"},
                                 {"name":"secondFlexmi", "type":"flexmi", "instanceOf": "secondEmfatic"},
+                                {"name":"secondXmi", "type":"xmi", "instanceOf": "secondEmfatic"},
                                 {"name":"thirdEmfatic", "type":"emfatic"},
-                                {"name":"thirdFlexmi", "type":"flexmi", "instanceOf": "thirdEmfatic"}
+                                {"name":"thirdFlexmi", "type":"flexmi", "instanceOf": "thirdEmfatic"},
+                                {"name":"thirdXmi", "type":"xmi", "instanceOf": "thirdEmfatic"}
                     ],
                 "returnType": "text",
                 "path": "[%= urls.get("epsilon") %]"
