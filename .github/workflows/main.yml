@@ -39,6 +39,6 @@ jobs:
       run: npm ci
       working-directory: ./http-server
     - name: Push Docker Image
-      uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
+      uses: gradle/gradle-build-action@v3.1.0
       with:
         arguments: build dockerPush
