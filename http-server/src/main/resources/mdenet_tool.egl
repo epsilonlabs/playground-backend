@@ -101,13 +101,39 @@
                                 {"name":"secondProgram", "type":"evl"},
                                 {"name":"emfatic", "type":"emfatic"},
                                 {"name":"flexmi", "type":"flexmi", "instanceOf": "emfatic"},
+                                {"name":"xmi", "type":"xmi", "instanceOf": "emfatic"},
                                 {"name":"json", "type":"json"},
                                 {"name":"secondEmfatic", "type":"emfatic"},
                                 {"name":"secondFlexmi", "type":"flexmi", "instanceOf": "secondEmfatic"},
+                                {"name":"secondXmi", "type":"xmi", "instanceOf": "secondEmfatic"},
                                 {"name":"thirdEmfatic", "type":"emfatic"},
-                                {"name":"thirdFlexmi", "type":"flexmi", "instanceOf": "thirdEmfatic"}
+                                {"name":"thirdFlexmi", "type":"flexmi", "instanceOf": "thirdEmfatic"},
+                                {"name":"thirdXmi", "type":"xmi", "instanceOf": "thirdEmfatic"}
                     ],
 
+                "returnType": "text",
+                "path": "[%= urls.get("epsilon") %]"
+            },
+
+            {
+                "id": "function-eml",
+                "name": "eml",
+                "parameters": [ {"name":"language", "type":"text"},
+                                {"name":"outputType", "type":"text"},
+                                {"name":"outputLanguage", "type":"text"},
+                                {"name":"program", "type":"eml"},
+                                {"name":"secondProgram", "type":"ecl"},
+                                {"name":"emfatic", "type":"emfatic"},
+                                {"name":"flexmi", "type":"flexmi", "instanceOf": "emfatic"},
+                                {"name":"xmi", "type":"xmi", "instanceOf": "emfatic"},
+                                {"name":"json", "type":"json"},
+                                {"name":"secondEmfatic", "type":"emfatic"},
+                                {"name":"secondFlexmi", "type":"flexmi", "instanceOf": "secondEmfatic"},
+                                {"name":"secondXmi", "type":"xmi", "instanceOf": "secondEmfatic"},
+                                {"name":"thirdEmfatic", "type":"emfatic"},
+                                {"name":"thirdFlexmi", "type":"flexmi", "instanceOf": "thirdEmfatic"},
+                                {"name":"thirdXmi", "type":"xmi", "instanceOf": "thirdEmfatic"}
+                    ],
                 "returnType": "text",
                 "path": "[%= urls.get("epsilon") %]"
             },
@@ -243,6 +269,44 @@
                       "icon": "info",
                       "url": "https://www.eclipse.org/epsilon/doc/evl/",
                       "hint": "EVL Language Reference"
+                    }
+                ]
+            },
+
+            {
+                "id": "eml",
+                "name": "eml",
+                "panelclass": "ProgramPanel",
+                "icon": "eml",
+                "language": "eml",
+                "buttons" : [
+                    {
+                      "id": "action-button",
+                      "icon": "run",
+                      "actionfunction": "function-eml",
+                      "hint": "Run the program"
+                    },
+                    {
+                      "id": "help-button",
+                      "icon": "info",
+                      "url": "https://www.eclipse.org/epsilon/doc/eml/",
+                      "hint": "EML Language Reference"
+                    }
+                ]
+            },
+
+            {
+                "id": "ecl",
+                "name": "ecl",
+                "panelclass": "ProgramPanel",
+                "icon": "ecl",
+                "language": "ecl",
+                "buttons" : [
+                    {
+                      "id": "help-button",
+                      "icon": "info",
+                      "url": "https://www.eclipse.org/epsilon/doc/ecl/",
+                      "hint": "EML Language Reference"
                     }
                 ]
             },
