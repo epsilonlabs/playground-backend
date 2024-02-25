@@ -1,5 +1,5 @@
 .mif-eol::before {
-	content: url("./icons/eol.gif");
+	content: url("./icons/eol.png");
 }
 
 .mif-flock::before {
@@ -15,15 +15,15 @@
 }
 
 .mif-etl::before {
-    content: url("./icons/etl.gif");
+    content: url("./icons/etl.png");
 }
 
 .mif-epl::before {
-    content: url("./icons/epl.gif");
+    content: url("./icons/epl.png");
 }
 
 .mif-evl::before {
-    content: url("./icons/evl.gif");
+    content: url("./icons/evl.png");
 }
 
 .mif-flexmi::before {
@@ -36,4 +36,12 @@
 
 .mif-json::before {
 	content: url("./icons/json.png");
+}
+
+.mif-eml::before {
+    content: url("./icons/eml.png");
+}
+
+.mif-ecl::before {
+    content: url("./icons/ecl.png");
 }
