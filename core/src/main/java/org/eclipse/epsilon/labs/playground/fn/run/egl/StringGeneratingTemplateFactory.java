@@ -16,7 +16,8 @@ public class StringGeneratingTemplateFactory extends EglTemplateFactory {
 	@Override
 	public EglTemplate load(URI resource) throws EglRuntimeException {
 		try {
-			return new StringGeneratingTemplate(new StringGeneratingTemplateSpecification(templateCode), context, resource, results, templateCode);
+			StringGeneratingTemplateSpecification spec = new StringGeneratingTemplateSpecification(templateCode, getImportManager());
+			return new StringGeneratingTemplate(spec, context, resource, results, templateCode);
 		} catch (Exception e) {
 			throw new EglRuntimeException(e);
 		}
