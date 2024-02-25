@@ -12,13 +12,13 @@ public class RunEpsilonRequest {
     @NotBlank
     private String program;
 
-    private String flexmi;
+    private String flexmi, xmi;
     private String emfatic;
     private String json;
 
-    private String secondProgram, secondFlexmi, secondEmfatic;
+    private String secondProgram, secondFlexmi, secondXmi, secondEmfatic;
 
-    private String thirdFlexmi, thirdEmfatic;
+    private String thirdFlexmi, thirdXmi, thirdEmfatic;
 
     public String getLanguage() {
         return language;
@@ -43,7 +43,15 @@ public class RunEpsilonRequest {
     public void setFlexmi(String flexmi) {
         this.flexmi = flexmi;
     }
+   
+    public String getXmi() {
+        return xmi;
+    }
 
+    public void setXmi(String xmi) {
+        this.xmi = xmi;
+    }
+    
     public String getEmfatic() {
         return emfatic;
     }
@@ -67,6 +75,14 @@ public class RunEpsilonRequest {
     public void setSecondFlexmi(String secondFlexmi) {
         this.secondFlexmi = secondFlexmi;
     }
+    
+    public String getSecondXmi() {
+        return secondXmi;
+    }
+
+    public void setSecondXmi(String secondXmi) {
+        this.secondXmi = secondXmi;
+    }
 
     public String getSecondEmfatic() {
         return secondEmfatic;
@@ -84,6 +100,14 @@ public class RunEpsilonRequest {
         this.thirdFlexmi = thirdFlexmi;
     }
 
+    public String getThirdXmi() {
+        return thirdXmi;
+    }
+
+    public void setThirdXmi(String thirdXmi) {
+        this.thirdXmi = thirdXmi;
+    }
+    
     public String getThirdEmfatic() {
         return thirdEmfatic;
     }

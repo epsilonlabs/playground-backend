@@ -13,9 +13,8 @@ public class StringGeneratingTemplate extends EglFileGeneratingTemplate {
 	
 	protected Map<String, String> results = null;
 
-	public StringGeneratingTemplate(EglTemplateSpecification spec, IEglContext context, URI outputRoot, Map<String, String> results, String templateCode)
-			throws Exception {
-		super(new StringGeneratingTemplateSpecification(templateCode), context, outputRoot);
+	public StringGeneratingTemplate(EglTemplateSpecification spec, IEglContext context, URI outputRoot, Map<String, String> results, String templateCode) throws Exception {
+		super(spec, context, outputRoot);
 		this.results = results;
 	}
 	

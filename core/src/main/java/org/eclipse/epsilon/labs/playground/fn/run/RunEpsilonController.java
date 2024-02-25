@@ -112,8 +112,14 @@ public class RunEpsilonController {
 		Model leftModel = getFirstModel(request);
 		leftModel.setName("Left");
 		leftModel.getAliases().add("Source");
-
-		InMemoryEmfModel rightModel = loader.getInMemoryFlexmiModel(request.getThirdFlexmi(), request.getThirdEmfatic());
+		
+		InMemoryEmfModel rightModel;
+		// The MDENet EP and Playground originally sent "undefined" as default value across all parameters
+		if (request.getXmi() != null && !"undefined".equals(request.getXmi())) {
+			rightModel = loader.getInMemoryXmiModel(request.getThirdXmi(), request.getThirdEmfatic());
+		} else {
+			rightModel = loader.getInMemoryFlexmiModel(request.getThirdFlexmi(), request.getThirdEmfatic());
+		}
 		rightModel.setName("Right");
 		rightModel.getAliases().add("Source");
 
@@ -233,7 +239,9 @@ public class RunEpsilonController {
 
 	protected Model getFirstModel(RunEpsilonRequest request) throws Exception {
 		// The MDENet EP and Playground originally sent "undefined" as default value across all parameters
-		if (request.getFlexmi() != null && !"undefined".equals(request.getFlexmi())) {
+		if (request.getXmi() != null && !"undefined".equals(request.getXmi())) {
+			return loader.getInMemoryXmiModel(request.getXmi(), request.getEmfatic());
+		} else if (request.getFlexmi() != null && !"undefined".equals(request.getFlexmi())) {
 			return loader.getInMemoryFlexmiModel(request.getFlexmi(), request.getEmfatic());
 		} else if (request.getJson() != null && !"undefined".equals(request.getJson())) {
 			return loader.getInMemoryJsonModel(request.getJson());

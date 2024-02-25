@@ -1,0 +1,7 @@
+@namespace(uri="tree", prefix="")
+package tree;
+
+class Node {
+	attr String label;
+	val Node[*] children;
+}

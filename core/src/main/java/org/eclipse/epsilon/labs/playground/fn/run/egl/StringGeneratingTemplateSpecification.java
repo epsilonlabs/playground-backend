@@ -9,13 +9,14 @@ import org.eclipse.epsilon.egl.incremental.IncrementalitySettings;
 import org.eclipse.epsilon.egl.internal.IEglModule;
 import org.eclipse.epsilon.egl.spec.EglTemplateSpecification;
 import org.eclipse.epsilon.egl.traceability.Template;
+import org.eclipse.epsilon.eol.IImportManager;
 
 public class StringGeneratingTemplateSpecification extends EglTemplateSpecification {
 
 	private final String code;
 	
-	protected StringGeneratingTemplateSpecification(String code) {
-		super("Anonymous", new NullFormatter(), new IncrementalitySettings(), Collections.emptyList());	
+	protected StringGeneratingTemplateSpecification(String code, IImportManager importManager) {
+		super("Anonymous", new NullFormatter(), new IncrementalitySettings(), importManager, Collections.emptyList());	
 		this.code = code;
 	}
 	

@@ -53,5 +53,7 @@ micronaut {
     }
 }
 
-
-
+test {
+    // Avoid errors from PlantUML tests looking for an X library, by using AWT in headless mode
+    jvmArgs '-Djava.awt.headless=true'
+}

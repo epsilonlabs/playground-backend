@@ -1,0 +1,19 @@
+rule NodeWithNode
+  merge l: Left!Node
+  with r: Right!Node
+  into m: Merged!Node {
+  m.label = l.label;
+
+  var mergedChildren: Set;
+  mergedChildren.addAll(l.children.equivalent());
+  mergedChildren.addAll(r.children.equivalent());
+  m.children.addAll(mergedChildren);
+}
+
+rule NodeFromNode
+  transform s: Source!Node
+  to t: Target!Node
+{
+  t.label = s.label;
+  t.children ::= s.children;
+}
