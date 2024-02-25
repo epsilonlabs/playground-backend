@@ -1,10 +1,18 @@
 package org.eclipse.epsilon.labs.playground.fn.run;
 
+import static org.junit.Assert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+
 import org.junit.jupiter.api.Test;
+import org.junit.matchers.JUnitMatchers;
+
+import com.google.common.io.CharStreams;
 
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
@@ -50,5 +58,29 @@ public class RunEpsilonTest {
         assertEquals(2, response.getGeneratedFiles().size());
     }
 
+    @Test
+    public void emlSecondInputXmi() throws Exception {
+        var req = new RunEpsilonRequest();
+        req.setLanguage("eml");
+        req.setProgram(getResourceAsString("/eml/tree.eml"));
+        req.setSecondProgram(getResourceAsString("/eml/tree.ecl"));
+        req.setXmi(getResourceAsString("/eml/left.xmi"));
+        req.setThirdXmi(getResourceAsString("/eml/right.xmi"));
+
+        String emfaticSource = getResourceAsString("/eml/tree.emf");
+        req.setEmfatic(emfaticSource);
+        req.setSecondEmfatic(emfaticSource);
+        req.setThirdEmfatic(emfaticSource);
+
+        var response = client.execute(req);
+        assertNull(response.getError());
+        assertThat(response.getTargetModelDiagram(), JUnitMatchers.containsString("A"));
+        assertThat(response.getTargetModelDiagram(), JUnitMatchers.containsString("B"));
+    }
+
+    private String getResourceAsString(String resource) throws IOException {
+        var inputStream = getClass().getResourceAsStream(resource);
+        return CharStreams.toString(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+    }
     
 }
