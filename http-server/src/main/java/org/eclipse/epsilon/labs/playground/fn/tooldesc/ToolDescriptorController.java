@@ -15,14 +15,9 @@ import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
-import io.micronaut.http.server.util.HttpHostResolver;
-import jakarta.inject.Inject;
 
 @Controller("/tools")
 public class ToolDescriptorController {
-
-    @Inject
-    private HttpHostResolver hostResolver;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ToolDescriptorController.class);
 
@@ -49,7 +44,8 @@ public class ToolDescriptorController {
     }
 
     private String resolve(HttpRequest<?> request, String path) {
-        return hostResolver.resolve(request) + path;
+        // Recent versions of MDENet EP support {{BASE-URL}}, so we do not need to use the Micronaut resolver
+        return "{{BASE-URL}}" + path;
     }
 
 }
