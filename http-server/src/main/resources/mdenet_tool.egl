@@ -159,6 +159,17 @@
             },
 
             {
+                "id": "function-xmi2plantuml",
+                "name": "XmiToPlantUML",
+                "parameters": [ {"name": "language", "type": "text"},
+                                {"name":"xmi", "type":"xmi"},
+                                {"name":"emfatic", "type":"emfatic"}
+                    ],
+                "returnType": "diagram",
+                "path": "[%= urls.get("xmi2plantuml") %]"
+            },
+
+            {
                 "id": "function-emfatic2plantuml",
                 "name": "EmfaticToPlantUML",
                 "parameters": [ {"name": "language", "type": "text"},
