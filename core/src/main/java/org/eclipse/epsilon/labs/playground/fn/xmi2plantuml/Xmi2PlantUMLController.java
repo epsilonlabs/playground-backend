@@ -37,7 +37,7 @@ public class Xmi2PlantUMLController {
 
     public ModelDiagramResponse generateModelDiagram(Model model, Variable... variables) throws Exception {
         EglModule module = new EglModule();
-        module.parse(getClass().getResource("/xmi2plantuml.egl").toURI());
+        module.parse(getClass().getResource("/flexmi2plantuml.egl").toURI());
         model.setName("M");
         module.getContext().getModelRepository().addModel(model);
         module.getContext().getFrameStack().put(variables);
