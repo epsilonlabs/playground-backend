@@ -37,12 +37,20 @@ public class Xmi2PlantUMLTest {
         assertEquals(HttpStatus.OK, response.getStatus());
     }
 
-    @Disabled // TODO complete test
     @Test
     public void singlePackage() {
         var req = new XmiToPlantUMLRequest();
-        req.setXmi("<?xml version=\"1.0\" encoding=\"ASCII\"?>");
-        req.setEmfatic("");
+
+        req.setXmi("<?xml version=\"1.0\" encoding=\"ASCII\"?>\n"
+            + "<test_lang:Model xmi:version=\"2.0\" xmlns:xmi=\"http://www.omg.org/XMI\" "
+            + "xmlns:test_lang=\"http://www.example.org/test_lang\"> \n"
+            + "</test_lang:Model>\n"
+        );
+
+        req.setEmfatic("@namespace(uri=\"http://www.example.org/test_lang\", prefix=\"test_lang\") \n\n"
+            + "package test_lang; \n"
+            + "class Model { } \n"
+        );
 
         ModelDiagramResponse result = client.convert(req);
         assertNull(result.getError());
