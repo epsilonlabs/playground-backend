@@ -23,6 +23,7 @@ import org.eclipse.epsilon.epl.EplModule;
 import org.eclipse.epsilon.etl.EtlModule;
 import org.eclipse.epsilon.evl.EvlModule;
 import org.eclipse.epsilon.flock.FlockModule;
+import org.eclipse.epsilon.labs.playground.fn.ModelDiagramRenderer;
 import org.eclipse.epsilon.labs.playground.fn.ModelLoader;
 import org.eclipse.epsilon.labs.playground.fn.flexmi2plantuml.Flexmi2PlantUMLController;
 import org.eclipse.epsilon.labs.playground.fn.run.EpsilonExecutionResponse.GeneratedFile;
@@ -39,6 +40,9 @@ public class RunEpsilonController {
 
 	@Inject
 	ModelLoader loader;
+
+	@Inject
+	ModelDiagramRenderer renderer;
 
 	@Inject
 	Flexmi2PlantUMLController flexmiController;
@@ -139,7 +143,7 @@ public class RunEpsilonController {
 
 		module.execute();
 
-		response.setTargetModelDiagram(flexmiController.generateModelDiagram(mergedModel).getModelDiagram());
+		response.setTargetModelDiagram(renderer.generateModelDiagram(mergedModel).getModelDiagram());
 	}
 
 	protected void runEtl(EtlModule module, RunEpsilonRequest request, EpsilonExecutionResponse response) throws Exception {
@@ -153,7 +157,7 @@ public class RunEpsilonController {
 
 		module.execute();
 
-		response.setTargetModelDiagram(flexmiController.generateModelDiagram(targetModel).getModelDiagram());
+		response.setTargetModelDiagram(renderer.generateModelDiagram(targetModel).getModelDiagram());
 	}
 
 	protected void runFlock(FlockModule module, RunEpsilonRequest request, EpsilonExecutionResponse response) throws Exception {
@@ -171,7 +175,7 @@ public class RunEpsilonController {
 
 		module.execute();
 
-		response.setTargetModelDiagram(flexmiController.generateModelDiagram(migratedModel).getModelDiagram());
+		response.setTargetModelDiagram(renderer.generateModelDiagram(migratedModel).getModelDiagram());
 	}
 
 	protected void runEvl(EvlModule module, RunEpsilonRequest request, EpsilonExecutionResponse response) throws Exception {
@@ -180,7 +184,7 @@ public class RunEpsilonController {
 		module.getContext().getModelRepository().addModel(model);
 		module.execute();
 
-		response.setValidatedModelDiagram(flexmiController.generateModelDiagram(model,
+		response.setValidatedModelDiagram(renderer.generateModelDiagram(model,
 				Variable.createReadOnlyVariable("unsatisfiedConstraints",
 						module.getContext().getUnsatisfiedConstraints()))
 				.getModelDiagram());
@@ -193,7 +197,7 @@ public class RunEpsilonController {
 		module.getContext().getModelRepository().addModel(model);
 		module.execute();
 
-		response.setPatternMatchedModelDiagram(flexmiController.generateModelDiagram(model,
+		response.setPatternMatchedModelDiagram(renderer.generateModelDiagram(model,
 				Variable.createReadOnlyVariable("matches",
 						module.getContext().getPatternMatchTrace().getMatches()))
 				.getModelDiagram());

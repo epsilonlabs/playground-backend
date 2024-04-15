@@ -1,4 +1,4 @@
-package org.eclipse.epsilon.labs.playground.fn.flexmi2plantuml;
+package org.eclipse.epsilon.labs.playground.fn.xmi2plantuml;
 
 import org.eclipse.epsilon.eol.models.Model;
 import org.eclipse.epsilon.labs.playground.fn.ModelDiagramRenderer;
@@ -10,9 +10,9 @@ import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
 import jakarta.inject.Inject;
 
-@Controller(Flexmi2PlantUMLController.PATH)
-public class Flexmi2PlantUMLController {
-    public static final String PATH = "/flexmi2plantuml";
+@Controller(Xmi2PlantUMLController.PATH)
+public class Xmi2PlantUMLController {
+    public static final String PATH = "/xmi2plantuml";
 
     @Inject
     ModelLoader modelLoader;
@@ -21,9 +21,9 @@ public class Flexmi2PlantUMLController {
     ModelDiagramRenderer renderer;
 
     @Post("/")
-    public ModelDiagramResponse convert(@Body Flexmi2PlantUMLRequest request) {
+    public ModelDiagramResponse convert(@Body Xmi2PlantUMLRequest request) {
         try {
-            Model model = modelLoader.getInMemoryFlexmiModel(request.getFlexmi(), request.getEmfatic());
+            Model model = modelLoader.getInMemoryXmiModel(request.getXmi(), request.getEmfatic());
             return renderer.generateModelDiagram(model);
         } catch (Throwable e) {
             var response = new ModelDiagramResponse();

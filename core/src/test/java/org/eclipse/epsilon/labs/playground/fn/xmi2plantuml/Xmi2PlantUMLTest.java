@@ -1,4 +1,4 @@
-package org.eclipse.epsilon.labs.playground.fn.flexmi2plantuml;
+package org.eclipse.epsilon.labs.playground.fn.xmi2plantuml;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -17,12 +17,12 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 
 @MicronautTest
-public class Flexmi2PlantUMLTest {
+public class Xmi2PlantUMLTest {
     
     @Inject
-    Flexmi2PlantUMLClient client;
+    Xmi2PlantUMLClient client;
 
-    @Client(Flexmi2PlantUMLController.PATH)
+    @Client(Xmi2PlantUMLController.PATH)
     @Inject
     HttpClient rawClient;
 
@@ -39,9 +39,18 @@ public class Flexmi2PlantUMLTest {
 
     @Test
     public void singlePackage() {
-        var req = new Flexmi2PlantUMLRequest();
-        req.setFlexmi("<?nsuri http://www.eclipse.org/emf/2002/Ecore?>\n<package name=\"p1\"/>");
-        req.setEmfatic("");
+        var req = new Xmi2PlantUMLRequest();
+
+        req.setXmi("<?xml version=\"1.0\" encoding=\"ASCII\"?>\n"
+            + "<test_lang:Model xmi:version=\"2.0\" xmlns:xmi=\"http://www.omg.org/XMI\" "
+            + "xmlns:test_lang=\"http://www.example.org/test_lang\"> \n"
+            + "</test_lang:Model>\n"
+        );
+
+        req.setEmfatic("@namespace(uri=\"http://www.example.org/test_lang\", prefix=\"test_lang\") \n\n"
+            + "package test_lang; \n"
+            + "class Model { } \n"
+        );
 
         ModelDiagramResponse result = client.convert(req);
         assertNull(result.getError());

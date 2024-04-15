@@ -7,6 +7,7 @@ import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.eclipse.epsilon.labs.playground.fn.emfatic2plantuml.Emfatic2PlantUMLController;
 import org.eclipse.epsilon.labs.playground.fn.flexmi2plantuml.Flexmi2PlantUMLController;
 import org.eclipse.epsilon.labs.playground.fn.run.RunEpsilonController;
+import org.eclipse.epsilon.labs.playground.fn.xmi2plantuml.Xmi2PlantUMLController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +31,8 @@ public class ToolDescriptorController {
             var urls = new HashMap<String, String>();
             urls.put("epsilon", resolve(request, RunEpsilonController.PATH));
             urls.put("flexmi2plantuml", resolve(request, Flexmi2PlantUMLController.PATH));
-            urls.put("emfatic2plantuml", resolve(request, Emfatic2PlantUMLController.PATH));
+            urls.put("xmi2plantuml", resolve(request, Xmi2PlantUMLController.PATH));
+            urls.put("emfatic2plantuml", resolve(request, Emfatic2PlantUMLController.PATH)); 
 
             module.getContext().getFrameStack().put(
                 Variable.createReadOnlyVariable("urls", urls)
