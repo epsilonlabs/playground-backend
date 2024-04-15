@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-import org.junit.jupiter.api.Disabled;
+import org.eclipse.epsilon.labs.playground.fn.ModelDiagramResponse;
 import org.junit.jupiter.api.Test;
 
 import com.google.common.net.HttpHeaders;
@@ -39,7 +39,7 @@ public class Xmi2PlantUMLTest {
 
     @Test
     public void singlePackage() {
-        var req = new XmiToPlantUMLRequest();
+        var req = new Xmi2PlantUMLRequest();
 
         req.setXmi("<?xml version=\"1.0\" encoding=\"ASCII\"?>\n"
             + "<test_lang:Model xmi:version=\"2.0\" xmlns:xmi=\"http://www.omg.org/XMI\" "

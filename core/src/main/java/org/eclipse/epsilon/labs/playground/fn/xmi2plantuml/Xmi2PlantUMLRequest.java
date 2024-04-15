@@ -3,7 +3,7 @@ package org.eclipse.epsilon.labs.playground.fn.xmi2plantuml;
 import io.micronaut.serde.annotation.Serdeable;
 
 @Serdeable
-public class XmiToPlantUMLRequest {
+public class Xmi2PlantUMLRequest {
 
     private String xmi;
     private String emfatic;

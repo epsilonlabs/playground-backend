@@ -1,6 +1,4 @@
-package org.eclipse.epsilon.labs.playground.fn.flexmi2plantuml;
-
-import org.eclipse.epsilon.labs.playground.fn.AbstractPlaygroundResponse;
+package org.eclipse.epsilon.labs.playground.fn;
 
 import io.micronaut.serde.annotation.Serdeable;
 

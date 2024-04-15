@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import org.eclipse.epsilon.labs.playground.fn.ModelDiagramResponse;
 import org.junit.jupiter.api.Test;
 
 import com.google.common.net.HttpHeaders;
@@ -38,7 +39,7 @@ public class Flexmi2PlantUMLTest {
 
     @Test
     public void singlePackage() {
-        var req = new FlexmiToPlantUMLRequest();
+        var req = new Flexmi2PlantUMLRequest();
         req.setFlexmi("<?nsuri http://www.eclipse.org/emf/2002/Ecore?>\n<package name=\"p1\"/>");
         req.setEmfatic("");
 
