@@ -70,6 +70,10 @@ You can then try out the endpoints through the Swagger UI available here:
 
 http://localhost:8080/swagger-ui
 
+The OpenAPI specification is available from:
+
+http://localhost:8080/swagger/swagger.yml
+
 To customise the port used for the HTTP server, you can use the `MICRONAUT_SERVER_PORT` environment variable:
 
 ```bash
