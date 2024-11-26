@@ -8,6 +8,8 @@ import org.eclipse.epsilon.labs.playground.fn.ModelLoader;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
+import io.micronaut.scheduling.TaskExecutors;
+import io.micronaut.scheduling.annotation.ExecuteOn;
 import jakarta.inject.Inject;
 
 @Controller(Flexmi2PlantUMLController.PATH)
@@ -20,6 +22,7 @@ public class Flexmi2PlantUMLController {
     @Inject
     ModelDiagramRenderer renderer;
 
+    @ExecuteOn(TaskExecutors.IO)
     @Post("/")
     public ModelDiagramResponse convert(@Body Flexmi2PlantUMLRequest request) {
         try {

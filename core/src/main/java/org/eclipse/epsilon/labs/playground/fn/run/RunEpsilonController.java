@@ -23,6 +23,7 @@ import org.eclipse.epsilon.epl.EplModule;
 import org.eclipse.epsilon.etl.EtlModule;
 import org.eclipse.epsilon.evl.EvlModule;
 import org.eclipse.epsilon.flock.FlockModule;
+import org.eclipse.epsilon.labs.playground.execution.ScriptTimeoutTerminator;
 import org.eclipse.epsilon.labs.playground.fn.ModelDiagramRenderer;
 import org.eclipse.epsilon.labs.playground.fn.ModelLoader;
 import org.eclipse.epsilon.labs.playground.fn.flexmi2plantuml.Flexmi2PlantUMLController;
@@ -32,11 +33,16 @@ import org.eclipse.epsilon.labs.playground.fn.run.egl.StringGeneratingTemplateFa
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
+import io.micronaut.scheduling.TaskExecutors;
+import io.micronaut.scheduling.annotation.ExecuteOn;
 import jakarta.inject.Inject;
 
 @Controller(RunEpsilonController.PATH)
 public class RunEpsilonController {
 	public static final String PATH = "/epsilon";
+
+	@Inject
+	ScriptTimeoutTerminator timeoutTerminator;
 
 	@Inject
 	ModelLoader loader;
@@ -47,6 +53,7 @@ public class RunEpsilonController {
 	@Inject
 	Flexmi2PlantUMLController flexmiController;
 
+	@ExecuteOn(TaskExecutors.IO)
 	@Post("/")
 	public EpsilonExecutionResponse execute(@Body RunEpsilonRequest request) {
 		var response = new EpsilonExecutionResponse();
@@ -64,7 +71,8 @@ public class RunEpsilonController {
 		return response;
 	}
 
-	public void run(RunEpsilonRequest request, OutputStream outputStream, EpsilonExecutionResponse response) throws Exception {
+	public void run(RunEpsilonRequest request, OutputStream outputStream, EpsilonExecutionResponse response)
+			throws Exception {
 		final String language = request.getLanguage();
 
 		IEolModule module = createModule(language);
@@ -75,36 +83,42 @@ public class RunEpsilonController {
 		}
 
 		module.getContext().setOutputStream(new PrintStream(outputStream));
+		timeoutTerminator.scheduleScriptTimeout(module);
 
-		switch (language) {
-			case "etl":
-				runEtl((EtlModule) module, request, response);
-				return;
-			case "flock":
-				runFlock((FlockModule) module, request, response);
-				return;
-			case "evl":
-				runEvl((EvlModule) module, request, response);
-				return;
-			case "epl":
-				runEpl((EplModule) module, request, response);
-				return;
-			case "egl":
-				runEgl((IEglModule) module, request, response);
-				return;
-			case "egx":
-				runEgx((EgxModule) module, request, response);
-				return;
-			case "eml":
-				runEml((EmlModule) module, request, response);
-				return;
-			default:
-				runEol((EolModule) module, request);
+		try {
+			switch (language) {
+				case "etl":
+					runEtl((EtlModule) module, request, response);
+					return;
+				case "flock":
+					runFlock((FlockModule) module, request, response);
+					return;
+				case "evl":
+					runEvl((EvlModule) module, request, response);
+					return;
+				case "epl":
+					runEpl((EplModule) module, request, response);
+					return;
+				case "egl":
+					runEgl((IEglModule) module, request, response);
+					return;
+				case "egx":
+					runEgx((EgxModule) module, request, response);
+					return;
+				case "eml":
+					runEml((EmlModule) module, request, response);
+					return;
+				default:
+					runEol((EolModule) module, request);
+			}
+		} finally {
+			module.getContext().getModelRepository().dispose();
+			module.getContext().dispose();
 		}
-
 	}
 
-	protected void runEml(EmlModule module, RunEpsilonRequest request, EpsilonExecutionResponse response) throws Exception {
+	protected void runEml(EmlModule module, RunEpsilonRequest request, EpsilonExecutionResponse response)
+			throws Exception {
 		EclModule eclModule = new EclModule();
 
 		eclModule.parse(request.getSecondProgram(), new File("/program.ecl"));
@@ -116,9 +130,10 @@ public class RunEpsilonController {
 		Model leftModel = getFirstModel(request);
 		leftModel.setName("Left");
 		leftModel.getAliases().add("Source");
-		
+
 		InMemoryEmfModel rightModel;
-		// The MDENet EP and Playground originally sent "undefined" as default value across all parameters
+		// The MDENet EP and Playground originally sent "undefined" as default value
+		// across all parameters
 		if (request.getXmi() != null && !"undefined".equals(request.getXmi())) {
 			rightModel = loader.getInMemoryXmiModel(request.getThirdXmi(), request.getThirdEmfatic());
 		} else {
@@ -146,7 +161,8 @@ public class RunEpsilonController {
 		response.setTargetModelDiagram(renderer.generateModelDiagram(mergedModel).getModelDiagram());
 	}
 
-	protected void runEtl(EtlModule module, RunEpsilonRequest request, EpsilonExecutionResponse response) throws Exception {
+	protected void runEtl(EtlModule module, RunEpsilonRequest request, EpsilonExecutionResponse response)
+			throws Exception {
 		Model sourceModel = getFirstModel(request);
 		sourceModel.setName("Source");
 		InMemoryEmfModel targetModel = loader.getBlankInMemoryModel(request.getSecondEmfatic());
@@ -160,7 +176,8 @@ public class RunEpsilonController {
 		response.setTargetModelDiagram(renderer.generateModelDiagram(targetModel).getModelDiagram());
 	}
 
-	protected void runFlock(FlockModule module, RunEpsilonRequest request, EpsilonExecutionResponse response) throws Exception {
+	protected void runFlock(FlockModule module, RunEpsilonRequest request, EpsilonExecutionResponse response)
+			throws Exception {
 
 		Model originalModel = getFirstModel(request);
 		originalModel.setName("Original");
@@ -178,7 +195,8 @@ public class RunEpsilonController {
 		response.setTargetModelDiagram(renderer.generateModelDiagram(migratedModel).getModelDiagram());
 	}
 
-	protected void runEvl(EvlModule module, RunEpsilonRequest request, EpsilonExecutionResponse response) throws Exception {
+	protected void runEvl(EvlModule module, RunEpsilonRequest request, EpsilonExecutionResponse response)
+			throws Exception {
 		Model model = getFirstModel(request);
 		model.setName("M");
 		module.getContext().getModelRepository().addModel(model);
@@ -212,7 +230,8 @@ public class RunEpsilonController {
 		response.setGeneratedText(generatedText);
 	}
 
-	protected void runEgx(EgxModule module, RunEpsilonRequest request, EpsilonExecutionResponse response) throws Exception {
+	protected void runEgx(EgxModule module, RunEpsilonRequest request, EpsilonExecutionResponse response)
+			throws Exception {
 		Model model = getFirstModel(request);
 		model.setName("M");
 		module.getContext().getModelRepository().addModel(model);
@@ -242,7 +261,8 @@ public class RunEpsilonController {
 	}
 
 	protected Model getFirstModel(RunEpsilonRequest request) throws Exception {
-		// The MDENet EP and Playground originally sent "undefined" as default value across all parameters
+		// The MDENet EP and Playground originally sent "undefined" as default value
+		// across all parameters
 		if (request.getXmi() != null && !"undefined".equals(request.getXmi())) {
 			return loader.getInMemoryXmiModel(request.getXmi(), request.getEmfatic());
 		} else if (request.getFlexmi() != null && !"undefined".equals(request.getFlexmi())) {
@@ -250,7 +270,8 @@ public class RunEpsilonController {
 		} else if (request.getJson() != null && !"undefined".equals(request.getJson())) {
 			return loader.getInMemoryJsonModel(request.getJson());
 		} else {
-			throw new IllegalArgumentException("Request does not have a valid first model (either flexmi + emfatic or json)");
+			throw new IllegalArgumentException(
+					"Request does not have a valid first model (either flexmi + emfatic or json)");
 		}
 	}
 

@@ -6,7 +6,9 @@ import java.nio.charset.Charset;
 import org.eclipse.epsilon.egl.EglModule;
 import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.eclipse.epsilon.eol.models.Model;
+import org.eclipse.epsilon.labs.playground.execution.ScriptTimeoutTerminator;
 
+import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
@@ -15,24 +17,34 @@ import net.sourceforge.plantuml.SourceStringReader;
 @Singleton
 public class ModelDiagramRenderer {
 
+    @Inject
+    ScriptTimeoutTerminator timeoutTerminator;
+
     public ModelDiagramResponse generateModelDiagram(Model model, Variable... variables) throws Exception {
         EglModule module = new EglModule();
         module.parse(getClass().getResource("/flexmi2plantuml.egl").toURI());
         model.setName("M");
         module.getContext().getModelRepository().addModel(model);
         module.getContext().getFrameStack().put(variables);
-        String plantUml = module.execute() + "";
+        timeoutTerminator.scheduleScriptTimeout(module);
 
-        SourceStringReader reader = new SourceStringReader(plantUml);
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        reader.outputImage(os, new FileFormatOption(FileFormat.SVG));
-        os.close();
+        try {
+            String plantUml = module.execute() + "";
 
-        String output = new String(os.toByteArray(), Charset.forName("UTF-8"));
-        ModelDiagramResponse diag = new ModelDiagramResponse();
-        diag.setModelDiagram(output);
+            SourceStringReader reader = new SourceStringReader(plantUml);
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            reader.outputImage(os, new FileFormatOption(FileFormat.SVG));
+            os.close();
 
-        return diag;
+            String output = new String(os.toByteArray(), Charset.forName("UTF-8"));
+            ModelDiagramResponse diag = new ModelDiagramResponse();
+            diag.setModelDiagram(output);
+
+            return diag;
+        } finally {
+            module.getContext().getModelRepository().dispose();
+            module.getContext().dispose();
+        }
     }
 
 }
