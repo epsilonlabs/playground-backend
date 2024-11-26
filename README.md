@@ -66,6 +66,10 @@ To run the HTTP server locally, run:
 ./gradlew run
 ```
 
+You can then try out the endpoints through the Swagger UI available here:
+
+http://localhost:8080/swagger-ui
+
 To customise the port used for the HTTP server, you can use the `MICRONAUT_SERVER_PORT` environment variable:
 
 ```bash

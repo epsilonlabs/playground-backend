@@ -1,6 +1,7 @@
 plugins {
     id("io.micronaut.library") version "4.4.4"
     id("com.github.johnrengelman.shadow") version "8.1.1"
+    id('io.micronaut.openapi') version "4.4.4"
 }
 
 dependencies {
@@ -12,6 +13,9 @@ dependencies {
 
     // Basic logging
     runtimeOnly("ch.qos.logback:logback-classic")
+
+    // OpenAPI support
+    annotationProcessor("io.micronaut.openapi:micronaut-openapi")
 
     // For testing the functions through the declarative HTTP client
     testImplementation("io.micronaut:micronaut-http-server-netty")
