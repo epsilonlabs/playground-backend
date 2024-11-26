@@ -39,6 +39,12 @@ The HTTP server includes static assets for providing [Ace](https://ace.c9.io/)-b
 
 * `POST /shorturl`: allows for storing work in Google Cloud Storage and retrieving it later.
 
+## Configuration options
+
+Besides the default [Micronaut options](https://docs.micronaut.io/latest/guide/index.html), the server can be configured through these environment variables:
+
+* `PLAYGROUND_TIMEOUT_MILLIS`: timeout in milliseconds for any Epsilon scripts being executed by the playground. Default is `60000` (60s).
+
 ## Building the project
 
 Run this command to build all modules and run the tests on the core endpoints:
