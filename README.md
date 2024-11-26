@@ -32,8 +32,12 @@ The endpoints are [CORS](https://fetch.spec.whatwg.org/)-aware: they allow reque
 ### Additional endpoints for the HTTP server
 
 * `GET /tools`: returns a JSON document according to the [MDENet Education Platform tool specification](https://github.com/mdenet/educationplatform/wiki/Adding-a-Tool).
+* `GET /swagger/epsilon-playground-core-0.0.yml`: returns the OpenAPI specification for the core endpoints.
+* `GET /swagger/epsilon-playground-http-0.0.yml`: returns the OpenAPI specification for the HTTP server-only endpoints.
 
 The HTTP server includes static assets for providing [Ace](https://ace.c9.io/)-based syntax highlighting and icons.
+
+The HTTP server also includes a copy of the Swagger UI at `/swagger-ui`, pointing at the core endpoints by default.
 
 ### Additional endpoints for the Google Cloud Function
 
@@ -75,10 +79,6 @@ To run the HTTP server locally, run:
 You can then try out the endpoints through the Swagger UI available here:
 
 http://localhost:8080/swagger-ui
-
-The OpenAPI specification is available from:
-
-http://localhost:8080/swagger/swagger.yml
 
 To customise the port used for the HTTP server, you can use the `MICRONAUT_SERVER_PORT` environment variable:
 
