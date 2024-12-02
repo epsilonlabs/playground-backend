@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
+import org.eclipse.epsilon.labs.playground.fn.run.EpsilonExecutionResponse.GeneratedFile;
 import org.junit.jupiter.api.Test;
 import org.junit.matchers.JUnitMatchers;
 
@@ -22,6 +23,35 @@ public class RunEpsilonTest {
     
     @Inject
     RunEpsilonClient client;
+
+    @Test
+    public void pinset() throws Exception {
+        var req = new RunEpsilonRequest();
+        req.setLanguage("pinset");
+        req.setProgram(getResourceAsString("/pinset/program.pinset"));
+        req.setEmfatic(getResourceAsString("/pinset/psl.emf"));
+        req.setFlexmi(getResourceAsString("/pinset/project.flexmi"));
+
+        var response = client.execute(req);
+        assertNull(response.getError());
+        assertEquals(1, response.getGeneratedFiles().size());
+
+        GeneratedFile generatedFile = response.getGeneratedFiles().get(0);
+        assertEquals("tasks.csv", generatedFile.getPath());
+        assertNotNull(generatedFile.getContent());
+    }
+
+    @Test
+    public void emg() throws Exception {
+        var req = new RunEpsilonRequest();
+        req.setLanguage("emg");
+        req.setProgram(getResourceAsString("/emg/program.emg"));
+        req.setEmfatic(getResourceAsString("/emg/petrinet.emf"));
+
+        var response = client.execute(req);
+        assertNull(response.getError());
+        assertNotNull(response.getTargetModelDiagram());
+    }
 
     @Test
     public void egx() {

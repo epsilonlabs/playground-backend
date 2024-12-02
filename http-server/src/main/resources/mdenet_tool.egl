@@ -99,6 +99,30 @@
             },
 
             {
+                "id": "function-emg",
+                "name": "emg",
+                "parameters": [ {"name":"language", "type":"text"},
+                                {"name":"program", "type":"emg"},
+                                {"name":"emfatic", "type":"emfatic"}
+                    ],
+                "returnType": "text",
+                "path": "[%= urls.get("epsilon") %]"
+            },
+
+            {
+                "id": "function-pinset",
+                "name": "pinset",
+                "parameters": [ {"name":"language", "type":"text"},
+                                {"name":"program", "type":"pinset"},
+                                {"name":"emfatic", "type":"emfatic"},
+                                {"name":"flexmi", "type":"flexmi", "instanceOf": "emfatic"}
+                    ],
+                "returnType": "text",
+                "path": "[%= urls.get("epsilon") %]"
+            },
+
+
+            {
                 "id": "function-xmi2plantuml",
                 "name": "XmiToPlantUML",
                 "parameters": [ {"name": "language", "type": "text"},

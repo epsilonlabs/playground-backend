@@ -1,0 +1,5 @@
+$instances 1
+@list net
+operation PetriNet create() {
+    self.name = nextCamelCaseString(15, 10);
+}

@@ -42,6 +42,8 @@ dependencies {
     implementation("org.eclipse.epsilon:org.eclipse.epsilon.flock.engine:${epsilonVersion}")
     implementation("org.eclipse.epsilon:org.eclipse.epsilon.egl.engine:${epsilonVersion}")
     implementation("org.eclipse.epsilon:org.eclipse.epsilon.eml.engine:${epsilonVersion}")
+    implementation("org.eclipse.epsilon:org.eclipse.epsilon.emg.engine:${epsilonVersion}")
+    implementation("org.eclipse.epsilon:org.eclipse.epsilon.pinset.engine:${epsilonVersion}")
 }
 
 java {

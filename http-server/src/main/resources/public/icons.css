@@ -45,3 +45,11 @@
 .mif-ecl::before {
     content: url("./icons/ecl.png");
 }
+
+.mif-emg::before {
+    content: url("./icons/emg.png");
+}
+
+.mif-pinset::before {
+    content: url("./icons/pinset.png");
+}

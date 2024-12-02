@@ -1,6 +1,5 @@
 package org.eclipse.epsilon.labs.playground.execution;
 
-import org.eclipse.epsilon.eol.IEolModule;
 import org.eclipse.epsilon.eol.execute.control.DefaultExecutionController;
 
 /**

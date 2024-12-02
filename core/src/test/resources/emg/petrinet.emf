@@ -1,0 +1,8 @@
+package petriNet;
+
+abstract class Element {
+  attr String name;
+}
+
+class PetriNet extends Element {
+}

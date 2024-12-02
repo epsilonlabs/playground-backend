@@ -1,0 +1,7 @@
+dataset tasks over t : Task {
+    properties [title, start, duration]
+
+    // Assuming each person provides at most one effort to a task
+    column num_participants : t.effort.size()
+    column total_effort : t.effort.collect(e | e.percentage).sum()
+}

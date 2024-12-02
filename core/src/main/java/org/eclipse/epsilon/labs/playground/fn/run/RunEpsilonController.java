@@ -14,6 +14,7 @@ import org.eclipse.epsilon.egl.EglModule;
 import org.eclipse.epsilon.egl.EgxModule;
 import org.eclipse.epsilon.egl.IEglModule;
 import org.eclipse.epsilon.emc.emf.InMemoryEmfModel;
+import org.eclipse.epsilon.emg.EmgModule;
 import org.eclipse.epsilon.eml.EmlModule;
 import org.eclipse.epsilon.eol.EolModule;
 import org.eclipse.epsilon.eol.IEolModule;
@@ -29,6 +30,8 @@ import org.eclipse.epsilon.labs.playground.fn.ModelLoader;
 import org.eclipse.epsilon.labs.playground.fn.flexmi2plantuml.Flexmi2PlantUMLController;
 import org.eclipse.epsilon.labs.playground.fn.run.EpsilonExecutionResponse.GeneratedFile;
 import org.eclipse.epsilon.labs.playground.fn.run.egl.StringGeneratingTemplateFactory;
+import org.eclipse.epsilon.pinset.DatasetRule;
+import org.eclipse.epsilon.pinset.PinsetModule;
 
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
@@ -108,12 +111,44 @@ public class RunEpsilonController {
 				case "eml":
 					runEml((EmlModule) module, request, response);
 					return;
+				case "emg":
+					runEmg((EmgModule) module, request, response);
+					return;
+				case "pinset":
+					runPinset((PinsetModule) module, request, response);
+					return;
 				default:
 					runEol((EolModule) module, request);
 			}
 		} finally {
 			module.getContext().getModelRepository().dispose();
 			module.getContext().dispose();
+		}
+	}
+
+	protected void runEmg(EmgModule module, RunEpsilonRequest request, EpsilonExecutionResponse response) throws Exception {
+		Model model = loader.getBlankInMemoryModel(request.getEmfatic());
+        model.setName("M");
+        module.getContext().getModelRepository().addModel(model);
+        module.execute();
+		response.setTargetModelDiagram(renderer.generateModelDiagram(model).getModelDiagram());
+    }
+
+	protected void runPinset(PinsetModule module, RunEpsilonRequest request, EpsilonExecutionResponse response) throws Exception {
+		Model model = getFirstModel(request);
+		model.setName("M");
+		module.getContext().getModelRepository().addModel(model);
+		module.persistDatasets(false);
+		module.execute();
+
+		var generatedFiles = new ArrayList<GeneratedFile>();
+		response.setGeneratedFiles(generatedFiles);
+
+		for (DatasetRule rule : module.getDatasetRules()) {
+			var genFile = new GeneratedFile();
+			genFile.setPath(module.getFileName(rule));
+			genFile.setContent(rule.getDataset().toString());
+			generatedFiles.add(genFile);
 		}
 	}
 
@@ -291,6 +326,10 @@ public class RunEpsilonController {
 				return new EgxModule(new StringGeneratingTemplateFactory());
 			case "eml":
 				return new EmlModule();
+			case "emg":
+				return new EmgModule();
+			case "pinset":
+				return new PinsetModule();
 			default:
 				return new EolModule();
 		}
