@@ -1,3 +1,79 @@
+@cached
 operation getColors() {
-	return Sequence{"azure", "beige", "floralwhite", "lemonchiffon", "mistyrose", "DDFADC", "pink", "wheat", "FAECFF"};
+	return Sequence{"azure", "beige", "floralwhite", "lemonchiffon", "mintcream", "DDFADC", "wheat", "ivory", "ghostwhite"};
+}
+
+@cached
+operation Any /*EClass*/ getColor() {
+
+	// If a color is specified for the class, use it
+	var color = self.getAnnotationValue("diagram", "color");
+	if (color != null) return color;
+
+	// If the container package is monochrome use that colour
+	var monochrome = self.eContainer().getMonochrome();
+	
+	// If monochrome is true, return a default color
+	if (monochrome == "true") {
+		return "floralwhite";
+	}
+	// Else if a non-false value is specified treat it as the selected color
+	else if (monochrome <> null and monochrome <> "false") { 
+		return monochrome;
+	}
+	else if (self.isAbstract) {
+		return getUninstantiableColor();
+	}
+	else { // Else use an automatic colour from the list above
+		var colors = getColors();
+		return colors.get(self.eContainer().getEClasses().indexOf(self).mod(colors.size()));
+	}
+}
+
+operation String darken() {
+	return '%darken("' + self + '",60)';
+}
+
+@cached
+operation Any /*EPackage*/ getEClasses() {
+	var concreteClasses : Sequence;
+	var abstractClasses : Sequence;
+	for (classifier in self.eContents().select(c|c.eClass().name = "EClass")) {
+		if (classifier.isAbstract) abstractClasses.add(classifier);
+		else concreteClasses.add(classifier);
+	}
+	return concreteClasses.includingAll(abstractClasses);
+}
+
+@cached
+operation Any /*EPackage*/ getMonochrome() {
+	var monochrome = self.getAnnotationValue("diagram", "monochrome");
+	if (monochrome != null) {
+		return monochrome;
+	}
+	else if (self.eContainer() != null) {
+		return self.eContainer().getMonochrome();
+	}
+	else {
+		return null;
+	}
+}
+
+operation Any /*EModelElement*/ getAnnotationValue(name : String, detail : String) : Any {
+	var ann = self.eAnnotations.selectOne(a|a.source = name and a.details.exists(d|d.key = detail));
+	var det;
+
+	if (ann.isDefined()) {
+		det = ann.details.selectOne(d|d.key = detail);
+	}
+
+	if (det.isDefined()) {
+		return det.value;
+	}
+
+	return det;
+}
+
+operation getUninstantiableColor() {
+	return "whitesmoke";
 }

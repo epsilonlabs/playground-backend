@@ -1,20 +1,24 @@
 [%import "shared.eol";%]
 @startuml
-skinparam roundCorner 0
+hide stereotypes
+skinparam roundCorner 3
 skinparam objectBorderThickness 1
 !pragma layout smetana
-skinparam classFontName system-ui
+skinparam defaultFontName system-ui
+skinparam ArrowColor #7A7A7A
 
 [%
 var elements = M.allInstances();
-var colors = getColors();
 %]
 
 [%for (e in elements) { %]
-object "[%=e.getNodeLabel()%]" as [%=e.getNodeId()%] #[%=colors.get(e.eClass().eContainer().eContents().indexOf(e.eClass()).mod(colors.size()))%] {
-	[%var attributes = e.eClass().getEAllAttributes().select(attr|e.eIsSet(attr) or not attr.isUnsettable());%]
+object "[%=e.getNodeLabel()%]" as [%=e.getNodeId()%]<<[%=e.eClass().name%]>> {
+	[%var attributes = e.eClass().getEAllAttributes();%]
 	[%for (attr in attributes){%]
-	[%=attr.name%] = [%=e.getAttributeValue(attr)%]
+	[%var value = e.getAttributeValue(attr);%]
+	[%if (value <> ""){%]
+	[%=attr.name%] = [%=value%]
+	[%}%]
 	[%}%]
 }
 [%}%]
@@ -30,10 +34,21 @@ object "[%=e.getNodeLabel()%]" as [%=e.getNodeId()%] #[%=colors.get(e.eClass().e
 
 [*Generate validation nodes*]
 [%if (unsatisfiedConstraints.isDefined()){%]
-[%for (uc in unsatisfiedConstraints){%]
-note top of [%=uc.getInstance().getNodeId()%] #[%=uc.getConstraint().getConstraintColour()%]
-  [%=uc.getMessage()%]
+[%if(unsatisfiedConstraints.isEmpty()){%]
+note as NOUC<<_Success>>
+<U+2611> The model is valid.
 end note
+[%}%]
+[%for (uc in unsatisfiedConstraints){%]
+[%if(elements.includes(uc.instance)){%]
+note top of [%=uc.getInstance().getNodeId()%]<<[%=uc.getConstraint().getConstraintStereotype()%]>>
+[%=uc.getConstraint().getConstraintIcon()%] [%=uc.getMessage()%]
+end note
+[%}else{%]
+note as UC[%=loopCount%]<<[%=uc.getConstraint().getConstraintStereotype()%]>>
+[%=uc.getConstraint().getConstraintIcon()%] [%=uc.getMessage()%]
+end note
+[%}%]
 [%}%]
 [%}%]
 
@@ -41,7 +56,7 @@ end note
 [%if (matches.isDefined()){%]
 [%for (match in matches){%]
 [%var matchNodeId = "match" + loopCount;%]
-note "[%=match.pattern.name%]" as [%=matchNodeId%] #gold
+note "[%=match.pattern.name%]" as [%=matchNodeId%]<<_Pattern>>
 
 [%for (key in match.roleBindings.keySet()){%]
 [%var values = match.roleBindings.get(key).asSequence();%]
@@ -51,7 +66,28 @@ note "[%=match.pattern.name%]" as [%=matchNodeId%] #gold
 [%}%]
 [%}%]
 [%}%]
-	
+
+skinparam note {
+    BackgroundColor<<_Pattern>> [%=getPatternColor()%]
+    BorderColor<<_Pattern>> [%=getPatternColor().darken()%]
+    BackgroundColor<<_Critique>> [%=getCritiqueColor()%]
+    BorderColor<<_Critique>> [%=getCritiqueColor().darken()%]
+    BackgroundColor<<_Constraint>> [%=getConstraintColor()%]
+    BorderColor<<_Constraint>> [%=getConstraintColor().darken()%]
+    BackgroundColor<<_Success>> [%="TECHNOLOGY"%]
+    BorderColor<<_Success>> [%="TECHNOLOGY".darken()%]
+    
+}
+
+[%if (not elements.isEmpty()){%]
+skinparam object {
+[%for (eClass in elements.collect(e|e.eClass()).asSet()){%]
+	backgroundColor<<[%=eClass.name%]>> [%=eClass.getColor()%] 
+	borderColor<<[%=eClass.name%]>> [%=eClass.getColor().darken()%]
+[%}%]
+}
+[%}%]
+
 @enduml
 [%
 operation Any getNodeId() {
@@ -88,6 +124,7 @@ operation Any getReferenced() {
 	}
 	return referenced;
 }
+
 operation getReferenceLabel(s, t, r) {
 	
 	for (ref in s.eClass().getEAllReferences()) {
@@ -99,11 +136,28 @@ operation getReferenceLabel(s, t, r) {
 }
 
 operation Integer mod(i : Integer) {
-return self - (self/i * i);
+	return self - (self/i * i);
 }
 
-operation Any getConstraintColour() {
-	if (self.isCritique()) return "khaki";
-	else return "mistyrose";
+operation getPatternColor() {
+	return "gold";
+}
+
+operation getConstraintColor() {
+	return "mistyrose";
+}
+
+operation getCritiqueColor() {
+	return "khaki";
+}
+
+operation Any getConstraintStereotype() {
+	if (self.isCritique()) return "_Critique";
+	else return "_Constraint";
+}
+
+operation Any getConstraintIcon() {
+	if (self.isCritique()) return "<U+26A0>";
+	else return "<U+24E7>";
 }
 %]

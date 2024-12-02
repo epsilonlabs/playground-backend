@@ -1,18 +1,23 @@
 [%import "shared.eol";%]
 @startuml
 hide circle
-skinparam roundCorner 0
+skinparam roundCorner 3
 hide empty methods
 skinparam classBorderThickness 1
 !pragma layout smetana
-skinparam classFontName system-ui
+skinparam defaultFontName system-ui
+skinparam ArrowColor #7A7A7A
 
-[%
-var colors = getColors();
-%]
+[%for (e in EEnum.all){%]
+class [%=e.name%] #[%=e.getEnumColor()%] #[%=e.getEnumColor().darken()%]{
+[%for (l in e.eLiterals){%]
+[%=l.name%]
+[%}%]
+}
+[%}%]
 
 [%for (c in EClass.all){%]
-[%if(c.isAbstract){%]abstract [%}%]class [%=c.name%] #[%=colors.get(c.eContainer().eContents().indexOf(c).mod(colors.size()))%] {
+[%if(c.isAbstract){%]abstract [%}%]class [%=c.name%] #[%=c.getColor()%] #[%=c.getColor().darken()%] {
 	[%for (f in c.eStructuralFeatures){%]
 	[%=f.getLabel()%]
 	[%}%]
@@ -25,6 +30,9 @@ var colors = getColors();
 [%for (r in getUnidirectionalReferences().includingAll(getBidirectionalReferences())){%]
 [%=r.getEdge()%]
 [%}%]
+[%for (a in getAttributeReferences()){%]
+[%=a.getEdge()%]
+[%}%]
 @enduml
 [*%out.toString().println();%*]
 [%
@@ -33,12 +41,19 @@ operation EClass getEdge(supertype : EClass) {
 	var direction = self.getAnnotationValue("diagram","inheritance.direction");
 	if (direction == null) direction = "up";
 	
+	if (direction == "none") return "";
+
+	var edge = "";
+
 	switch (direction) {
-		case "up": return supertype.name + " <|-- " + self.name;
-		case "down": return self.name + " --|> " +  supertype.name;
-		case "right": return self.name + " -|> " +  supertype.name;
-		case "left": return supertype.name + " <|- " + self.name;
+		case "up": edge = supertype.name + " <|-- " + self.name;
+		case "down": edge = self.name + " --|> " +  supertype.name;
+		case "right": edge = self.name + " -|> " +  supertype.name;
+		case "left": edge = supertype.name + " <|- " + self.name;
 	}
+
+	edge += ': "\t"';
+	return edge;
 }
 
 operation EClass getExtends() {
@@ -46,11 +61,47 @@ operation EClass getExtends() {
 	else return "extends " + self.eSuperTypes.name.concat(", ");
 }
 
+operation EAttribute getEdge() {
+	var direction = self.getAnnotationValue("diagram","direction");
+	if (direction == null) direction = "left";
+
+	if (direction == "none") return "";
+
+	var edge = "";
+
+	switch (direction) {
+		case "up": edge = self.eType.name + " " + "--" + " " + self.eContainer().name;
+		case "down": edge = self.eContainer().name + " "  + "--" + " " + self.eType.name;
+		case "right": edge = self.eContainer().name + " " + "-" + " " + self.eType.name;
+		case "left": edge = self.eType.name + " " + "-" + " " +  self.eContainer().name;
+	}
+
+	edge += ': "\t"';
+	return edge;
+}
+
 operation EReference getEdge() {
 	
 	var direction = self.getAnnotationValue("diagram","direction");
+
+	if (direction == null and self.eOpposite.isDefined()) {
+		var oppositeDirection = self.eOpposite.getAnnotationValue("diagram","direction");
+		switch (oppositeDirection) {
+			case "up": direction = "down";
+			case "down": direction = "up";
+			case "left": direction = "right";
+			case "right": direction = "left";
+			case "none": direction = "none";
+		}
+		if (direction == null and self.eOpposite.isContainment()) {
+			direction = "up";
+		}
+	}
+
 	if (direction == null) direction = self.isContainment ? "down" : "right";
 	
+	if (direction == "none") return "";
+
 	var selfLeftEnd = self.isContainment ? "*" : (self.eOpposite.isDefined() ? "<" : "");
 	var selfRightEnd = self.isContainment ? "*" : (self.eOpposite.isDefined() ? ">" : "");
 	var otherLeftEnd = self.eOpposite.isDefined() ? (self.eOpposite.isContainment ? "*" : "<") : "<" ;
@@ -109,29 +160,34 @@ operation getBidirectionalReferences() {
 }
 
 @cached
+operation getAttributeReferences() {
+	return EAttribute.all.select(a|a.eType.isTypeOf(EEnum));
+}
+
+@cached
 operation getVisibleReferences() { 
 	return EReference.all;
 }
 
-operation EModelElement getAnnotationValue(name : String, detail : String) : Any {
-	var ann := self.eAnnotations.selectOne(a|a.source = name);
-	var det;
+operation EEnum getEnumColor() {
+	// If a color is specified for the enumeration, use it
+	var color = self.getAnnotationValue("diagram", "color");
+	if (color != null) return color;
 
-	if (ann.isDefined()) {
-		det := ann.details.selectOne(d|d.key = detail);
+	// If the container package is monochrome use that colour
+	var monochrome = self.eContainer().getMonochrome();
+	
+	// If monochrome is true, return a default color
+	if (monochrome == "true") {
+		return "floralwhite";
 	}
-
-	if (det.isDefined()) {
-		return det.value;
+	// Else if a non-false value is specified treat it as the selected color
+	else if (monochrome <> null and monochrome <> "false") { 
+		return monochrome;
 	}
-	else if (self.isTypeOf(EClass)) {
-		for (s in self.eSuperTypes) {
-			var sann := s.getAnnotationValue(name, detail);
-			if (sann.isDefined()) {
-				return sann;
-			}
-		}
+	// Else return a fixed color
+	else {
+		return getUninstantiableColor();
 	}
-	return det;	
 }
 %]
