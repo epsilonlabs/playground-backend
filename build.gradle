@@ -4,14 +4,18 @@ repositories {
     maven {
         url "https://oss.sonatype.org/content/repositories/snapshots"
     }
+}
 
-    maven {
-        name =  "GithubPackages"
-        url = "https://maven.pkg.github.com/epsilonlabs/playground-micronaut"
-        credentials {
-            username = System.getenv("GITHUB_ACTOR")
-            password = System.getenv("GITHUB_TOKEN")            
-        }
+publishing {
+    repositories {
+        maven {
+            name =  "GithubPackages"
+            url = "https://maven.pkg.github.com/epsilonlabs/playground-micronaut"
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")            
+            }
+        }        
     }
 }
 
