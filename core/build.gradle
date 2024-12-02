@@ -72,4 +72,14 @@ publishing {
             from components.java
         }
     }
+    repositories {
+        maven {
+            name =  "GithubPackages"
+            url = "https://maven.pkg.github.com/epsilonlabs/playground-micronaut"
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")            
+            }
+        }        
+    }    
 }
