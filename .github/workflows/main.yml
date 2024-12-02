@@ -3,6 +3,7 @@ name: Main branch
 on:
   push:
     branches: [ "main" ]
+  workflow_dispatch:
   schedule:
     # Weekly rebuild of Docker image
     - cron: '38 11 * * 1'
