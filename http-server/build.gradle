@@ -77,3 +77,14 @@ tasks.named('processResources') {
 tasks.named('inspectRuntimeClasspath') {
     dependsOn webpack
 }
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+        }
+        shadow(MavenPublication) {
+            from components.shadow
+        }
+    }
+}
