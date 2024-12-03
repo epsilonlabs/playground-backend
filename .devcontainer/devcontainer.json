@@ -22,6 +22,9 @@
 			"gradleVersion": "latest",
 			"mavenVersion": "latest",
 			"antVersion": "latest"
+		},
+		"ghcr.io/devcontainers-extra/features/apt-packages:1": {
+			"packages": "graphviz"
 		}
 	},
 

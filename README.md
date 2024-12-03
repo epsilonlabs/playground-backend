@@ -8,10 +8,14 @@ This project publishes [Docker images](https://github.com/epsilonlabs/playground
 
 To build this project, you will need:
 
-- [Git](https://git-scm.com/downloads) command-line client 
+- [Git](https://git-scm.com/downloads) command-line client
 - [Java 17](https://adoptium.net/) (for Micronaut 4.x)
 - [Node.js 16](https://nodejs.org/en) (for packing the JavaScript files in `ep-tool-server`)
 - [`rsync`](https://rsync.samba.org/) command-line tool
+
+To run this project, you will also need:
+
+- [Graphviz](https://graphviz.org/)
 
 Alternatively, you can open this project in [VS Code](https://code.visualstudio.com/) and use the provided [development container](https://code.visualstudio.com/docs/devcontainers/containers), which includes the dependencies.
 

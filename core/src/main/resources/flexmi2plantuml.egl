@@ -3,7 +3,6 @@
 hide stereotypes
 skinparam roundCorner 3
 skinparam objectBorderThickness 1
-!pragma layout smetana
 skinparam defaultFontName system-ui
 skinparam ArrowColor #7A7A7A
 
