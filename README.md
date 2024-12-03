@@ -108,6 +108,17 @@ To customise the port, you can use the `MICRONAUT_SERVER_PORT` environment varia
 MICRONAUT_SERVER_PORT=8010 ./gradlew run
 ```
 
+### From the uber JAR
+
+If you have Java installed, you can run the tool server from its uber-JAR.
+For instance, if you built it yourself:
+
+```bash
+java -jar ep-tool-server/build/libs/ep-tool-server-0.1-SNAPSHOT-all.jar
+```
+
+You can download the latest `-all.jar` directly from [Github Packages](https://github.com/epsilonlabs/playground-backend/packages/2332989).
+
 ### From the Docker image
 
 To run the tool service image while exposing its endpoints on the 8010 port (e.g., to avoid the 8080 port used by the MDENet Education Platform), run:
@@ -133,6 +144,17 @@ http://localhost:8080/
 The Swagger UI is also available here:
 
 http://localhost:8080/swagger-ui
+
+### From the uber JAR
+
+If you have Java installed, you can run the tool server from its uber-JAR.
+For instance, if you built it yourself:
+
+```bash
+java -jar standalone-server/build/libs/standalone-server-0.1-SNAPSHOT-all.jar
+```
+
+You can download the latest `-all.jar` directly from [Github Packages](https://github.com/epsilonlabs/playground-backend/packages/2333178).
 
 ### From the Docker image
 
