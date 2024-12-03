@@ -53,6 +53,7 @@ The server also includes a copy of the Swagger UI at `/swagger-ui`, pointing at 
 
 ### Additional endpoints for the standalone Playground tool server
 
+* `POST /shorturl`: allows for storing work locally and retrieving it later.
 * `GET /swagger/epsilon-playground-core-0.0.yml`: returns the OpenAPI specification for the core endpoints.
 
 The server includes a local copy of the static assets of the Epsilon Playground.
