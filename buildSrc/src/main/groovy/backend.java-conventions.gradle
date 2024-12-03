@@ -8,7 +8,6 @@ java {
     targetCompatibility = JavaVersion.toVersion("17")
 }
 
-
 publishing {
     publications {
         maven(MavenPublication) {

@@ -29,6 +29,8 @@ The project is divided into:
 * [`standalone-server`](./standalone-server) combines the microservices with a local copy of the [Epsilon Playground](https://github.com/eclipse-epsilon/epsilon-website) frontend, for easy local use of the playground (e.g. for teaching). More instructions on how to use it are [below](#running-the-standalone-playground-server).
 * [`gcp-function`](./gcp-function) exposes the microservices as a Google Cloud Function, and adds an endpoint for communicating with the Google Cloud Storage API.
 
+The [`buildSrc`](./buildSrc) directory includes common Gradle build logic (see [Gradle documentation on this](https://docs.gradle.org/current/userguide/sharing_build_logic_between_subprojects.html#sec:using_buildsrc)).
+
 ## Endpoints
 
 The endpoints are [CORS](https://fetch.spec.whatwg.org/)-aware: they allow requests from any origin with any headers and a `Max-Age` set to 1 hour, but only with the methods listed below.
