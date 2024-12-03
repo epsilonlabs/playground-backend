@@ -5,6 +5,7 @@ include 'core'
 include 'ep-tool-server'
 include 'backend-server'
 include 'gcp-function'
+include 'standalone-server'
 
 dependencyResolutionManagement {
     repositories {

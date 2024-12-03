@@ -1,0 +1,6 @@
+backend.*
+cypress*
+.gitignore
+readme.md
+webpack.config.js
+package.json
