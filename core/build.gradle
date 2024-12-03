@@ -75,7 +75,7 @@ publishing {
     repositories {
         maven {
             name =  "GithubPackages"
-            url = "https://maven.pkg.github.com/epsilonlabs/playground-micronaut"
+            url = "https://maven.pkg.github.com/epsilonlabs/playground-backend"
             credentials {
                 username = System.getenv("GITHUB_ACTOR")
                 password = System.getenv("GITHUB_TOKEN")            

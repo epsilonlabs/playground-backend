@@ -88,12 +88,12 @@ MICRONAUT_SERVER_PORT=8010 ./gradlew run
 
 ### From the Docker image
 
-This project publishes [a Docker image](https://github.com/epsilonlabs/playground-micronaut/pkgs/container/playground-micronaut) to the Github Container Registry from its `main` branch.
+This project publishes [a Docker image](https://github.com/epsilonlabs/playground-backend/pkgs/container/playground-backend) to the Github Container Registry from its `main` branch.
 
 To run this image while exposing its endpoints on the 8010 port (e.g., to avoid the 8080 port used by the MDENet Education Platform), run:
 
 ```bash
-docker run --rm -p 8010:8080 ghcr.io/epsilonlabs/playground-micronaut:0.1
+docker run --rm -p 8010:8080 ghcr.io/epsilonlabs/playground-backend:ep-tool-server
 ```
 
 ## Deploying to Google Cloud Functions

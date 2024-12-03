@@ -1,5 +1,5 @@
 
-rootProject.name="playground-micronaut"
+rootProject.name="playground-backend"
 
 include 'core'
 include 'ep-tool-server'

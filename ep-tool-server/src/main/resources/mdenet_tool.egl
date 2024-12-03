@@ -2,7 +2,7 @@
 "tool":
     {
         "id": "epsilon",
-        "name": "playground-micronaut",
+        "name": "playground-backend",
         "version": "0.1.0",
         "author": "Epsilon Labs",
         "homepage": "https://eclipse.dev/epsilon/",

@@ -12,7 +12,7 @@ import io.swagger.v3.oas.annotations.info.License;
         version = "0.0",
         description = "Core functions for running Epsilon scripts and rendering models",
         license = @License(name = "Eclipse Public License 2.0", url = "https://www.eclipse.org/legal/epl-2.0/"),
-        contact = @Contact(url = "https://github.com/epsilonlabs/playground-micronaut", name = "Epsilon Developers")
+        contact = @Contact(url = "https://github.com/epsilonlabs/playground-backend", name = "Epsilon Developers")
     )
 )
 public class Application {
