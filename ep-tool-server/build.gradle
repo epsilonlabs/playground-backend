@@ -45,7 +45,7 @@ tasks.named("dockerfile") {
 }
 
 tasks.named("dockerBuild") {
-    images = ["ghcr.io/epsilonlabs/playground-micronaut:$project.version"]
+    images = ["ghcr.io/epsilonlabs/playground-micronaut:ep-tool-server"]
 }
 
 // Webpack for syntax highlighting

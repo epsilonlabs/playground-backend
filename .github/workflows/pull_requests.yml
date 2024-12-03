@@ -23,7 +23,7 @@ jobs:
         node-version: '16.x'
     - name: Install Node dependencies
       run: npm ci
-      working-directory: ./http-server
+      working-directory: ./ep-tool-server
     - name: Build with Gradle
       uses: gradle/gradle-build-action@v3.1.0
       with:

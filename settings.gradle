@@ -2,7 +2,7 @@
 rootProject.name="playground-micronaut"
 
 include 'core'
-include 'http-server'
+include 'ep-tool-server'
 include 'gcp-function'
 
 dependencyResolutionManagement {

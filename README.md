@@ -7,7 +7,7 @@ This project provides an alternative [Micronaut](https://micronaut.io/)-based im
 To build this project, you will need:
 
 - [Java 17](https://adoptium.net/) (for Micronaut 4.x)
-- [Node.js 16](https://nodejs.org/en) (for packing the JavaScript files in `http-server`)
+- [Node.js 16](https://nodejs.org/en) (for packing the JavaScript files in `ep-tool-server`)
 
 Alternatively, you can open this project in [VS Code](https://code.visualstudio.com/) and use the provided [development container](https://code.visualstudio.com/docs/devcontainers/containers), which includes both.
 
@@ -16,7 +16,7 @@ Alternatively, you can open this project in [VS Code](https://code.visualstudio.
 The project is divided into three modules:
 
 * [`core`](./core) is a library that contains most of the implementations of the microservices.
-* [`http-server`](./http-server) exposes the microservices as an HTTP server, which can be distributed as an uber-JAR or as a Docker image.
+* [`ep-tool-server`](./ep-tool-server) exposes the microservices as an [MDENet Education Platform tool service](https://github.com/mdenet/educationplatform/wiki/Adding-a-Tool#tool-service), which can be distributed as an uber-JAR or as a Docker image.
 * [`gcp-function`](./gcp-function) exposes the microservices as a Google Cloud Function, and adds an endpoint for communicating with the Google Cloud Storage API.
 
 ## Endpoints
@@ -29,7 +29,7 @@ The endpoints are [CORS](https://fetch.spec.whatwg.org/)-aware: they allow reque
 * `POST /flexmi2plantuml`: transforms a model written in [Flexmi](https://eclipse.dev/epsilon/doc/flexmi/) that conforms to a metamodel written in Emfatic to a PlantUML class diagram.
 * `POST /epsilon`: runs an Epsilon script against a given set of metamodels (written in Emfatic) and models (written in Flexmi or XMI). The first model can alternatively be a JSON document.
 
-### Additional endpoints for the HTTP server
+### Additional endpoints for the EP tool server
 
 * `GET /tools`: returns a JSON document according to the [MDENet Education Platform tool specification](https://github.com/mdenet/educationplatform/wiki/Adding-a-Tool).
 * `GET /swagger/epsilon-playground-core-0.0.yml`: returns the OpenAPI specification for the core endpoints.
@@ -62,7 +62,7 @@ This will also build uber-JAR distributions of the HTTP server and the Google Cl
 After the project has been built, you can build a Docker image for the HTTP server as well:
 
 ```bash
-cd http-server
+cd ep-tool-server
 ../gradlew dockerBuild
 ```
 
