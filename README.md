@@ -59,21 +59,20 @@ Run this command to build all modules and run the tests on the core endpoints:
 
 This will also build uber-JAR distributions of the HTTP server and the Google Cloud Functions, in the respective `build/libs` directories of the modules.
 
-After the project has been built, you can build a Docker image for the HTTP server as well:
+After the project has been built, you can build the various Docker images with:
 
 ```bash
-cd ep-tool-server
-../gradlew dockerBuild
+./gradlew dockerBuild
 ```
 
-## Running the HTTP server
+## Running the Education Platform tool server
 
 ### Locally from Gradle
 
 To run the HTTP server locally, run:
 
 ```bash
-./gradlew run
+./gradlew ep-tool-server:run
 ```
 
 You can then try out the endpoints through the Swagger UI available here:
@@ -88,9 +87,9 @@ MICRONAUT_SERVER_PORT=8010 ./gradlew run
 
 ### From the Docker image
 
-This project publishes [a Docker image](https://github.com/epsilonlabs/playground-backend/pkgs/container/playground-backend) to the Github Container Registry from its `main` branch.
+This project publishes [Docker images](https://github.com/epsilonlabs/playground-backend/pkgs/container/playground-backend) to the Github Container Registry from its `main` branch.
 
-To run this image while exposing its endpoints on the 8010 port (e.g., to avoid the 8080 port used by the MDENet Education Platform), run:
+To run the tool service image while exposing its endpoints on the 8010 port (e.g., to avoid the 8080 port used by the MDENet Education Platform), run:
 
 ```bash
 docker run --rm -p 8010:8080 ghcr.io/epsilonlabs/playground-backend:ep-tool-server
