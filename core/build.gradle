@@ -3,6 +3,8 @@ plugins {
     id("com.gradleup.shadow") version "8.3.5"
     id('io.micronaut.openapi') version "4.4.4"
     id("maven-publish")
+
+    id 'backend.java-conventions'
 }
 
 dependencies {
@@ -47,11 +49,6 @@ dependencies {
     implementation("org.eclipse.epsilon:org.eclipse.epsilon.pinset.engine:${epsilonVersion}")
 }
 
-java {
-    sourceCompatibility = JavaVersion.toVersion("17")
-    targetCompatibility = JavaVersion.toVersion("17")
-}
-
 micronaut {
     runtime("netty")
     testRuntime("junit5")
@@ -64,22 +61,4 @@ micronaut {
 test {
     // Avoid errors from PlantUML tests looking for an X library, by using AWT in headless mode
     jvmArgs '-Djava.awt.headless=true'
-}
-
-publishing {
-    publications {
-        maven(MavenPublication) {
-            from components.java
-        }
-    }
-    repositories {
-        maven {
-            name =  "GithubPackages"
-            url = "https://maven.pkg.github.com/epsilonlabs/playground-backend"
-            credentials {
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN")            
-            }
-        }
-    }
 }

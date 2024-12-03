@@ -1,0 +1,10 @@
+plugins {
+    id 'backend.java-conventions'
+}
+
+tasks.named("dockerfile") {
+  baseImage = "eclipse-temurin:17-alpine"
+
+  // Install graphviz for the PlantUML functions
+  runCommand 'apk add --no-cache graphviz'
+}

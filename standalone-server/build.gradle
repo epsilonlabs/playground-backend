@@ -2,7 +2,8 @@ plugins {
     id("io.micronaut.application") version "4.4.4"
     id("com.gradleup.shadow") version "8.3.5"
     id('io.micronaut.openapi') version "4.4.4"
-    id("maven-publish")
+
+    id 'backend.server-conventions'
 }
 
 dependencies {
@@ -20,10 +21,6 @@ dependencies {
 application {
     mainClass = "org.eclipse.epsilon.labs.playground.standalone.Application"
 }
-java {
-    sourceCompatibility = JavaVersion.toVersion("17")
-    targetCompatibility = JavaVersion.toVersion("17")
-}
 
 micronaut {
     runtime("netty")
@@ -32,13 +29,6 @@ micronaut {
         incremental(true)
         annotations("org.eclipse.epsilon.labs.playground.fn.*")
     }
-}
-
-tasks.named("dockerfile") {
-  baseImage = "eclipse-temurin:17-alpine"
-
-  // Install graphviz for the PlantUML functions
-  runCommand 'apk add --no-cache graphviz'
 }
 
 tasks.named("dockerBuild") {
@@ -68,22 +58,4 @@ tasks.named('processResources') {
 
 tasks.named('inspectRuntimeClasspath') {
     dependsOn cloneFrontend
-}
-
-publishing {
-    publications {
-        maven(MavenPublication) {
-            from components.java
-        }
-    }
-    repositories {
-        maven {
-            name =  "GithubPackages"
-            url = "https://maven.pkg.github.com/epsilonlabs/playground-backend"
-            credentials {
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN")            
-            }
-        }
-    }
 }
