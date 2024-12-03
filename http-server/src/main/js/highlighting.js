@@ -10,3 +10,5 @@ import './evl.js';
 import './flexmi.js';
 import './flock.js';
 import './json.js';
+import './emg.js';
+import './pinset.js';
