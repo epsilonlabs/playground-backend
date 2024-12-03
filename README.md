@@ -177,7 +177,7 @@ This means that unless you use a [bind mount](https://docs.docker.com/engine/sto
 For example, you could run this command to bind the `shorturl` folder in your host system to `/var/share/shorturl` within the container:
 
 ```bash
-docker run --rm -v $(pwd)/shorturl:/var/share/shorturl -p 8080:8080 ghcr.io/epsilonlabs/playground-backend:standalone-server
+docker run --rm -v ./shorturl:/var/share/shorturl -p 8080:8080 ghcr.io/epsilonlabs/playground-backend:standalone-server
 ```
 
 ## Deploying to Google Cloud Functions
