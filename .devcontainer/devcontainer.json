@@ -24,7 +24,8 @@
 			"antVersion": "latest"
 		},
 		"ghcr.io/devcontainers-extra/features/apt-packages:1": {
-			"packages": "graphviz"
+			// PlantUML needs fonts and Graphviz
+			"packages": "fontconfig,graphviz"
 		}
 	},
 
@@ -33,8 +34,6 @@
 		"LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}"
 	},
 
-	// PlantUML needs fonts
-	"postCreateCommand": "sudo apt-get update && sudo apt-get -y install fontconfig",
 	"forwardPorts": [
 		8080
 	],
