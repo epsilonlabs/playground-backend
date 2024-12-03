@@ -1,21 +1,18 @@
 plugins {
-    id("io.micronaut.application") version "4.4.4"
-    id("com.gradleup.shadow") version "8.3.5"
-    id('io.micronaut.openapi') version "4.4.4"
-
+    id 'io.micronaut.application'
+    id 'com.gradleup.shadow'
+    id 'io.micronaut.openapi'
     id 'backend.server-conventions'
 }
 
 dependencies {
-    annotationProcessor("io.micronaut.serde:micronaut-serde-processor")
-    implementation("io.micronaut.serde:micronaut-serde-jackson")
     implementation(project(":core"))
 
-    // To try out the functions locally via a Netty HTTP server
-    developmentOnly("io.micronaut:micronaut-http-server-netty")
+    annotationProcessor(mn.micronaut.serde.processor)
+    implementation(mn.micronaut.serde.jackson)
 
-    testImplementation("io.micronaut:micronaut-http-server-netty")
-    testImplementation("io.micronaut.reactor:micronaut-reactor")
+    testImplementation(mn.micronaut.http.server.netty)
+    testImplementation(mn.micronaut.reactor)
 }
 
 application {

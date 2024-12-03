@@ -1,8 +1,7 @@
 plugins {
-    id("io.micronaut.application") version "4.4.4"
-    id("com.gradleup.shadow") version "8.3.5"
-    id('io.micronaut.openapi') version "4.4.4"
-
+    id 'io.micronaut.application'
+    id 'com.gradleup.shadow'
+    id 'io.micronaut.openapi'
     id 'backend.server-conventions'
 }
 
@@ -10,18 +9,18 @@ dependencies {
     implementation(project(":core"))
 
     // OpenAPI support
-    annotationProcessor("io.micronaut.openapi:micronaut-openapi")
-    compileOnly("io.micronaut.openapi:micronaut-openapi-annotations")
+    annotationProcessor(mn.micronaut.openapi)
+    compileOnly(mn.micronaut.openapi.annotations)
 
     // To try out the functions locally via a Netty HTTP server
-    developmentOnly("io.micronaut:micronaut-http-server-netty")
+    developmentOnly(mn.micronaut.http.server.netty)
 
     // For rendering the MDENet Education Platform tools JSON file
     implementation("org.eclipse.epsilon:org.eclipse.epsilon.egl.engine:${epsilonVersion}")
 
     // For testing the additional logic for exposing the services as an MDENet EP tool
-    testImplementation("io.micronaut:micronaut-http-client")
-    testImplementation("io.micronaut.reactor:micronaut-reactor")
+    testImplementation(mn.micronaut.http.client)
+    testImplementation(mn.micronaut.reactor)
 }
 
 application {

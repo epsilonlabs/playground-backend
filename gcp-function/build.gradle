@@ -1,20 +1,20 @@
 plugins {
-    id("io.micronaut.library") version "4.4.4"
-    id("com.gradleup.shadow") version "8.3.5"
-    id('io.micronaut.openapi') version "4.4.4"
+    id 'io.micronaut.library'
+    id 'com.gradleup.shadow'
+    id 'io.micronaut.openapi'
     id 'backend.java-conventions'
 }
 
 dependencies {
     implementation(project(":core"))
 
-    annotationProcessor("io.micronaut.serde:micronaut-serde-processor")
-    implementation("io.micronaut.serde:micronaut-serde-jackson")
+    annotationProcessor(mn.micronaut.serde.processor)
+    implementation(mn.micronaut.serde.jackson)
 
     // For using regular Micronaut @Controller annotations to specify functions
-    implementation("io.micronaut.gcp:micronaut-gcp-function-http")
-    runtimeOnly("com.google.cloud.functions:functions-framework-api")
+    implementation(mn.micronaut.gcp.function.http)
 
+    runtimeOnly("com.google.cloud.functions:functions-framework-api")
     testImplementation("com.google.cloud.functions:functions-framework-api")
 
     // For accessing Google Cloud storage

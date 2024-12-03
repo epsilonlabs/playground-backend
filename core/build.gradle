@@ -1,29 +1,27 @@
 plugins {
-    id("io.micronaut.library") version "4.4.4"
-    id("com.gradleup.shadow") version "8.3.5"
-    id('io.micronaut.openapi') version "4.4.4"
-    id("maven-publish")
-
+    id 'io.micronaut.library'
+    id 'com.gradleup.shadow'
+    id 'io.micronaut.openapi'
     id 'backend.java-conventions'
 }
 
 dependencies {
-    annotationProcessor("io.micronaut.serde:micronaut-serde-processor")
-    implementation("io.micronaut.serde:micronaut-serde-jackson")
+    annotationProcessor(mn.micronaut.serde.processor)
+    implementation(mn.micronaut.serde.jackson)
 
-    annotationProcessor("io.micronaut.validation:micronaut-validation-processor")
-    implementation("io.micronaut.validation:micronaut-validation")
+    annotationProcessor(mn.micronaut.validation.processor)
+    implementation(mn.validation)
 
     // Basic logging
-    runtimeOnly("ch.qos.logback:logback-classic")
+    runtimeOnly(mn.logback.classic)
 
     // OpenAPI support
-    annotationProcessor("io.micronaut.openapi:micronaut-openapi")
-    compileOnly("io.micronaut.openapi:micronaut-openapi-annotations")
+    annotationProcessor(mn.micronaut.openapi)
+    compileOnly(mn.micronaut.openapi.annotations)
 
     // For testing the functions through the declarative HTTP client
-    testImplementation("io.micronaut:micronaut-http-server-netty")
-    testImplementation("io.micronaut:micronaut-http-client")
+    testImplementation(mn.micronaut.http.server.netty)
+    testImplementation(mn.micronaut.http.client)
 
     // Epsilon dependencies - Flexmi, Ecore and PlantUML
     implementation("org.eclipse.epsilon:org.eclipse.epsilon.flexmi:${epsilonVersion}")
