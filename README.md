@@ -80,7 +80,7 @@ Run this command to build all modules and run the tests on the core endpoints:
 ./gradlew build
 ```
 
-This will also build uber-JAR distributions of the HTTP server and the Google Cloud Functions, in the respective `build/libs` directories of the modules.
+This will also build uber-JAR distributions of the servers and the Google Cloud Functions, in the respective `build/libs` directories of the modules.
 
 After the project has been built, you can build the various Docker images with:
 
