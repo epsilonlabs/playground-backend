@@ -1,0 +1,59 @@
+plugins {
+    id("io.micronaut.application") version "4.4.4"
+    id("com.gradleup.shadow") version "8.3.5"
+    id('io.micronaut.openapi') version "4.4.4"
+    id("maven-publish")
+}
+
+dependencies {
+    implementation(project(":core"))
+
+    // To try out the functions locally via a Netty HTTP server
+    developmentOnly("io.micronaut:micronaut-http-server-netty")
+
+    testImplementation("io.micronaut:micronaut-http-server-netty")
+    testImplementation("io.micronaut.reactor:micronaut-reactor")
+}
+
+application {
+    mainClass = "org.eclipse.epsilon.labs.playground.Application"
+}
+java {
+    sourceCompatibility = JavaVersion.toVersion("17")
+    targetCompatibility = JavaVersion.toVersion("17")
+}
+
+micronaut {
+    runtime("netty")
+    testRuntime("junit5")
+    processing {
+        incremental(true)
+        annotations("org.eclipse.epsilon.labs.playground.fn.*")
+    }
+}
+
+tasks.named("dockerfile") {
+  baseImage = "eclipse-temurin:17-alpine"
+}
+
+tasks.named("dockerBuild") {
+    images = ["ghcr.io/epsilonlabs/playground-backend:backend-server"]
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            name =  "GithubPackages"
+            url = "https://maven.pkg.github.com/epsilonlabs/playground-backend"
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")            
+            }
+        }
+    }
+}
