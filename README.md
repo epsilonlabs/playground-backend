@@ -76,7 +76,8 @@ The standalone Playground server supports these additional environment variables
 * `PLAYGROUND_EPSILON_URL`: URL to the service running Epsilon scripts. The default is to use the server's own implementation.
 * `PLAYGROUND_FLEXMI2PLANTUML_URL`: URL to the service running the Flexmi to PlantUML transformation. The default is to use the server's own implementation.
 * `PLAYGROUND_EMFATIC2PLANTUML_URL`: URL to the service running Epsilon scripts. The default is to use the server's own implementation.
-* `PLAYGROUND_SHORT_URL`: URL to the service running Epsilon scripts. The default is to use `http://localhost:8005`, and will need to be changed for the time being.
+* `PLAYGROUND_SHORT_URL`: URL to the service running Epsilon scripts. The default is to use the server's own implementation, which uses a local folder. When using this default, the following environment variable applies:
+  * `PLAYGROUND_SHORT_FOLDER`: absolute path to the folder that should store the contents to be shared. This is the `shorturl` subfolder of the current working directory by default when running directly via Gradle or from the uber-JAR. For the Docker image specifics, see [below](#standalone-playground-from-the-docker-image).
 
 ## Building the project
 
@@ -96,7 +97,7 @@ After the project has been built, you can build the various Docker images with:
 
 ## Running the Education Platform tool server
 
-### Locally from Gradle
+### EP tool server from Gradle
 
 To run the Education Platform tool server locally, run:
 
@@ -114,7 +115,7 @@ To customise the port, you can use the `MICRONAUT_SERVER_PORT` environment varia
 MICRONAUT_SERVER_PORT=8010 ./gradlew run
 ```
 
-### From the uber JAR
+### EP tool server from the uber JAR
 
 If you have Java installed, you can run the tool server from its uber-JAR.
 For instance, if you built it yourself:
@@ -125,7 +126,7 @@ java -jar ep-tool-server/build/libs/ep-tool-server-0.1-SNAPSHOT-all.jar
 
 You can download the latest `-all.jar` directly from [Github Packages](https://github.com/epsilonlabs/playground-backend/packages/2332989).
 
-### From the Docker image
+### EP tool server from the Docker image
 
 To run the tool service image while exposing its endpoints on the 8010 port (e.g., to avoid the 8080 port used by the MDENet Education Platform), run:
 
@@ -135,7 +136,7 @@ docker run --rm -p 8010:8080 ghcr.io/epsilonlabs/playground-backend:ep-tool-serv
 
 ## Running the standalone Playground server
 
-### Locally from Gradle
+### Standalone Playground from Gradle
 
 To run the standalone Playground server locally, run:
 
@@ -151,7 +152,7 @@ The Swagger UI is also available here:
 
 http://localhost:8080/swagger-ui
 
-### From the uber JAR
+### Standalone Playground from the uber JAR
 
 If you have Java installed, you can run the tool server from its uber-JAR.
 For instance, if you built it yourself:
@@ -162,12 +163,21 @@ java -jar standalone-server/build/libs/standalone-server-0.1-SNAPSHOT-all.jar
 
 You can download the latest `-all.jar` directly from [Github Packages](https://github.com/epsilonlabs/playground-backend/packages/2333178).
 
-### From the Docker image
+### Standalone Playground from the Docker image
 
 To run the standalone Playground server directly from Docker, run:
 
 ```bash
 docker run --rm -p 8080:8080 ghcr.io/epsilonlabs/playground-backend:standalone-server
+```
+
+Note that the default implementation of "Share" in this image will use the `/var/share/shorturl` folder within the Docker container.
+This means that unless you use a [bind mount](https://docs.docker.com/engine/storage/bind-mounts/) or a [volume](https://docs.docker.com/engine/storage/volumes/), you would lose all shared work once the container was destroyed.
+
+For example, you could run this command to bind the `shorturl` folder in your host system to `/var/share/shorturl` within the container:
+
+```bash
+docker run --rm -v $(pwd)/shorturl:/var/share/shorturl -p 8080:8080 ghcr.io/epsilonlabs/playground-backend:standalone-server
 ```
 
 ## Deploying to Google Cloud Functions

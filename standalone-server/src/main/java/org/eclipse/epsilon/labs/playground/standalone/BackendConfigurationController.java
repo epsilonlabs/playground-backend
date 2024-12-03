@@ -11,6 +11,8 @@ import io.micronaut.http.annotation.Get;
 @Controller
 public class BackendConfigurationController {
 
+    public static final String PATH = "backend.json";
+
     @Value("${playground.epsilon.url:`" + RunEpsilonController.PATH + "`}")
     private String runEpsilonUrl;
 
@@ -20,10 +22,10 @@ public class BackendConfigurationController {
     @Value("${playground.emfatic2plantuml.url:`" + Emfatic2PlantUMLController.PATH + "`}")
     private String emfatic2PlantUMLUrl;
 
-    @Value("${playground.short.url:`http://localhost:8005`}")
+    @Value("${playground.short.url:`" + ShortURLController.PATH + "`}")
     private String shortenerUrl;
 
-    @Get("backend.json")
+    @Get(BackendConfigurationController.PATH)
     public BackendConfiguration getConfig() {
         BackendConfiguration config = new BackendConfiguration();
         createService(config, "RunEpsilonFunction", runEpsilonUrl);

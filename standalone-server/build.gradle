@@ -11,7 +11,11 @@ dependencies {
     annotationProcessor(mn.micronaut.serde.processor)
     implementation(mn.micronaut.serde.jackson)
 
+    annotationProcessor(mn.micronaut.validation.processor)
+    implementation(mn.micronaut.validation)
+
     testImplementation(mn.micronaut.http.server.netty)
+    testImplementation(mn.micronaut.http.client)
     testImplementation(mn.micronaut.reactor)
 }
 
@@ -28,13 +32,18 @@ micronaut {
     }
 }
 
+tasks.named("dockerfile") {
+    environmentVariable('PLAYGROUND_SHORT_FOLDER', '/var/share/shorturl')
+    runCommand 'mkdir -p ${PLAYGROUND_SHORT_FOLDER}'
+}
+
 tasks.named("dockerBuild") {
     images = ["ghcr.io/epsilonlabs/playground-backend:standalone-server"]
 }
 
 def clonedFrontendDir = 'build/frontend'
 
-task cloneFrontend(type: Exec) {
+tasks.register('cloneFrontend', Exec) {
     inputs.file('clone-frontend.sh').withPathSensitivity(PathSensitivity.RELATIVE)
     inputs.file('frontend-exclusions.txt').withPathSensitivity(PathSensitivity.RELATIVE)
     outputs.dir(clonedFrontendDir)
