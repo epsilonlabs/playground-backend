@@ -10,26 +10,42 @@ import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
 
+import io.micronaut.context.annotation.Value;
+import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
+import io.micronaut.http.exceptions.HttpStatusException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Controller("/shorturl")
 public class ShortURLController implements IShortURLController {
+
+	@Value("${playground.gcp.projectId:`epsilon-live-gcp`")
+	private String projectId;
+
+	@Value("${playground.gcp.bucket:`epsilon-live-gcp.appspot.com`")
+	private String bucket;
+
+	@Value("${playground.gcp.credentials:`epsilon-live-gcp.json`")
+	private String credentialsPath;
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(ShortURLController.class);
 
 	@Override
 	@Post
 	public ShortURLMessage shorten(@Body ShortURLMessage request) {
 		var response = new ShortURLMessage();
 		try {
-			Storage storage = StorageOptions.newBuilder().setProjectId("epsilon-live-gcp")
-					.setCredentials(GoogleCredentials.fromStream(new FileInputStream("epsilon-live-gcp.json"))).build()
+			Storage storage = StorageOptions.newBuilder().setProjectId(projectId)
+					.setCredentials(GoogleCredentials.fromStream(new FileInputStream(credentialsPath))).build()
 					.getService();
 
 			if (request.getContent() != null) {
 				String content = request.getContent();
 				String shortened = getShortened(content);
-				BlobId blobId = BlobId.of("epsilon-live-gcp.appspot.com", shortened);
+				BlobId blobId = BlobId.of(bucket, shortened);
 
 				Blob blob = storage.get(blobId);
 				if (blob == null) {
@@ -40,7 +56,7 @@ public class ShortURLController implements IShortURLController {
 				response.setShortened(shortened);
 			} else if (request.getShortened() != null) {
 				String shortened = request.getShortened();
-				BlobId blobId = BlobId.of("epsilon-live-gcp.appspot.com", shortened);
+				BlobId blobId = BlobId.of(bucket, shortened);
 
 				Blob blob = storage.get(blobId);
 				if (blob != null) {
@@ -49,8 +65,8 @@ public class ShortURLController implements IShortURLController {
 			}
 
 		} catch (Throwable t) {
-			response.setError(t.getMessage());
-			response.setOutput(t.getMessage());
+			LOGGER.error(t.getMessage(), t);
+			throw new HttpStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to store the example");
 		}
 		return response;
 	}

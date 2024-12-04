@@ -1,0 +1,28 @@
+plugins {
+    id 'io.micronaut.library'
+    id 'backend.java-conventions'
+}
+
+dependencies {
+    annotationProcessor(mn.micronaut.serde.processor)
+    implementation(mn.micronaut.serde.jackson)
+
+    annotationProcessor(mn.micronaut.validation.processor)
+    implementation(mn.validation)
+
+    // Basic logging
+    runtimeOnly(mn.logback.classic)
+
+    // OpenAPI support
+    annotationProcessor(mn.micronaut.openapi)
+    compileOnly(mn.micronaut.openapi.annotations)
+}
+
+micronaut {
+    runtime("netty")
+    testRuntime("junit5")
+    processing {
+        incremental(true)
+        annotations("org.eclipse.epsilon.labs.playground.fn.*")
+    }
+}

@@ -3,10 +3,9 @@ package org.eclipse.epsilon.labs.playground.fn.shorturl;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import org.eclipse.epsilon.labs.playground.fn.AbstractPlaygroundResponse;
 
 @Serdeable
-public class ShortURLMessage extends AbstractPlaygroundResponse {
+public class ShortURLMessage {
 
     public static final int MAX_CONTENT_LENGTH = 100_000;
     public static final String SHORTENED_REGEX = "[a-f0-9]{8}";

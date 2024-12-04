@@ -13,7 +13,7 @@ public class S3ClientFactory {
 
   @io.micronaut.runtime.context.scope.ThreadLocal
   public S3Client createS3Client() {
-    Region region = Region.US_EAST_1;
+    Region region = Region.EU_NORTH_1;
     if (s3Region != null) {
       region = Region.of(s3Region);
     }

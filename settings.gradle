@@ -16,5 +16,7 @@ rootProject.name="playground-backend"
 include 'core'
 include 'ep-tool-server'
 include 'backend-server'
+include 'shorturl-api'
+include 'shorturl-s3'
 include 'gcp-function'
 include 'standalone-server'
