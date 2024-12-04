@@ -8,6 +8,13 @@ plugins {
 dependencies {
     implementation(project(":core"))
 
+    annotationProcessor(mn.micronaut.validation.processor)
+    implementation(mn.micronaut.validation)
+
+    // AWS SDK BOM + S3 support
+    implementation(platform("software.amazon.awssdk:bom:2.29.27"))
+    implementation("software.amazon.awssdk:s3")
+
     testImplementation(mn.micronaut.http.server.netty)
     testImplementation(mn.micronaut.reactor)
 }
