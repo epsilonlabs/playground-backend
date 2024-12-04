@@ -4,7 +4,7 @@ import io.micronaut.http.HttpStatus;
 import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
-import org.eclipse.epsilon.labs.playground.standalone.ShortURLMessage;
+import org.eclipse.epsilon.labs.playground.fn.shorturl.ShortURLMessage;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

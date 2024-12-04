@@ -15,9 +15,10 @@ import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
 
 @Controller("/shorturl")
-public class ShortURLController {
+public class ShortURLController implements IShortURLController {
 
-	@Post("/")
+	@Override
+	@Post
 	public ShortURLMessage shorten(@Body ShortURLMessage request) {
 		var response = new ShortURLMessage();
 		try {

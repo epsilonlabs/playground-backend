@@ -5,12 +5,13 @@ import io.micronaut.context.event.StartupEvent;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
-import io.micronaut.http.annotation.Post;
 import io.micronaut.http.exceptions.HttpStatusException;
 import io.micronaut.runtime.event.annotation.EventListener;
 import io.micronaut.scheduling.TaskExecutors;
 import io.micronaut.scheduling.annotation.ExecuteOn;
 import jakarta.validation.Valid;
+import org.eclipse.epsilon.labs.playground.fn.shorturl.IShortURLController;
+import org.eclipse.epsilon.labs.playground.fn.shorturl.ShortURLMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +21,7 @@ import java.nio.file.Files;
 import java.util.UUID;
 
 @Controller(ShortURLController.PATH)
-public class ShortURLController {
+public class ShortURLController implements IShortURLController {
   public static final String PATH = "/shorturl";
   private static final Logger LOGGER = LoggerFactory.getLogger(ShortURLController.class);
 
@@ -41,7 +42,7 @@ public class ShortURLController {
   }
 
   @ExecuteOn(TaskExecutors.IO)
-  @Post
+  @Override
   public ShortURLMessage shorten(@Valid @Body ShortURLMessage request) {
     var response = new ShortURLMessage();
     if (request.getContent() != null) {
