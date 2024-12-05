@@ -33,6 +33,16 @@ public class FunctionRequestHandlerTest {
     }
 
     @Test
+    public void testNoBody() throws Exception {
+        APIGatewayProxyRequestEvent request = new APIGatewayProxyRequestEvent();
+        request.setHttpMethod("POST");
+        request.setPath("/");
+
+        APIGatewayProxyResponseEvent response = handler.execute(request);
+        assertEquals(400, response.getStatusCode().intValue());
+    }
+
+    @Test
     public void testNotFound() throws Exception {
         APIGatewayProxyRequestEvent request = new APIGatewayProxyRequestEvent();
         request.setHttpMethod("POST");

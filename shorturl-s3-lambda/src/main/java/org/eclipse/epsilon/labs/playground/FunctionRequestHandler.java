@@ -51,6 +51,11 @@ public class FunctionRequestHandler extends MicronautRequestHandler<APIGatewayPr
             response.setStatusCode(400);
             return response;
         }
+        if (input.getBody() == null) {
+            setResponseText(response, "Request body is missing.");
+            response.setStatusCode(400);
+            return response;
+        }
 
         try {
             var request = objectMapper.readValue(input.getBody(), ShortURLRequest.class);
