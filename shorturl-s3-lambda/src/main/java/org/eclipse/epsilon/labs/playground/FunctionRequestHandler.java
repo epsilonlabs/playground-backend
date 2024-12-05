@@ -47,7 +47,7 @@ public class FunctionRequestHandler extends MicronautRequestHandler<APIGatewayPr
     public APIGatewayProxyResponseEvent execute(APIGatewayProxyRequestEvent input) {
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
         if (!"POST".equals(input.getHttpMethod())) {
-            setResponseText(response, "Invalid HTTP method. Valid HTTP methods are: [POST]");
+            setResponseText(response, String.format("Invalid HTTP method: %s. Valid HTTP methods are: [POST]", input.getHttpMethod()));
             response.setStatusCode(400);
             return response;
         }
