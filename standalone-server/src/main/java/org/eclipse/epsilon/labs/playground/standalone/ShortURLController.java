@@ -11,7 +11,8 @@ import io.micronaut.scheduling.TaskExecutors;
 import io.micronaut.scheduling.annotation.ExecuteOn;
 import jakarta.validation.Valid;
 import org.eclipse.epsilon.labs.playground.fn.shorturl.IShortURLController;
-import org.eclipse.epsilon.labs.playground.fn.shorturl.ShortURLMessage;
+import org.eclipse.epsilon.labs.playground.fn.shorturl.ShortURLRequest;
+import org.eclipse.epsilon.labs.playground.fn.shorturl.ShortURLResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,8 +44,8 @@ public class ShortURLController implements IShortURLController {
 
   @ExecuteOn(TaskExecutors.IO)
   @Override
-  public ShortURLMessage shorten(@Valid @Body ShortURLMessage request) {
-    var response = new ShortURLMessage();
+  public ShortURLResponse shorten(@Valid @Body ShortURLRequest request) {
+    var response = new ShortURLResponse();
     if (request.getContent() != null) {
       String content = request.getContent();
       String shortened = getShortened(content);

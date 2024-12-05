@@ -35,8 +35,8 @@ public class ShortURLController implements IShortURLController {
 
 	@Override
 	@Post
-	public ShortURLMessage shorten(@Body ShortURLMessage request) {
-		var response = new ShortURLMessage();
+	public ShortURLResponse shorten(@Body ShortURLRequest request) {
+		var response = new ShortURLResponse();
 		try {
 			Storage storage = StorageOptions.newBuilder().setProjectId(projectId)
 					.setCredentials(GoogleCredentials.fromStream(new FileInputStream(credentialsPath))).build()

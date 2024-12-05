@@ -10,7 +10,8 @@ import io.micronaut.scheduling.annotation.ExecuteOn;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import org.eclipse.epsilon.labs.playground.fn.shorturl.IShortURLController;
-import org.eclipse.epsilon.labs.playground.fn.shorturl.ShortURLMessage;
+import org.eclipse.epsilon.labs.playground.fn.shorturl.ShortURLRequest;
+import org.eclipse.epsilon.labs.playground.fn.shorturl.ShortURLResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import software.amazon.awssdk.core.ResponseBytes;
@@ -36,8 +37,8 @@ public class S3ShortURLController implements IShortURLController {
 
   @ExecuteOn(TaskExecutors.BLOCKING)
   @Override
-  public ShortURLMessage shorten(@Valid @Body ShortURLMessage request) {
-    var response = new ShortURLMessage();
+  public ShortURLResponse shorten(@Valid @Body ShortURLRequest request) {
+    var response = new ShortURLResponse();
 
     if (request.getShortened() != null) {
       GetObjectRequest objectRequest = GetObjectRequest.builder()

@@ -13,5 +13,5 @@ import jakarta.validation.Valid;
  */
 public interface IShortURLController {
   @Post
-  ShortURLMessage shorten(@Valid @Body ShortURLMessage request);
+  ShortURLResponse shorten(@Valid @Body ShortURLRequest request);
 }

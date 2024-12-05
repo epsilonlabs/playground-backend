@@ -4,7 +4,7 @@ import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.client.annotation.Client;
-import org.eclipse.epsilon.labs.playground.fn.shorturl.ShortURLMessage;
+import org.eclipse.epsilon.labs.playground.fn.shorturl.ShortURLRequest;
 import org.eclipse.epsilon.labs.playground.standalone.BackendConfiguration;
 import org.eclipse.epsilon.labs.playground.standalone.BackendConfigurationController;
 import org.eclipse.epsilon.labs.playground.standalone.ShortURLController;
@@ -13,7 +13,7 @@ import org.eclipse.epsilon.labs.playground.standalone.ShortURLController;
 public interface StandaloneClient {
 
   @Post(ShortURLController.PATH)
-  ShortURLMessage shortURL(@Body ShortURLMessage request);
+  ShortURLRequest shortURL(@Body ShortURLRequest request);
 
   @Get(BackendConfigurationController.PATH)
   BackendConfiguration getBackendConfiguration();

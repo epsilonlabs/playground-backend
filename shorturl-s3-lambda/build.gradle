@@ -1,0 +1,39 @@
+plugins {
+    id 'io.micronaut.application'
+    id 'com.gradleup.shadow'
+    id 'io.micronaut.openapi'
+    id 'backend.java-conventions'
+}
+
+dependencies {
+    implementation(project(':shorturl-api'))
+
+    annotationProcessor(mn.micronaut.serde.processor)
+    annotationProcessor(mn.micronaut.validation.processor)
+    implementation("com.amazonaws:aws-lambda-java-events")
+    implementation(mn.micronaut.http.client.jdk)
+    implementation(mn.micronaut.aws.lambda.events.serde)
+    implementation(mn.micronaut.aws.sdk.v2)
+    implementation(mn.micronaut.function.aws)
+    implementation(mn.micronaut.function.aws.custom.runtime)
+    implementation(mn.micronaut.object.storage.aws)
+    implementation(mn.micronaut.serde.jackson)
+    implementation(mn.micronaut.validation)
+    implementation("jakarta.validation:jakarta.validation-api")
+    runtimeOnly("ch.qos.logback:logback-classic")
+
+    testImplementation(mn.micronaut.object.storage.local)
+}
+
+application {
+    mainClass = "org.eclipse.epsilon.labs.playground.FunctionLambdaRuntime"
+}
+
+micronaut {
+    runtime("lambda_provided")
+    testRuntime("junit5")
+    processing {
+        incremental(true)
+        annotations("org.eclipse.epsilon.labs.playground.*")
+    }
+}

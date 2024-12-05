@@ -4,7 +4,7 @@ import io.micronaut.http.HttpStatus;
 import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
-import org.eclipse.epsilon.labs.playground.fn.shorturl.ShortURLMessage;
+import org.eclipse.epsilon.labs.playground.fn.shorturl.ShortURLRequest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,14 +21,14 @@ public class StandaloneTest {
 
   @Test
   public void shortenContent() {
-    var storeRequest = new ShortURLMessage();
+    var storeRequest = new ShortURLRequest();
     storeRequest.setContent("example");
 
     var storeResponse = client.shortURL(storeRequest);
     assertNotNull(storeResponse);
-    assertTrue(storeResponse.getShortened().matches(ShortURLMessage.SHORTENED_REGEX));
+    assertTrue(storeResponse.getShortened().matches(ShortURLRequest.SHORTENED_REGEX));
 
-    var fetchRequest = new ShortURLMessage();
+    var fetchRequest = new ShortURLRequest();
     fetchRequest.setShortened(storeResponse.getShortened());
     var fetchResponse = client.shortURL(fetchRequest);
     assertNotNull(fetchResponse);
@@ -38,7 +38,7 @@ public class StandaloneTest {
 
   @Test
   public void shortenedNotValid() {
-    var fetchRequest = new ShortURLMessage();
+    var fetchRequest = new ShortURLRequest();
     fetchRequest.setShortened("../give/me/another/path");
     try {
       client.shortURL(fetchRequest);
@@ -50,8 +50,8 @@ public class StandaloneTest {
 
   @Test
   public void contentTooLong() {
-    var storeRequest = new ShortURLMessage();
-    String longString = new String(new char[ShortURLMessage.MAX_CONTENT_LENGTH + 1]).replace('\0', 'a');
+    var storeRequest = new ShortURLRequest();
+    String longString = new String(new char[ShortURLRequest.MAX_CONTENT_LENGTH + 1]).replace('\0', 'a');
     storeRequest.setContent(longString);
     try {
       client.shortURL(storeRequest);

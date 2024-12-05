@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 @Serdeable
-public class ShortURLMessage {
+public class ShortURLRequest {
 
     public static final int MAX_CONTENT_LENGTH = 100_000;
     public static final String SHORTENED_REGEX = "[a-f0-9]{8}";
