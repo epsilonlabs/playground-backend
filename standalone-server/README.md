@@ -23,7 +23,7 @@ The server also includes a copy of the Swagger UI at `/swagger-ui`, pointing at 
 To run the standalone Playground server locally, run:
 
 ```bash
-./gradlew standalone-server:run
+../gradlew run
 ```
 
 You can then try out the Playground through:
@@ -40,7 +40,7 @@ If you have Java installed, you can run the tool server from its uber-JAR.
 For instance, if you built it yourself:
 
 ```bash
-java -jar standalone-server/build/libs/standalone-server-0.1-SNAPSHOT-all.jar
+java -jar build/libs/standalone-server-0.1-SNAPSHOT-all.jar
 ```
 
 You can download the latest `-all.jar` directly from [Github Packages](https://github.com/epsilonlabs/playground-backend/packages/2333178).

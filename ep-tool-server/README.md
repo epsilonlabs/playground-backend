@@ -17,7 +17,7 @@ The server also includes a copy of the Swagger UI at `/swagger-ui`, pointing at 
 To run the Education Platform tool server locally, run:
 
 ```bash
-./gradlew ep-tool-server:run
+../gradlew run
 ```
 
 You can then try out the endpoints through the Swagger UI available here:
@@ -27,7 +27,7 @@ http://localhost:8080/swagger-ui
 To customise the port, you can use the `MICRONAUT_SERVER_PORT` environment variable:
 
 ```bash
-MICRONAUT_SERVER_PORT=8010 ./gradlew run
+MICRONAUT_SERVER_PORT=8010 ../gradlew run
 ```
 
 ## Running from the uber JAR
@@ -36,7 +36,7 @@ If you have Java installed, you can run the tool server from its uber-JAR.
 For instance, if you built it yourself:
 
 ```bash
-java -jar ep-tool-server/build/libs/ep-tool-server-0.1-SNAPSHOT-all.jar
+java -jar build/libs/ep-tool-server-0.1-SNAPSHOT-all.jar
 ```
 
 You can download the latest `-all.jar` directly from [Github Packages](https://github.com/epsilonlabs/playground-backend/packages/2332989).
