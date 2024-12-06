@@ -1,6 +1,0 @@
-applicationType: function
-defaultPackage: org.eclipse.epsilon.labs.playground.fn.flexmi2plantuml
-testFramework: junit
-sourceLanguage: java
-buildTool: gradle
-features: [app-name, google-cloud-function, gradle, http-client-test, jackson-databind, java, junit, logback, micronaut-build, properties, readme, shade]
