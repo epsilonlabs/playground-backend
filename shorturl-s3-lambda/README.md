@@ -93,7 +93,7 @@ In the "Configuration" tab, go to the "Function URL" section and click on Edit:
 
 * Auth type should be NONE
 * "Configure cross-origin resource sharing" should be enabled:
-  * Origin can be left as "*", or limited to specific domains
+  * Origin can be left as "*", or limited to specific origins (e.g. `https://eclipse.dev`)
   * Expose headers should have:
     * content-type
     * access-control-allow-origin
