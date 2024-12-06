@@ -1,5 +1,7 @@
 plugins {
     id 'io.micronaut.library'
+    id 'com.gradleup.shadow'    
+    id 'io.micronaut.openapi'
     id 'backend.java-conventions'
 }
 
