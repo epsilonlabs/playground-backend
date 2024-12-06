@@ -46,11 +46,6 @@ public class FunctionRequestHandler extends MicronautRequestHandler<APIGatewayPr
     @Override
     public APIGatewayProxyResponseEvent execute(APIGatewayProxyRequestEvent input) {
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
-        if (!"POST".equals(input.getHttpMethod())) {
-            setResponseText(response, String.format("Invalid HTTP method: %s. Valid HTTP methods are: [POST]", input.getHttpMethod()));
-            response.setStatusCode(400);
-            return response;
-        }
         if (input.getBody() == null) {
             setResponseText(response, "Request body is missing.");
             response.setStatusCode(400);
@@ -74,9 +69,9 @@ public class FunctionRequestHandler extends MicronautRequestHandler<APIGatewayPr
 
     private void processInvalidRequest(Set<ConstraintViolation<ShortURLRequest>> violations, APIGatewayProxyResponseEvent response) throws IOException {
         var responseBody = new ShortURLResponse();
-        responseBody.setError("Invalid request: " + String.join(",",
+        responseBody.setError("Invalid request: " +
             violations.stream().map(e -> e.getPropertyPath() + " " + e.getMessage()
-            ).collect(Collectors.toList())));
+            ).collect(Collectors.joining(",")));
         response.setStatusCode(400);
         setResponseJSON(response, responseBody);
     }
@@ -121,7 +116,7 @@ public class FunctionRequestHandler extends MicronautRequestHandler<APIGatewayPr
         if (content.isPresent()) {
             try (
                 InputStream is = content.get().getInputStream();
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream()
             ) {
                 byte[] buffer = new byte[1024];
                 for (int length; (length = is.read(buffer)) != -1; ) {

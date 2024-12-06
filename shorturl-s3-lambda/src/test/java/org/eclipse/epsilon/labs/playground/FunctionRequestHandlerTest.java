@@ -33,7 +33,7 @@ public class FunctionRequestHandlerTest {
     }
 
     @Test
-    public void testNoBody() throws Exception {
+    public void testNoBody() {
         APIGatewayProxyRequestEvent request = new APIGatewayProxyRequestEvent();
         request.setHttpMethod("POST");
         request.setPath("/");
@@ -101,20 +101,6 @@ public class FunctionRequestHandlerTest {
         APIGatewayProxyResponseEvent response = handler.execute(request);
         assertEquals(400, response.getStatusCode().intValue());
         assertTrue(response.getBody().toLowerCase().contains("one of"));
-    }
-
-    @Test
-    public void testBadMethod() throws Exception {
-        APIGatewayProxyRequestEvent request = new APIGatewayProxyRequestEvent();
-        request.setHttpMethod("GET");
-        request.setPath("/");
-
-        ShortURLRequest message = new ShortURLRequest();
-        request.setBody(objectMapper.writeValueAsString(message));
-
-        APIGatewayProxyResponseEvent response = handler.execute(request);
-        assertEquals(400, response.getStatusCode().intValue());
-        assertTrue(response.getBody().toLowerCase().contains("post"));
     }
 
     @Test
