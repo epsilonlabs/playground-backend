@@ -40,6 +40,5 @@ micronaut {
 
 // We do not want Docker images for this one (just uber-JAR or native ZIP)
 tasks.dockerBuild.enabled = false
-tasks.dockerBuildNative.enabled = false
 tasks.dockerPush.enabled = false
 tasks.dockerPushNative.enabled = false
