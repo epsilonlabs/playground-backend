@@ -17,8 +17,8 @@
 			"nvmVersion": "latest"
 		},
 		"ghcr.io/devcontainers/features/java:1": {
-			"version": "17",
-			"jdkDistro": "tem",
+			"version": "17.0.9",
+			"jdkDistro": "graalce",
 			"gradleVersion": "latest",
 			"mavenVersion": "latest",
 			"antVersion": "latest"
