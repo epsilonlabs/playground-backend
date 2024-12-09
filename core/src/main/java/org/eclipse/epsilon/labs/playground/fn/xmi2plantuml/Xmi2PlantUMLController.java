@@ -1,9 +1,7 @@
 package org.eclipse.epsilon.labs.playground.fn.xmi2plantuml;
 
-import org.eclipse.epsilon.eol.models.Model;
 import org.eclipse.epsilon.labs.playground.fn.ModelDiagramRenderer;
 import org.eclipse.epsilon.labs.playground.fn.ModelDiagramResponse;
-import org.eclipse.epsilon.labs.playground.fn.ModelLoader;
 
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
@@ -17,17 +15,13 @@ public class Xmi2PlantUMLController {
     public static final String PATH = "/xmi2plantuml";
 
     @Inject
-    ModelLoader modelLoader;
-
-    @Inject
     ModelDiagramRenderer renderer;
 
     @ExecuteOn(TaskExecutors.IO)
     @Post("/")
     public ModelDiagramResponse convert(@Body Xmi2PlantUMLRequest request) {
         try {
-            Model model = modelLoader.getInMemoryXmiModel(request.getXmi(), request.getEmfatic());
-            return renderer.generateModelDiagram(model);
+            return renderer.generateDiagramFromXmi(request.getXmi(), request.getEmfatic());
         } catch (Throwable e) {
             var response = new ModelDiagramResponse();
             response.setError(e.getMessage());

@@ -1,9 +1,7 @@
 package org.eclipse.epsilon.labs.playground.fn.flexmi2plantuml;
 
-import org.eclipse.epsilon.eol.models.Model;
 import org.eclipse.epsilon.labs.playground.fn.ModelDiagramRenderer;
 import org.eclipse.epsilon.labs.playground.fn.ModelDiagramResponse;
-import org.eclipse.epsilon.labs.playground.fn.ModelLoader;
 
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
@@ -17,17 +15,13 @@ public class Flexmi2PlantUMLController {
     public static final String PATH = "/flexmi2plantuml";
 
     @Inject
-    ModelLoader modelLoader;
-
-    @Inject
     ModelDiagramRenderer renderer;
 
     @ExecuteOn(TaskExecutors.IO)
-    @Post("/")
+    @Post
     public ModelDiagramResponse convert(@Body Flexmi2PlantUMLRequest request) {
         try {
-            Model model = modelLoader.getInMemoryFlexmiModel(request.getFlexmi(), request.getEmfatic());
-            return renderer.generateModelDiagram(model);
+            return renderer.generateDiagramFromFlexmi(request.getFlexmi(), request.getEmfatic());
         } catch (Throwable e) {
             var response = new ModelDiagramResponse();
             response.setError(e.getMessage());
