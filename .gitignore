@@ -16,3 +16,4 @@ bin/
 .factorypath
 core/xmi.xmi
 standalone-server/shorturl
+/standalone-server/xmi.xmi

@@ -19,6 +19,10 @@ dependencies {
     annotationProcessor(mn.micronaut.openapi)
     compileOnly(mn.micronaut.openapi.annotations)
 
+    // Caching
+    implementation(mn.micronaut.cache.core)
+    implementation(mn.micronaut.cache.caffeine)
+
     // For testing the functions through the declarative HTTP client
     testImplementation(mn.micronaut.http.server.netty)
     testImplementation(mn.micronaut.http.client)
