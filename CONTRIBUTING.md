@@ -31,7 +31,6 @@ There are different distributions of the core microservices, depending on your n
 * [`ep-tool-server`](./ep-tool-server) exposes the microservices as an [MDENet Education Platform tool service](https://github.com/mdenet/educationplatform/wiki/Adding-a-Tool#tool-service), which can be distributed as an uber-JAR or as a Docker image.
 * [`backend-server`](./backend-server) exposes the microservices on their own, without any additions and without the Swagger UI. Mostly to be used when serving a frontend separately (e.g. via a CDN).
 * [`standalone-server`](./standalone-server) combines the microservices with a local copy of the [Epsilon Playground](https://github.com/eclipse-epsilon/epsilon-website) frontend, for easy local use of the playground (e.g. for teaching).
-* [`gcp-function`](./gcp-function) exposes the microservices as a Google Cloud Function, and implements the `shorturl-api` through the Google Cloud Storage API.
 
 There is an implementation of the `shorturl-api` as a serverless function:
 
