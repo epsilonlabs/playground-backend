@@ -9,7 +9,7 @@ This project publishes [Docker images](https://github.com/epsilonlabs/playground
 To try the Playground on your own computer (with Docker installed), you can run:
 
 ```shell
-docker run --rm -p 8080:8080 ghcr.io/epsilonlabs/playground-backend:standalone-server
+docker run --rm -p 8080:8080 ghcr.io/epsilonlabs/playground-backend/standalone-server
 ```
 
 ## Using and administering the Playground
