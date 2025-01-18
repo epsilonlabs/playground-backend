@@ -53,3 +53,12 @@ If you would like to build the Docker images as well, run:
 ```shell
 ./gradlew dockerBuild
 ```
+
+## Managing releases
+
+The version number for the entire project is in the `gradle.properties` file, as the `projectVersion`.
+If at some point we want to produce a stable release, the process would be as follows:
+
+1. Create a tag with the commit that will be the source for this release.
+1. Bump the `projectVersion` to the next version, so interim images for the next release will start to be produced.
+1. Update the [`dockerFromTags` workflow](.github/workflows/dockerFromTags.yml) so it will periodically rebuild the images of the release. Specifically, new entries will need to be added to the `include` list of its matrix strategy.
