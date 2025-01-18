@@ -50,7 +50,7 @@ You can download the latest `-all.jar` directly from [Github Packages](https://g
 To run the standalone Playground server directly from Docker, run:
 
 ```bash
-docker run --rm -p 8080:8080 ghcr.io/epsilonlabs/playground-backend:standalone-server
+docker run --rm -p 8080:8080 ghcr.io/epsilonlabs/playground-backend/standalone-server
 ```
 
 Note that the default implementation of "Share" in this image will use the `/var/share/shorturl` folder within the Docker container.
@@ -59,5 +59,8 @@ This means that unless you use a [bind mount](https://docs.docker.com/engine/sto
 For example, you could run this command to bind the `shorturl` folder in your host system to `/var/share/shorturl` within the container:
 
 ```bash
-docker run --rm -v ./shorturl:/var/share/shorturl -p 8080:8080 ghcr.io/epsilonlabs/playground-backend:standalone-server
+docker run --rm -v ./shorturl:/var/share/shorturl -p 8080:8080 ghcr.io/epsilonlabs/playground-backend/standalone-server
 ```
+
+Besides the `latest` tag, other tags are supported.
+See [the full list](https://github.com/epsilonlabs/playground-backend/pkgs/container/playground-backend%2Fstandalone-server).

@@ -32,9 +32,12 @@ You can download the latest `-all.jar` directly from [Github Packages](https://g
 To run the tool service image, run:
 
 ```bash
-docker run --rm -p 8080:8080 ghcr.io/epsilonlabs/playground-backend:backend-server
+docker run --rm -p 8080:8080 ghcr.io/epsilonlabs/playground-backend/backend-server
 ```
 
 The endpoints will be available from:
 
 http://localhost:8080/
+
+Besides the `latest` tag, other tags are supported.
+See [the full list](https://github.com/epsilonlabs/playground-backend/pkgs/container/playground-backend%2Fbackend-server).

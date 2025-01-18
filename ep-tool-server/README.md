@@ -46,5 +46,8 @@ You can download the latest `-all.jar` directly from [Github Packages](https://g
 To run the tool service image while exposing its endpoints on the 8010 port (e.g., to avoid the 8080 port used by the MDENet Education Platform), run:
 
 ```bash
-docker run --rm -p 8010:8080 ghcr.io/epsilonlabs/playground-backend:ep-tool-server
+docker run --rm -p 8010:8080 ghcr.io/epsilonlabs/playground-backend/ep-tool-server
 ```
+
+Besides the `latest` tag, other tags are supported.
+See [the full list](https://github.com/epsilonlabs/playground-backend/pkgs/container/playground-backend%2Fep-tool-server).
