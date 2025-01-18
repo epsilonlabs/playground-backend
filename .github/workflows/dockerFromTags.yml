@@ -31,8 +31,7 @@ jobs:
             javaVersion: 17.0.9
             nodeVersion: 16.x
             epsilonVersion: 2.6.0
-            epsilonTag: 0.1,0.1-epsilon2.6
-      max-parallel: 1
+            dockerTags: 0.1,0.1-epsilon2.6
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
