@@ -13,6 +13,10 @@ permissions:
   contents: read
   packages: write
 
+concurrency:
+  group: tagged-docker-image
+  cancel-in-progress: true
+
 jobs:
   build:
     strategy:
@@ -28,6 +32,7 @@ jobs:
             nodeVersion: 16.x
             epsilonVersion: 2.6.0
             epsilonTag: 0.1,0.1-epsilon2.6
+      max-parallel: 1
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
