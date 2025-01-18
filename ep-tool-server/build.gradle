@@ -37,7 +37,11 @@ micronaut {
 }
 
 tasks.named("dockerBuild") {
-    images = ["ghcr.io/epsilonlabs/playground-backend:ep-tool-server"]
+    images = (
+        dockerTags
+            .split(',')
+            .collect {"ghcr.io/epsilonlabs/playground-backend/ep-tool-server:${it}"}
+    )
 }
 
 // Webpack for syntax highlighting

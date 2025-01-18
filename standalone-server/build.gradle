@@ -39,7 +39,11 @@ tasks.named("dockerfile") {
 }
 
 tasks.named("dockerBuild") {
-    images = ["ghcr.io/epsilonlabs/playground-backend:standalone-server"]
+    images = (
+        dockerTags
+            .split(',')
+            .collect {"ghcr.io/epsilonlabs/playground-backend/standalone-server:${it}"}
+    )
 }
 
 def clonedFrontendDir = 'build/frontend'
