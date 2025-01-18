@@ -6,10 +6,6 @@ on:
     # Weekly rebuild of Docker image
     - cron: '12 17 * * 4'
 
-concurrency:
-  group: tagged-docker-image
-  cancel-in-progress: true
-
 env:
   AWS_REGION: us-east-1
 
