@@ -3,6 +3,11 @@ name: Main branch
 on:
   push:
     branches: [ "main" ]
+    paths-ignore:
+      - .github/workflows/dockerFromTags.yml
+      - .github/workflows/pull_requests.yml
+      - '**/README.md'
+      - CONTRIBUTING.md
   workflow_dispatch:
   schedule:
     # Weekly rebuild of Docker image
