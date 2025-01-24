@@ -30,7 +30,9 @@ public class ModelLoader {
         EPackage ePackage = getEPackage(emfatic);
         resourceSet.getPackageRegistry().put(ePackage.getNsURI(), ePackage);
         resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new FlexmiResourceFactory());
-        Resource resource = resourceSet.createResource(URI.createURI("flexmi.flexmi"));
+        // For Flexmi we need to call URI.createFileURI instead of URI.createURI
+        // as absolute URIs are required for Flexmi resources that involve EGL templates
+        Resource resource = resourceSet.createResource(URI.createFileURI("/flexmi.flexmi"));
         resource.load(new ByteArrayInputStream(flexmi.getBytes()), null);
 
         InMemoryEmfModel model = new InMemoryEmfModel(resource);

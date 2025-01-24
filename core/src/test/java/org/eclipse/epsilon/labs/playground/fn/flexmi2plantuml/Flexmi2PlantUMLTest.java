@@ -49,4 +49,16 @@ public class Flexmi2PlantUMLTest {
         assertNotNull(result.getModelDiagram());
     }
 
+    @Test
+    public void eglTemplate() {
+        var req = new Flexmi2PlantUMLRequest();
+        req.setFlexmi("<_><foo/><:template name=\"foo\"><content language=\"EGL\"></content></:template></_>");
+        req.setEmfatic("");
+        
+        ModelDiagramResponse result = client.convert(req);
+        assertNull(result.getError());
+        assertNull(result.getOutput());
+        assertNotNull(result.getModelDiagram());
+    }
+
 }
