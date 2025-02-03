@@ -120,7 +120,14 @@ public class RunEpsilonController {
 				default:
 					runEol((EolModule) module, request);
 			}
-		} finally {
+		}
+		catch (Exception ex) {
+			// Call getMessage() to compute error messages of Epsilon exceptions
+			// before the throwing module's context is disposed below
+			ex.getMessage();
+			throw ex;
+		}
+		finally {
 			module.getContext().getModelRepository().dispose();
 			module.getContext().dispose();
 		}

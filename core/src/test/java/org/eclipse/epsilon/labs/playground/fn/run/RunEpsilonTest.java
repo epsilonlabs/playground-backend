@@ -108,6 +108,19 @@ public class RunEpsilonTest {
         assertThat(response.getTargetModelDiagram(), JUnitMatchers.containsString("B"));
     }
 
+    @Test
+    public void stackTrace() throws Exception {
+        var req = new RunEpsilonRequest();
+
+        req.setEmfatic("package psl;");
+        req.setFlexmi("<?nsuri psl?><_/>");
+
+        req.setLanguage("eol");
+        req.setProgram("x.println();");
+        var response = client.execute(req);
+        assertThat(response.getError(), JUnitMatchers.containsString("program.eol"));
+    }
+
     private String getResourceAsString(String resource) throws IOException {
         var inputStream = getClass().getResourceAsStream(resource);
         return CharStreams.toString(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
