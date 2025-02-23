@@ -1,0 +1,30 @@
+services:
+  playground:
+    image: ghcr.io/epsilonlabs/playground-backend/standalone-server:latest
+    ports:
+      - 8080:8080
+    volumes:
+      - shorturl:/var/share/shorturl
+    depends_on:
+      - kroki
+      - yjs
+    environment:
+      - PLAYGROUND_YJS_URL=ws://localhost:8082/ws/
+      - PLAYGROUND_KROKI_URL=http://localhost:8081
+  kroki:
+    image: yuzutech/kroki:latest
+    ports:
+      - 8081:8000
+  yjs:
+    image: ghcr.io/epsilonlabs/yjs-websocket-nginx:latest
+    platform: linux/amd64
+    ports:
+      - 8082:80
+    healthcheck:
+      test: curl --fail http://localhost || kill 1
+      interval: 1m30s
+      timeout: 30s
+      start_period: 30s
+    restart: always
+volumes:
+  shorturl:

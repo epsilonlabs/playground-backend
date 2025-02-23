@@ -47,7 +47,7 @@ java -jar build/libs/standalone-server-0.1-SNAPSHOT-all.jar
 
 You can download the latest `-all.jar` directly from [Github Packages](https://github.com/epsilonlabs/playground-backend/packages/2333178).
 
-## Running from the Docker image
+## Running from Docker
 
 To run the standalone Playground server directly from Docker, run:
 
@@ -66,3 +66,17 @@ docker run --rm -v ./shorturl:/var/share/shorturl -p 8080:8080 ghcr.io/epsilonla
 
 Besides the `latest` tag, other tags are supported.
 See [the full list](https://github.com/epsilonlabs/playground-backend/pkgs/container/playground-backend%2Fstandalone-server).
+
+## Running from Docker Compose
+
+This project includes a Docker Compose [`compose.yml`](./compose.yml) file which will start a local copy of the playground, as well as local instances of Yjs and Kroki, and keep "Share" files in a named Docker volume.
+
+To use it, run this command from this directory:
+
+```bash
+docker compose up -d
+```
+
+After some time, the local playground will be accessible from:
+
+http://localhost:8080
