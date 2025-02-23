@@ -17,6 +17,8 @@ The server also includes a copy of the Swagger UI at `/swagger-ui`, pointing at 
 * `PLAYGROUND_EMFATIC2PLANTUML_URL`: URL to the service running Epsilon scripts. The default is to use the server's own implementation.
 * `PLAYGROUND_SHORT_URL`: URL to the service running Epsilon scripts. The default is to use the server's own implementation, which uses a local folder. When using this default, the following environment variable applies:
     * `PLAYGROUND_SHORT_FOLDER`: absolute path to the folder that should store the contents to be shared. This is the `shorturl` subfolder of the current working directory by default when running directly via Gradle or from the uber-JAR.
+* `PLAYGROUND_YJS_URL`: URL to the [yjs](https://github.com/yjs/y-websocket) live collaboration server. This defaults to a demo server provided by the Yjs project, but we recommend pointing it to your own instance: we have a Dockerized version available [here](https://github.com/epsilonlabs/yjs-websocket-nginx-docker).
+* `PLAYGROUND_KROKI_URL`: URL to the [Kroki](https://kroki.io/) server that produces diagrams from textual descriptions. This defaults to the public demo server, but again, we recommend that you run your own local instance if possible.
 
 ## Running from Gradle
 

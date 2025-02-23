@@ -13,6 +13,9 @@ public class BackendConfigurationController {
 
     public static final String PATH = "backend.json";
 
+    protected static final String DEFAULT_LIVE_SHARE_URL = "wss://demos.yjs.dev/ws";
+    protected static final String DEFAULT_KROKI_URL = "https://kroki.io";
+
     @Value("${playground.epsilon.url:`" + RunEpsilonController.PATH + "`}")
     private String runEpsilonUrl;
 
@@ -25,6 +28,12 @@ public class BackendConfigurationController {
     @Value("${playground.short.url:`" + ShortURLController.PATH + "`}")
     private String shortenerUrl;
 
+    @Value("${playground.yjs.url:`" + DEFAULT_LIVE_SHARE_URL + "`}")
+    private String liveShareUrl;
+
+    @Value("${playground.kroki.url:`" + DEFAULT_KROKI_URL + "`}")
+    private String krokiUrl;
+
     @Get(BackendConfigurationController.PATH)
     public BackendConfiguration getConfig() {
         BackendConfiguration config = new BackendConfiguration();
@@ -32,6 +41,8 @@ public class BackendConfigurationController {
         createService(config, "FlexmiToPlantUMLFunction", flexmi2PlantUMLUrl);
         createService(config, "EmfaticToPlantUMLFunction", emfatic2PlantUMLUrl);
         createService(config, "ShortURLFunction", shortenerUrl);
+        createService(config, "Yjs", liveShareUrl);
+        createService(config, "Kroki", krokiUrl);
         return config;
     }
 
