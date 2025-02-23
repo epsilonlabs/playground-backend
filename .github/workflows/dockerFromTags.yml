@@ -31,7 +31,12 @@ jobs:
             javaVersion: 17.0.9
             nodeVersion: 16.x
             epsilonVersion: 2.6.0
-            dockerTags: 0.1,0.1-epsilon2.6
+            dockerTags: 0.1-epsilon2.6
+          - version: 0.1
+            javaVersion: 17.0.9
+            nodeVersion: 16.x
+            epsilonVersion: 2.8.0
+            dockerTags: 0.1,0.1-epsilon2.8
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
