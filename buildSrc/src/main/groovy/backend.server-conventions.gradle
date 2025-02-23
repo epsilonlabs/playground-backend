@@ -3,8 +3,8 @@ plugins {
 }
 
 tasks.named("dockerfile") {
-  baseImage = "eclipse-temurin:17-alpine"
+  baseImage = "eclipse-temurin:17"
 
   // Install graphviz for the PlantUML functions
-  runCommand 'apk add --no-cache graphviz'
+  runCommand 'apt-get update && apt-get install -y --no-install-recommends graphviz && rm -rf /var/lib/apt/lists/*'
 }
