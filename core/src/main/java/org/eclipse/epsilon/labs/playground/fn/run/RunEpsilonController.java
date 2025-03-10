@@ -79,7 +79,14 @@ public class RunEpsilonController {
 		final String language = request.getLanguage();
 
 		IEolModule module = createModule(language);
-		module.parse(request.getProgram(), new File("/program." + language));
+		try {
+			module.parse(request.getProgram(), new File("/program." + language));
+		}
+		catch (Exception ex) {
+			// If an exception happens, it will be recorded as a parse problem
+			// so there's nothing else to do here
+		}
+
 		if (!module.getParseProblems().isEmpty()) {
 			response.setError(module.getParseProblems().get(0).toString());
 			return;
