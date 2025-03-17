@@ -30,7 +30,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Login to GitHub Container Registry
-      uses: docker/login-action@v3
+      uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
@@ -48,7 +48,7 @@ jobs:
       run: npm ci
       working-directory: ./ep-tool-server
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v3
+      uses: gradle/actions/setup-gradle@94baf225fe0a508e581a564467443d0e2379123b
     - name: Build with Gradle
       run: |
         PROJECT_VERSION="$(grep projectVersion gradle.properties | awk -F '=' '{print $2}')"
