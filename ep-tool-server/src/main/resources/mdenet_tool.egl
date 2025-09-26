@@ -12,6 +12,7 @@
                 "id": "function-eol",
                 "name": "eol",
                 "parameters": [ {"name":"flexmi", "type":"flexmi", "instanceOf": "emfatic"},
+                                {"name":"xmi", "type":"xmi", "instanceOf": "emfatic"},
                                 {"name":"emfatic", "type":"emfatic"},
                                 {"name":"program", "type":"eol"},
                                 {"name":"language", "type":"text"}
@@ -27,6 +28,7 @@
                                 {"name":"program", "type":"etl"},
                                 {"name":"emfatic", "type":"emfatic"},
                                 {"name":"flexmi", "type":"flexmi", "instanceOf": "emfatic"},
+                                {"name":"xmi", "type":"xmi", "instanceOf": "emfatic"},
                                 {"name":"secondEmfatic", "type":"emfatic"}
                     ],
                 "returnType": "text",
@@ -39,7 +41,8 @@
                 "parameters": [ {"name":"language", "type":"text"},
                                 {"name":"program", "type":"egl"},
                                 {"name":"emfatic", "type":"emfatic"},
-                                {"name":"flexmi", "type":"flexmi", "instanceOf": "emfatic"}
+                                {"name":"flexmi", "type":"flexmi", "instanceOf": "emfatic"},
+                                {"name":"xmi", "type":"xmi", "instanceOf": "emfatic"}
                     ],
                 "returnType": "text",
                 "path": "[%= urls.get("epsilon") %]"
@@ -52,7 +55,8 @@
                                 {"name":"program", "type":"egx"},
                                 {"name":"secondProgram", "type":"egl"},
                                 {"name":"emfatic", "type":"emfatic"},
-                                {"name":"flexmi", "type":"flexmi", "instanceOf": "emfatic"}
+                                {"name":"flexmi", "type":"flexmi", "instanceOf": "emfatic"},
+                                {"name":"xmi", "type":"xmi", "instanceOf": "emfatic"}
                     ],
                 "returnType": "text",
                 "path": "[%= urls.get("epsilon") %]"
@@ -64,7 +68,8 @@
                 "parameters": [ {"name":"language", "type":"text"},
                                 {"name":"program", "type":"evl"},
                                 {"name":"emfatic", "type":"emfatic"},
-                                {"name":"flexmi", "type":"flexmi", "instanceOf": "emfatic"}
+                                {"name":"flexmi", "type":"flexmi", "instanceOf": "emfatic"},
+                                {"name":"xmi", "type":"xmi", "instanceOf": "emfatic"}
                     ],
 
                 "returnType": "text",
@@ -79,9 +84,11 @@
                                 {"name":"secondProgram", "type":"ecl"},
                                 {"name":"emfatic", "type":"emfatic"},
                                 {"name":"flexmi", "type":"flexmi", "instanceOf": "emfatic"},
+                                {"name":"xmi", "type":"xmi", "instanceOf": "emfatic"},
                                 {"name":"secondEmfatic", "type":"emfatic"},
                                 {"name":"thirdEmfatic", "type":"emfatic"},
-                                {"name":"thirdFlexmi", "type":"flexmi", "instanceOf": "thirdEmfatic"}
+                                {"name":"thirdFlexmi", "type":"flexmi", "instanceOf": "thirdEmfatic"},
+                                {"name":"thirdXmi", "type":"xmi", "instanceOf": "emfatic"}
                     ],
                 "returnType": "text",
                 "path": "[%= urls.get("epsilon") %]"
@@ -91,8 +98,9 @@
                 "id": "function-flexmi2plantuml",
                 "name": "FlexmiToPlantUML",
                 "parameters": [ {"name": "language", "type": "text"},
-                                {"name":"flexmi", "type":"flexmi"},
-                                {"name":"emfatic", "type":"emfatic"}
+                                {"name":"flexmi", "type":"flexmi", "instanceOf": "emfatic"},
+                                {"name":"emfatic", "type":"emfatic"},
+                                {"name":"xmi", "type":"xmi", "instanceOf": "emfatic"}
                     ],
                 "returnType": "diagram",
                 "path": "[%= urls.get("flexmi2plantuml") %]"
@@ -103,7 +111,8 @@
                 "name": "emg",
                 "parameters": [ {"name":"language", "type":"text"},
                                 {"name":"program", "type":"emg"},
-                                {"name":"emfatic", "type":"emfatic"}
+                                {"name":"emfatic", "type":"emfatic", "instanceOf": "emfatic"},
+                                {"name":"xmi", "type":"xmi", "instanceOf": "emfatic"}
                     ],
                 "returnType": "text",
                 "path": "[%= urls.get("epsilon") %]"
@@ -115,7 +124,8 @@
                 "parameters": [ {"name":"language", "type":"text"},
                                 {"name":"program", "type":"pinset"},
                                 {"name":"emfatic", "type":"emfatic"},
-                                {"name":"flexmi", "type":"flexmi", "instanceOf": "emfatic"}
+                                {"name":"flexmi", "type":"flexmi", "instanceOf": "emfatic"},
+                                {"name":"xmi", "type":"xmi", "instanceOf": "emfatic"}
                     ],
                 "returnType": "text",
                 "path": "[%= urls.get("epsilon") %]"
