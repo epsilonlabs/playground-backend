@@ -4,6 +4,11 @@ plugins {
 
 tasks.named("dockerfile") {
   baseImage = "eclipse-temurin:17"
+  args = [
+    '--add-opens=java.base/java.util=ALL-UNNAMED',
+    '--add-opens=java.base/java.util.stream=ALL-UNNAMED',
+    '--add-opens=java.base/java.util.concurrent=ALL-UNNAMED'
+  ]
 
   // Install graphviz for the PlantUML functions
   runCommand 'apt-get update && apt-get install -y --no-install-recommends graphviz && rm -rf /var/lib/apt/lists/*'
