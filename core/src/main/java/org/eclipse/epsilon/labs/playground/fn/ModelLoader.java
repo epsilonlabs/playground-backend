@@ -23,9 +23,13 @@ public class ModelLoader {
 		InMemoryEmfModel model = new InMemoryEmfModel(getEPackage(emfatic).eResource());
 		model.setName("M");
 		return model;
-	}    
+	}
 
     public InMemoryEmfModel getInMemoryFlexmiModel(String flexmi, String emfatic) throws Exception {
+        return getInMemoryFlexmiModel(flexmi, emfatic, false);
+    }
+
+    public InMemoryEmfModel getInMemoryFlexmiModel(String flexmi, String emfatic, boolean annotated) throws Exception {
         ResourceSet resourceSet = new ResourceSetImpl();
         EPackage ePackage = getEPackage(emfatic);
         resourceSet.getPackageRegistry().put(ePackage.getNsURI(), ePackage);
@@ -35,7 +39,9 @@ public class ModelLoader {
         Resource resource = resourceSet.createResource(URI.createFileURI("/flexmi.flexmi"));
         resource.load(new ByteArrayInputStream(flexmi.getBytes()), null);
 
-        InMemoryEmfModel model = new InMemoryEmfModel(resource);
+        InMemoryEmfModel model = annotated ?
+                new AnnotatedInMemoryEmfModel(resource) :
+                new InMemoryEmfModel(resource);
         model.setName("M");
         return model;
     }

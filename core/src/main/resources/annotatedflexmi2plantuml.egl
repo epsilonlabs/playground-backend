@@ -10,13 +10,13 @@ var topLevelNodes = `@node`.all.excludingAll(containedNodes);
 [%}%]
 
 [%for (e in `@edge`.all){%]
-[%=e.^source.getNodeId()%]-[#[%=e.color%]]->[%=e.^target.getNodeId()%]
+[%=e.^source.getNodeId()%]-[#[%=e.color ?: "black"%]]->[%=e.^target.getNodeId()%]
 [%}%]
 
 [%for (n in `@node`.all){%]
     [%for (f in n.`@edge`){%]
     [%for (v in f.getValues().select(v|v.isTypeOf(`@node`))){%]
-[%=n.getNodeId()%] -[#[%=f.color%]]-> [%=v.getNodeId()%]
+[%=n.getNodeId()%] -[#[%=f.color ?: "black"%]]-> [%=v.getNodeId()%]
     [%}%]
     [%}%]
 [%}%]
@@ -42,7 +42,7 @@ operation `@node` getPackageShape() {
 }
 @template
 operation `@node` toPlantUml() {%]
-[%=self.getNodeShape()%] "[%=self.^label%]" as [%=self.getNodeId()%] [%=self.getPackageShape()%] #[%=self.color%] {
+[%=self.getNodeShape()%] "[%=self.^label%]" as [%=self.getNodeId()%] [%=self.getPackageShape()%] #[%=self.color ?: "wheat"%] {
     [%if(self.contents.isDefined()){%]
     [%for(content in self.^contents.select(c|c.isTypeOf(`@node`))){%]
     [%=content.toPlantUml()%]

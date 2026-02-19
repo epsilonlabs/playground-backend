@@ -5,46 +5,24 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.emfatic.core.EmfaticResourceFactory;
-import org.eclipse.epsilon.egl.EglModule;
-import org.eclipse.epsilon.emc.emf.EmfModel;
-import org.eclipse.epsilon.eol.EolModule;
+import org.eclipse.epsilon.emc.emf.InMemoryEmfModel;
 import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
 import org.eclipse.epsilon.eol.exceptions.models.EolModelElementTypeNotFoundException;
 import org.eclipse.epsilon.eol.exceptions.models.EolNotInstantiableModelElementTypeException;
 import org.eclipse.epsilon.eol.execute.context.IEolContext;
 import org.eclipse.epsilon.eol.execute.introspection.AbstractPropertyGetter;
 import org.eclipse.epsilon.eol.execute.introspection.IPropertyGetter;
-import org.eclipse.epsilon.flexmi.FlexmiResourceFactory;
 
-import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
 // This should extend InMemoryEmfModel instead
-public class AnnotatedEmfModel extends EmfModel {
+public class AnnotatedInMemoryEmfModel extends InMemoryEmfModel {
 
     protected AnnotatedEmfPropertyGetter propertyGetter = new AnnotatedEmfPropertyGetter();
 
-    public static void main(String[] args) throws Exception {
-        try {
-            // Register the Flexmi and Emfatic parsers with EMF
-            Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("flexmi", new FlexmiResourceFactory());
-            Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("emf", new EmfaticResourceFactory());
-
-            EglModule module = new EglModule();
-            module.parse(new File("core/src/main/resources/annotatedflexmi2plantuml.egl"));
-            AnnotatedEmfModel model = new AnnotatedEmfModel();
-            model.setName("M");
-            model.setModelFile(new File("core/src/main/resources/samples/filesystem.flexmi").getAbsolutePath());
-            model.setMetamodelFile(new File("core/src/main/resources/samples/filesystem.emf").getAbsolutePath());
-            model.load();
-            module.getContext().getModelRepository().addModel(model);
-            System.out.println(module.execute());
-        }
-        catch (Exception ex) {
-            ex.printStackTrace();
-        }
+    public AnnotatedInMemoryEmfModel(Resource modelImpl) {
+        super(modelImpl);
     }
 
     @Override
@@ -70,6 +48,11 @@ public class AnnotatedEmfModel extends EmfModel {
     @Override
     public boolean isOfKind(Object instance, String metaClass) throws EolModelElementTypeNotFoundException {
         return isOfType(instance, metaClass);
+    }
+
+    @Override
+    public Object getCacheKeyForType(String type) throws EolModelElementTypeNotFoundException {
+        return type;
     }
 
     @Override

@@ -7,6 +7,7 @@ import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
 import org.eclipse.epsilon.egl.EglModule;
+import org.eclipse.epsilon.eol.EolModule;
 import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.eclipse.epsilon.eol.models.Model;
 import org.eclipse.epsilon.labs.playground.execution.ScriptTimeoutTerminator;
@@ -39,10 +40,19 @@ public class ModelDiagramRenderer {
 
   @Cacheable("flexmi-to-svg")
   public ModelDiagramResponse generateDiagramFromFlexmi(String flexmi, String emfatic) throws Exception {
-    Model model = modelLoader.getInMemoryFlexmiModel(flexmi, emfatic);
+
+    Model model = modelLoader.getInMemoryFlexmiModel(flexmi, emfatic, isAnnotated(emfatic));
     ModelDiagramResponse diag = new ModelDiagramResponse();
     diag.setModelDiagram(renderPlantUML(model2plantuml(model)));
     return diag;
+  }
+
+  protected boolean isAnnotated(String emfatic) throws Exception {
+    Model emfaticModel = modelLoader.getInMemoryEmfaticModel(emfatic);
+    EolModule checker = new EolModule();
+    checker.parse("return EClass.all.exists(c|c.eAnnotations.exists(a|a.source = 'node' or a.source = 'edge'));");
+    checker.getContext().getModelRepository().addModel(emfaticModel);
+    return (Boolean) checker.execute();
   }
 
   @Cacheable("xmi-to-svg")
@@ -55,7 +65,9 @@ public class ModelDiagramRenderer {
 
   protected String model2plantuml(Model model, Variable... variables) throws Exception {
     EglModule module = new EglModule();
-    module.parse(getClass().getResource("/flexmi2plantuml.egl").toURI());
+    String template = model instanceof AnnotatedInMemoryEmfModel ?
+            "/annotatedflexmi2plantuml.egl" : "/flexmi2plantuml.egl";
+    module.parse(getClass().getResource(template).toURI());
     model.setName("M");
     module.getContext().getModelRepository().addModel(model);
     module.getContext().getFrameStack().put(variables);
