@@ -1,0 +1,33 @@
+@namespace(uri="filesystem", prefix="filesystem")
+package filesystem;
+
+class Filesystem {
+    val Drive[*] drives;
+    val Sync[*] syncs;
+}
+
+class Drive extends Folder {
+
+}
+
+@node(contents="contents")
+class Folder extends File {
+    val File[*] contents;
+}
+
+@node(shape="node")
+class Shortcut extends File {
+    @edge(color="red")
+    ref File target;
+}
+
+@edge(source="source", target="target", color="red")
+class Sync {
+    ref File source;
+    ref File target;
+}
+
+@node(label = "name", color = "azure")
+class File {
+    attr String name;
+}

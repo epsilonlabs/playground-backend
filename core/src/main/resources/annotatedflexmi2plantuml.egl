@@ -1,0 +1,58 @@
+@startuml
+
+[%
+var containedNodes = `@node`.all.select(n|n.contents.isDefined()).^contents.flatten().asSet();
+var topLevelNodes = `@node`.all.excludingAll(containedNodes);
+%]
+
+[%for (n in topLevelNodes){%]
+[%=n.toPlantUml()%]
+[%}%]
+
+[%for (e in `@edge`.all){%]
+[%=e.^source.getNodeId()%]-[#[%=e.color%]]->[%=e.^target.getNodeId()%]
+[%}%]
+
+[%for (n in `@node`.all){%]
+    [%for (f in n.`@edge`){%]
+    [%for (v in f.getValues().select(v|v.isTypeOf(`@node`))){%]
+[%=n.getNodeId()%] -[#[%=f.color%]]-> [%=v.getNodeId()%]
+    [%}%]
+    [%}%]
+[%}%]
+@enduml
+
+[%
+operation `@node` getNodeId() {
+    return "n" + `@node`.all.indexOf(self);
+}
+
+operation `@node` getNodeShape() {
+    if (self.contents.isDefined()) {
+        return "package";
+    }
+    else {
+        return self.shape ?: "object";
+    }
+}
+
+operation `@node` getPackageShape() {
+    if (self.contents.isDefined()) return "<<" + (self.shape ?: "rectangle") + ">>";
+    else return "";
+}
+@template
+operation `@node` toPlantUml() {%]
+[%=self.getNodeShape()%] "[%=self.^label%]" as [%=self.getNodeId()%] [%=self.getPackageShape()%] #[%=self.color%] {
+    [%if(self.contents.isDefined()){%]
+    [%for(content in self.^contents.select(c|c.isTypeOf(`@node`))){%]
+    [%=content.toPlantUml()%]
+    [%}%]
+    [%}%]
+}
+[%}%]
+
+[*
+- e.^source means get the source detail of the edge annotation and if it doesn't start with eol: interpret it as the value of the source feature,
+otherwise run the EOL expression against a regular EMF model underpinned by the same resource and return the result
+- e.color means get the color detail of the edge annotation and if it doesn't start with eol: get its value
+*]

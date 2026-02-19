@@ -30,6 +30,7 @@ dependencies {
     // Epsilon dependencies - Flexmi, Ecore and PlantUML
     implementation("org.eclipse.epsilon:org.eclipse.epsilon.flexmi:${epsilonVersion}")
     implementation("org.eclipse.emf:org.eclipse.emf.ecore:2.23.0")
+    implementation("org.eclipse.emf:org.eclipse.emf.common:2.23.0")
     implementation("org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.16.0")
     implementation("org.eclipse.emfatic:org.eclipse.emfatic.core:1.1.0")
     implementation("net.sourceforge.plantuml:plantuml:1.2022.14")
