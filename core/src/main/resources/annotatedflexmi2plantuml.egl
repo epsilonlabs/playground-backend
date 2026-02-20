@@ -1,7 +1,7 @@
 [%import "shared.eol";%]
 [%import "flexmi2plantuml.eol";%]
 @startuml
-
+hide stereotypes
 skinparam note {
     BackgroundColor<<_Pattern>> [%=getPatternColor()%]
     BorderColor<<_Pattern>> [%=getPatternColor().darken()%]
@@ -11,8 +11,14 @@ skinparam note {
     BorderColor<<_Constraint>> [%=getConstraintColor().darken()%]
     BackgroundColor<<_Success>> [%="TECHNOLOGY"%]
     BorderColor<<_Success>> [%="TECHNOLOGY".darken()%]
-
 }
+
+[%for (n in `@node`.all){%]
+skinparam [%=n.getNodeShape()%] {
+    BorderColor<<[%=n.getNodeId()%]type>> [%=n.`border.color` ?: n.getColor().darken()%]
+    BackgroundColor<<[%=n.getNodeId()%]type>> [%=n.getColor()%]
+}
+[%}%]
 
 [%
 var containedNodes = `@node`.all.select(n|n.contents.isDefined()).^contents.flatten().asSet();
@@ -26,11 +32,11 @@ var topLevelNodes = `@node`.all.excludingAll(containedNodes);
 [%for (e in `@edge`.all){%]
 [%if(e.needsEdgeNode()){%]
 rectangle " " as [%=e.getNodeId()%]
-[%=e.^source.getNodeId()%]-[#[%=e.color ?: "black"%]]-[%=e.getNodeId()%]
-[%=e.getNodeId()%]-[#[%=e.color ?: "black"%]]->[%=e.^target.getNodeId()%] [%if(e.label.isDefined()){%]: [%=e.^label%][%}%]
+[%=e.^source.getNodeId()%]-[%=e.getEdgeStyle()%]-[%=e.getNodeId()%]
+[%=e.getNodeId()%]-[%=e.getEdgeStyle()%]->[%=e.^target.getNodeId()%] [%if(e.label.isDefined()){%]: [%=e.^label%][%}%]
 
 [%}else{%]
-[%=e.^source.getNodeId()%]-[#[%=e.color ?: "black"%]]->[%=e.^target.getNodeId()%] [%if(e.label.isDefined()){%]: [%=e.^label%][%}%]
+[%=e.^source.getNodeId()%]-[%=e.getEdgeStyle()%]->[%=e.^target.getNodeId()%] [%if(e.label.isDefined()){%]: [%=e.^label%][%}%]
 
 [%}%]
 [%}%]
@@ -38,7 +44,7 @@ rectangle " " as [%=e.getNodeId()%]
 [%for (n in `@node`.all){%]
     [%for (f in n.`@edge`){%]
     [%for (v in f.getValues().select(v|v.isTypeOf(`@node`))){%]
-[%=n.getNodeId()%] -[#[%=f.color ?: "black"%]]-> [%=v.getNodeId()%] [%if(f.label.isDefined()){%]: [%=f.label%][%}%]
+[%=n.getNodeId()%] -[%=f.getEdgeStyle()%]-> [%=v.getNodeId()%] [%if(f.label.isDefined()){%]: [%=f.label%][%}%]
 
     [%}%]
     [%}%]
@@ -112,9 +118,24 @@ operation Any hasNode() {
     return self.isTypeOf(`@node`) or self.isTypeOf(`@edge`);
 }
 
+operation Any getEdgeStyle() {
+    var styles : Sequence;
+
+    if (self.color.isDefined()) styles.add("#" + self.color);
+    if (self.style.isDefined()) styles.add(self.style);
+    if (self.thickness.isDefined()) styles.add("thickness=" + self.thickness);
+
+    if (not styles.isEmpty()) return "[" + styles.concat(",") + "]";
+    else return "";
+}
+
+operation `@node` getColor() {
+    return self.color ?: self.eClass().getColor();
+}
+
 @template
 operation `@node` toPlantUml() {%]
-[%=self.getNodeShape()%] "[%=self.^label%]" as [%=self.getNodeId()%] [%=self.getPackageShape()%] #[%=self.color ?: "floralwhite"%] {
+[%=self.getNodeShape()%] "[%=self.^label%]" as [%=self.getNodeId()%] <<[%=self.getNodeId()%]type>> [%=self.getPackageShape()%] {
     [%if(self.contents.isDefined()){%]
     [%for(content in self.^contents.select(c|c.isTypeOf(`@node`))){%]
     [%=content.toPlantUml()%]

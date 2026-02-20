@@ -209,8 +209,15 @@ public class AnnotatedInMemoryEmfModel extends InMemoryEmfModel {
 
         public Collection<Object> getValues() {
             Object value = getValue();
-            if (value instanceof Collection<?>) return (Collection<Object>) value;
-            else return Arrays.asList(value);
+            if (eStructuralFeature.isMany()) {
+                return (Collection<Object>) value;
+            }
+            else if (value != null) {
+                return Arrays.asList(value);
+            }
+            else {
+                return Collections.emptyList();
+            }
         }
 
         public Object getValue() {
