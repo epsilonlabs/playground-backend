@@ -16,6 +16,7 @@ import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.eclipse.epsilon.eol.execute.introspection.AbstractPropertyGetter;
 import org.eclipse.epsilon.eol.execute.introspection.IPropertyGetter;
 
+import java.sql.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -79,13 +80,13 @@ public class AnnotatedInMemoryEmfModel extends InMemoryEmfModel {
     }
 
     protected List<EAnnotation> getEAnnotations(EObject instance) {
-        Stack<EAnnotation> eAnnotations = new Stack<>();
+        List<EAnnotation> eAnnotations = new ArrayList<>();
         for (EAnnotation annotation : instance.eClass().getEAnnotations()) {
-            eAnnotations.push(annotation);
+            eAnnotations.add(annotation);
         }
         for (EClass superType : instance.eClass().getEAllSuperTypes()) {
             for (EAnnotation annotation : superType.getEAnnotations()) {
-                eAnnotations.push(annotation);
+                eAnnotations.add(annotation);
             }
         }
         return eAnnotations;

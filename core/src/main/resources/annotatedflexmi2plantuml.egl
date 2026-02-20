@@ -17,6 +17,8 @@ skinparam note {
 skinparam [%=n.getNodeShape()%] {
     BorderColor<<[%=n.getNodeId()%]type>> [%=n.`border.color` ?: n.getColor().darken()%]
     BackgroundColor<<[%=n.getNodeId()%]type>> [%=n.getColor()%]
+    [%=n.skinParam("FontColor", n.`font.color`)%]
+    [%=n.skinParam("FontSize", n.`font.size`)%]
 }
 [%}%]
 
@@ -125,12 +127,28 @@ operation Any getEdgeStyle() {
     if (self.style.isDefined()) styles.add(self.style);
     if (self.thickness.isDefined()) styles.add("thickness=" + self.thickness);
 
-    if (not styles.isEmpty()) return "[" + styles.concat(",") + "]";
-    else return "";
+    var direction = self.direction;
+    if (direction.isUndefined()) {
+        if (M.owns(self)) {
+            direction = "right";
+        }
+        else {
+            direction = self.getEStructuralFeature().isContainment() ? "down" : "right";
+        }
+    }
+
+    var style;
+    if (styles.notEmpty()) style = "[" + styles.concat(",") + "]";
+    return style + direction;
 }
 
 operation `@node` getColor() {
     return self.color ?: self.eClass().getColor();
+}
+
+operation `@node` skinParam(param : String, value : Any) {
+    if (value.isDefined()) return param + "<<" + self.getNodeId() + "type>> " + value;
+    else return "";
 }
 
 @template
