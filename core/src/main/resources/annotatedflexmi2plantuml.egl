@@ -1,4 +1,18 @@
+[%import "shared.eol";%]
+[%import "flexmi2plantuml.eol";%]
 @startuml
+
+skinparam note {
+    BackgroundColor<<_Pattern>> [%=getPatternColor()%]
+    BorderColor<<_Pattern>> [%=getPatternColor().darken()%]
+    BackgroundColor<<_Critique>> [%=getCritiqueColor()%]
+    BorderColor<<_Critique>> [%=getCritiqueColor().darken()%]
+    BackgroundColor<<_Constraint>> [%=getConstraintColor()%]
+    BorderColor<<_Constraint>> [%=getConstraintColor().darken()%]
+    BackgroundColor<<_Success>> [%="TECHNOLOGY"%]
+    BorderColor<<_Success>> [%="TECHNOLOGY".darken()%]
+
+}
 
 [%
 var containedNodes = `@node`.all.select(n|n.contents.isDefined()).^contents.flatten().asSet();
@@ -11,9 +25,9 @@ var topLevelNodes = `@node`.all.excludingAll(containedNodes);
 
 [%for (e in `@edge`.all){%]
 [%if(e.needsEdgeNode()){%]
-rectangle " " as [%=e.getEdgeId()%]
-[%=e.^source.getNodeId()%]-[#[%=e.color ?: "black"%]]-[%=e.getEdgeId()%]
-[%=e.getEdgeId()%]-[#[%=e.color ?: "black"%]]->[%=e.^target.getNodeId()%] [%if(e.label.isDefined()){%]: [%=e.^label%][%}%]
+rectangle " " as [%=e.getNodeId()%]
+[%=e.^source.getNodeId()%]-[#[%=e.color ?: "black"%]]-[%=e.getNodeId()%]
+[%=e.getNodeId()%]-[#[%=e.color ?: "black"%]]->[%=e.^target.getNodeId()%] [%if(e.label.isDefined()){%]: [%=e.^label%][%}%]
 
 [%}else{%]
 [%=e.^source.getNodeId()%]-[#[%=e.color ?: "black"%]]->[%=e.^target.getNodeId()%] [%if(e.label.isDefined()){%]: [%=e.^label%][%}%]
@@ -30,15 +44,43 @@ rectangle " " as [%=e.getEdgeId()%]
     [%}%]
 [%}%]
 
+[*Generate validation nodes*]
+[%if (unsatisfiedConstraints.isDefined()){%]
+[%if(unsatisfiedConstraints.isEmpty()){%]
+note as NOUC<<_Success>>
+<U+2611> The model is valid.
+end note
+[%}%]
+[%for (uc in unsatisfiedConstraints.select(uc|uc.getInstance().hasNode())){%]
+note top of [%=uc.getInstance().getNodeId()%]<<[%=uc.getConstraint().getConstraintStereotype()%]>>
+[%=uc.getConstraint().getConstraintIcon()%] [%=uc.getMessage()%]
+end note
+[%}%]
+[%}%]
+
+[*Generate pattern nodes*]
+[%if (matches.isDefined()){%]
+[%for (match in matches){%]
+[%var matchNodeId = "match" + loopCount;%]
+note "[%=match.pattern.name%]" as [%=matchNodeId%]<<_Pattern>>
+
+[%for (key in match.roleBindings.keySet()){%]
+[%var values = match.roleBindings.get(key).asSequence();%]
+[%for (value in values.select(v|v.hasNode())){%]
+[%=matchNodeId%] .. [%=value.getNodeId()%]: [%=key%]
+[%}%]
+[%}%]
+[%}%]
+[%}%]
+
 @enduml
 
 [%
-operation `@edge` getEdgeId() {
+operation `@edge` getNodeId() {
     return 'e' + `@edge`.all.indexOf(self);
 }
 
 operation `@edge` needsEdgeNode() {
-    return true;
     if (unsatisfiedConstraints.isDefined()) {
         return unsatisfiedConstraints.exists(uc|uc.instance = self);
     }
@@ -65,6 +107,11 @@ operation `@node` getPackageShape() {
     if (self.contents.isDefined()) return "<<" + (self.shape ?: "rectangle") + ">>";
     else return "";
 }
+
+operation Any hasNode() {
+    return self.isTypeOf(`@node`) or self.isTypeOf(`@edge`);
+}
+
 @template
 operation `@node` toPlantUml() {%]
 [%=self.getNodeShape()%] "[%=self.^label%]" as [%=self.getNodeId()%] [%=self.getPackageShape()%] #[%=self.color ?: "floralwhite"%] {

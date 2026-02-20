@@ -1,4 +1,5 @@
 [%import "shared.eol";%]
+[%import "flexmi2plantuml.eol";%]
 @startuml
 hide stereotypes
 skinparam roundCorner 3
@@ -136,27 +137,5 @@ operation getReferenceLabel(s, t, r) {
 
 operation Integer mod(i : Integer) {
 	return self - (self/i * i);
-}
-
-operation getPatternColor() {
-	return "gold";
-}
-
-operation getConstraintColor() {
-	return "mistyrose";
-}
-
-operation getCritiqueColor() {
-	return "khaki";
-}
-
-operation Any getConstraintStereotype() {
-	if (self.isCritique()) return "_Critique";
-	else return "_Constraint";
-}
-
-operation Any getConstraintIcon() {
-	if (self.isCritique()) return "<U+26A0>";
-	else return "<U+24E7>";
 }
 %]

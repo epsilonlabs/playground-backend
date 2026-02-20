@@ -1,0 +1,21 @@
+operation getPatternColor() {
+	return "gold";
+}
+
+operation getConstraintColor() {
+	return "mistyrose";
+}
+
+operation getCritiqueColor() {
+	return "khaki";
+}
+
+operation Any getConstraintStereotype() {
+	if (self.isCritique()) return "_Critique";
+	else return "_Constraint";
+}
+
+operation Any getConstraintIcon() {
+	if (self.isCritique()) return "<U+26A0>";
+	else return "<U+24E7>";
+}
