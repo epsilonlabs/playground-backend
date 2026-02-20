@@ -2,6 +2,10 @@
 [%import "flexmi2plantuml.eol";%]
 @startuml
 hide stereotypes
+skinparam roundCorner 3
+skinparam defaultFontName system-ui
+skinparam ArrowColor #7A7A7A
+
 skinparam note {
     BackgroundColor<<_Pattern>> [%=getPatternColor()%]
     BorderColor<<_Pattern>> [%=getPatternColor().darken()%]
@@ -34,11 +38,11 @@ var topLevelNodes = `@node`.all.excludingAll(containedNodes);
 [%for (e in `@edge`.all){%]
 [%if(e.needsEdgeNode()){%]
 rectangle " " as [%=e.getNodeId()%]
-[%=e.^source.getNodeId()%]-[%=e.getEdgeStyle()%]-[%=e.getNodeId()%]
-[%=e.getNodeId()%]-[%=e.getEdgeStyle()%]->[%=e.^target.getNodeId()%] [%if(e.label.isDefined()){%]: [%=e.^label%][%}%]
+[%=e.^source.getNodeId()%]-[%=e.getDecoration(true)%][%=e.getEdgeStyle()%]-[%=e.getNodeId()%]
+[%=e.getNodeId()%]-[%=e.getEdgeStyle()%]-[%=e.getDecoration(false)%][%=e.^target.getNodeId()%] [%if(e.label.isDefined()){%]: [%=e.^label%][%}%]
 
 [%}else{%]
-[%=e.^source.getNodeId()%]-[%=e.getEdgeStyle()%]->[%=e.^target.getNodeId()%] [%if(e.label.isDefined()){%]: [%=e.^label%][%}%]
+[%=e.^source.getNodeId()%] [%=e.getDecoration(true)%]-[%=e.getEdgeStyle()%]-[%=e.getDecoration(false)%] [%=e.^target.getNodeId()%] [%if(e.label.isDefined()){%]: [%=e.^label%][%}%]
 
 [%}%]
 [%}%]
@@ -46,7 +50,7 @@ rectangle " " as [%=e.getNodeId()%]
 [%for (n in `@node`.all){%]
     [%for (f in n.`@edge`){%]
     [%for (v in f.getValues().select(v|v.isTypeOf(`@node`))){%]
-[%=n.getNodeId()%] -[%=f.getEdgeStyle()%]-> [%=v.getNodeId()%] [%if(f.label.isDefined()){%]: [%=f.label%][%}%]
+[%=n.getNodeId()%] [%=f.getDecoration(true)%]-[%=f.getEdgeStyle()%]-[%=f.getDecoration(false)%] [%=v.getNodeId()%] [%if(f.label.isDefined()){%]: [%=f.label%][%}%]
 
     [%}%]
     [%}%]
@@ -140,6 +144,17 @@ operation Any getEdgeStyle() {
     var style;
     if (styles.notEmpty()) style = "[" + styles.concat(",") + "]";
     return style + direction;
+}
+
+operation Any getDecoration(source : Boolean) : String {
+    var decoration = source ? self.`source.decoration` : self.`target.decoration`;
+    if (decoration == "rhomb") return "o";
+    else if (decoration == "arrow") return source ? "<" : ">";
+    else if (decoration == "arrow.filled") return source ? "<" : ">";
+    else if (decoration == "arrow.empty") return "^";
+    else if (decoration == "diamond") return "*";
+    else if (decoration == "diamond.empty") return "o";
+    else return source ? "" : ">";
 }
 
 operation `@node` getColor() {
