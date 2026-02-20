@@ -6,6 +6,7 @@ import jakarta.inject.Singleton;
 import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
+import net.sourceforge.plantuml.core.DiagramDescription;
 import org.eclipse.epsilon.egl.EglModule;
 import org.eclipse.epsilon.eol.EolModule;
 import org.eclipse.epsilon.eol.execute.context.Variable;
@@ -41,19 +42,13 @@ public class ModelDiagramRenderer {
   @Cacheable("flexmi-to-svg")
   public ModelDiagramResponse generateDiagramFromFlexmi(String flexmi, String emfatic) throws Exception {
 
-    Model model = modelLoader.getInMemoryFlexmiModel(flexmi, emfatic, isAnnotated(emfatic));
+    Model model = modelLoader.getInMemoryFlexmiModel(flexmi, emfatic);
     ModelDiagramResponse diag = new ModelDiagramResponse();
     diag.setModelDiagram(renderPlantUML(model2plantuml(model)));
     return diag;
   }
 
-  protected boolean isAnnotated(String emfatic) throws Exception {
-    Model emfaticModel = modelLoader.getInMemoryEmfaticModel(emfatic);
-    EolModule checker = new EolModule();
-    checker.parse("return EClass.all.exists(c|c.eAnnotations.exists(a|a.source = 'node' or a.source = 'edge'));");
-    checker.getContext().getModelRepository().addModel(emfaticModel);
-    return (Boolean) checker.execute();
-  }
+
 
   @Cacheable("xmi-to-svg")
   public ModelDiagramResponse generateDiagramFromXmi(String xmi, String emfatic) throws Exception {
@@ -65,6 +60,11 @@ public class ModelDiagramRenderer {
 
   protected String model2plantuml(Model model, Variable... variables) throws Exception {
     EglModule module = new EglModule();
+
+    if (model instanceof AnnotatableInMemoryEmfModel) {
+      model = ((AnnotatableInMemoryEmfModel) model).toAnnotatedInMemoryEmfModel();
+    }
+
     String template = model instanceof AnnotatedInMemoryEmfModel ?
             "/annotatedflexmi2plantuml.egl" : "/flexmi2plantuml.egl";
     module.parse(getClass().getResource(template).toURI());
@@ -74,12 +74,7 @@ public class ModelDiagramRenderer {
     timeoutTerminator.scheduleScriptTimeout(module);
 
     try {
-      Object plantuml = module.execute() + "";
-      System.err.println(plantuml);
-      return (String) plantuml;
-    } catch (Exception ex) {
-      ex.printStackTrace();
-      return "";
+      return module.execute() + "";
     }
     finally {
       module.getContext().getModelRepository().dispose();
@@ -108,11 +103,17 @@ public class ModelDiagramRenderer {
   @Cacheable("plantuml-to-svg")
   protected String renderPlantUML(String plantUml) throws IOException {
     SourceStringReader reader = new SourceStringReader(plantUml);
-    ByteArrayOutputStream os = new ByteArrayOutputStream();
-    reader.outputImage(os, new FileFormatOption(FileFormat.SVG));
-    os.close();
 
-    return os.toString(StandardCharsets.UTF_8);
+    ByteArrayOutputStream os = new ByteArrayOutputStream();
+    DiagramDescription diagramDescription = reader.outputImage(os, new FileFormatOption(FileFormat.SVG));
+    os.close();
+//    if (diagramDescription.getDescription().equalsIgnoreCase("(Error)")) {
+//      return plantUml;
+//    }
+//    else {
+      return os.toString(StandardCharsets.UTF_8);
+//    }
+
   }
 
 }

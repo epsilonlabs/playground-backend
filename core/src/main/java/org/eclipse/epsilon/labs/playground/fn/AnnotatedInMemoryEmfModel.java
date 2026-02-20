@@ -19,11 +19,14 @@ import org.eclipse.epsilon.eol.execute.introspection.IPropertyGetter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-// This should extend InMemoryEmfModel instead
 public class AnnotatedInMemoryEmfModel extends InMemoryEmfModel {
 
     protected AnnotatedEmfPropertyGetter propertyGetter = new AnnotatedEmfPropertyGetter();
     protected InMemoryEmfModel inMemoryEmfModel = null;
+
+    public AnnotatedInMemoryEmfModel(String name, Resource modelImpl) {
+        super(name, modelImpl);
+    }
 
     public AnnotatedInMemoryEmfModel(Resource modelImpl) {
         super(modelImpl);

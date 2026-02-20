@@ -10,14 +10,21 @@ var topLevelNodes = `@node`.all.excludingAll(containedNodes);
 [%}%]
 
 [%for (e in `@edge`.all){%]
+[%if(e.needsEdgeNode()){%]
+rectangle " " as [%=e.getEdgeId()%]
+[%=e.^source.getNodeId()%]-[#[%=e.color ?: "black"%]]-[%=e.getEdgeId()%]
+[%=e.getEdgeId()%]-[#[%=e.color ?: "black"%]]->[%=e.^target.getNodeId()%] [%if(e.label.isDefined()){%]: [%=e.^label%][%}%]
+
+[%}else{%]
 [%=e.^source.getNodeId()%]-[#[%=e.color ?: "black"%]]->[%=e.^target.getNodeId()%] [%if(e.label.isDefined()){%]: [%=e.^label%][%}%]
 
+[%}%]
 [%}%]
 
 [%for (n in `@node`.all){%]
     [%for (f in n.`@edge`){%]
     [%for (v in f.getValues().select(v|v.isTypeOf(`@node`))){%]
-[%=n.getNodeId()%] -[#[%=f.color ?: "black"%]]-> [%=v.getNodeId()%] : [%if(f.label.isDefined()){%][%=f.label%][%}%]
+[%=n.getNodeId()%] -[#[%=f.color ?: "black"%]]-> [%=v.getNodeId()%] [%if(f.label.isDefined()){%]: [%=f.label%][%}%]
 
     [%}%]
     [%}%]
@@ -26,6 +33,21 @@ var topLevelNodes = `@node`.all.excludingAll(containedNodes);
 @enduml
 
 [%
+operation `@edge` getEdgeId() {
+    return 'e' + `@edge`.all.indexOf(self);
+}
+
+operation `@edge` needsEdgeNode() {
+    return true;
+    if (unsatisfiedConstraints.isDefined()) {
+        return unsatisfiedConstraints.exists(uc|uc.instance = self);
+    }
+    if (matches.isDefined()) {
+        return matches.exists(m|m.roleBindings.values.flatten().includes(self));
+    }
+    return false;
+}
+
 operation `@node` getNodeId() {
     return "n" + `@node`.all.indexOf(self);
 }
