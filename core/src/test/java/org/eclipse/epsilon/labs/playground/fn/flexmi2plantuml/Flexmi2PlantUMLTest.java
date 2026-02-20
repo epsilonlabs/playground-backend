@@ -18,7 +18,7 @@ import jakarta.inject.Inject;
 
 @MicronautTest
 public class Flexmi2PlantUMLTest {
-    
+
     @Inject
     Flexmi2PlantUMLClient client;
 
@@ -29,9 +29,9 @@ public class Flexmi2PlantUMLTest {
     @Test
     public void corsPreflight() {
         var request = HttpRequest
-            .OPTIONS("/")
-            .header(HttpHeaders.ORIGIN, "http://localhost:1234")
-            .header(HttpHeaders.ACCESS_CONTROL_REQUEST_METHOD, "POST");
+                .OPTIONS("/")
+                .header(HttpHeaders.ORIGIN, "http://localhost:1234")
+                .header(HttpHeaders.ACCESS_CONTROL_REQUEST_METHOD, "POST");
 
         var response = rawClient.toBlocking().exchange(request);
         assertEquals(HttpStatus.OK, response.getStatus());
@@ -50,11 +50,68 @@ public class Flexmi2PlantUMLTest {
     }
 
     @Test
+    public void annotated() {
+        var req = new Flexmi2PlantUMLRequest();
+
+        req.setEmfatic("""
+                  package filesystem;
+                
+                  class Filesystem {
+                      val Drive[*] drives;
+                      val Sync[*] syncs;
+                  }
+                
+                  class Drive extends Folder {}
+                
+                  @node(contents="contents")
+                  class Folder extends File {
+                      val File[*] contents;
+                  }
+                
+                  @node(shape="node")
+                  class Shortcut extends File {
+                      @edge(color="red", label="eol:'sync'")
+                      ref File target;
+                  }
+                
+                  @edge(source="source", target="target", color="green")
+                  class Sync {
+                      ref File source;
+                      ref File target;
+                  }
+                
+                  @node(label = "name", color = "azure")
+                  class File {
+                      attr String name;
+                  }
+                """);
+
+        req.setFlexmi("""
+                <?nsuri filesystem?>
+                <filesystem>
+                    <drive name="C">
+                        <folder name="My Documents">
+                            <file name="image.bmp"/>
+                        </folder>
+                        <shortcut name="image.lnk" target="image.bmp"/>
+                        <file name="synced.bmp"/>
+                    </drive>
+                    <sync source="synced.bmp" target="image.bmp"/>
+                </filesystem>
+                """);
+
+        ModelDiagramResponse result = client.convert(req);
+        assertNull(result.getError());
+        assertNull(result.getOutput());
+        assertNotNull(result.getModelDiagram());
+    }
+
+    @Test
     public void eglTemplate() {
         var req = new Flexmi2PlantUMLRequest();
         req.setFlexmi("<_><foo/><:template name=\"foo\"><content language=\"EGL\"></content></:template></_>");
         req.setEmfatic("");
-        
+
         ModelDiagramResponse result = client.convert(req);
         assertNull(result.getError());
         assertNull(result.getOutput());

@@ -6,10 +6,13 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.epsilon.emc.emf.InMemoryEmfModel;
+import org.eclipse.epsilon.eol.EolModule;
+import org.eclipse.epsilon.eol.exceptions.EolInternalException;
 import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
 import org.eclipse.epsilon.eol.exceptions.models.EolModelElementTypeNotFoundException;
 import org.eclipse.epsilon.eol.exceptions.models.EolNotInstantiableModelElementTypeException;
 import org.eclipse.epsilon.eol.execute.context.IEolContext;
+import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.eclipse.epsilon.eol.execute.introspection.AbstractPropertyGetter;
 import org.eclipse.epsilon.eol.execute.introspection.IPropertyGetter;
 
@@ -20,6 +23,7 @@ import java.util.stream.Collectors;
 public class AnnotatedInMemoryEmfModel extends InMemoryEmfModel {
 
     protected AnnotatedEmfPropertyGetter propertyGetter = new AnnotatedEmfPropertyGetter();
+    protected InMemoryEmfModel inMemoryEmfModel = null;
 
     public AnnotatedInMemoryEmfModel(Resource modelImpl) {
         super(modelImpl);
@@ -103,6 +107,13 @@ public class AnnotatedInMemoryEmfModel extends InMemoryEmfModel {
         return propertyGetter;
     }
 
+    public InMemoryEmfModel getInMemoryEmfModel() {
+        if (inMemoryEmfModel == null) {
+            inMemoryEmfModel = new InMemoryEmfModel(this.modelImpl);
+        }
+        return inMemoryEmfModel;
+    }
+
     class AnnotatedEmfPropertyGetter extends AbstractPropertyGetter {
 
         @Override
@@ -116,7 +127,13 @@ public class AnnotatedInMemoryEmfModel extends InMemoryEmfModel {
             if (object instanceof EObjectStructuralFeature) {
                 for (EAnnotation eAnnotation : ((EObjectStructuralFeature) object).getEStructuralFeature().getEAnnotations()) {
                     if (eAnnotation.getDetails().containsKey(property)) {
-                        return eAnnotation.getDetails().get(property);
+                        String value = eAnnotation.getDetails().get(property);
+                        if (isEol(value)) {
+                            return runEol(value, Variable.createReadOnlyVariable("self", ((EObjectStructuralFeature) object).getEObject()));
+                        }
+                        else {
+                            return value;
+                        }
                     }
                 }
             } else {
@@ -142,21 +159,39 @@ public class AnnotatedInMemoryEmfModel extends InMemoryEmfModel {
                         if (eAnnotation.getDetails().containsKey(property)) {
 
                             String value = eAnnotation.getDetails().get(property);
-                            if (caret) {
+                            if (isEol(value)) {
+                                return runEol(value, Variable.createReadOnlyVariable("self", object));
+                            }
+                            else if (caret) {
                                 return eObject.eGet(eObject.eClass().getEStructuralFeature(value));
                             } else {
-                                if (value.startsWith("eol:")) {
-                                    // TODo
-                                    return null;
-                                } else {
-                                    return value;
-                                }
+                                return value;
                             }
                         }
                     }
                 }
             }
             return null;
+        }
+    }
+
+    protected boolean isEol(String value) {
+        return value.startsWith("eol:");
+    }
+
+    protected Object runEol(String code, Variable... variables) throws EolRuntimeException {
+        try {
+            code = code.substring(4);
+            code = "return " + code + ";";
+            EolModule module = new EolModule();
+            module.parse(code);
+            for (Variable variable : variables) {
+                module.getContext().getFrameStack().put(variable);
+            }
+            module.getContext().getModelRepository().addModel(getInMemoryEmfModel());
+            return module.execute();
+        } catch (Exception e) {
+            throw new EolInternalException(e);
         }
     }
 

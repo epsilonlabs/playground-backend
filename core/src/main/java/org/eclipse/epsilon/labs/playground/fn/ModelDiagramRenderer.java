@@ -74,8 +74,14 @@ public class ModelDiagramRenderer {
     timeoutTerminator.scheduleScriptTimeout(module);
 
     try {
-      return module.execute() + "";
-    } finally {
+      Object plantuml = module.execute() + "";
+      System.err.println(plantuml);
+      return (String) plantuml;
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      return "";
+    }
+    finally {
       module.getContext().getModelRepository().dispose();
       module.getContext().dispose();
     }
