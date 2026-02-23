@@ -133,7 +133,9 @@ public class AnnotatedInMemoryEmfModel extends InMemoryEmfModel {
                     if (eAnnotation.getDetails().containsKey(property)) {
                         String value = eAnnotation.getDetails().get(property);
                         if (isEol(value)) {
-                            return runEol(value, Variable.createReadOnlyVariable("self", ((EObjectStructuralFeature) object).getEObject()));
+                            return runEol(value,
+                                    Variable.createReadOnlyVariable("self", ((EObjectStructuralFeature) object).getEObject()),
+                                    Variable.createReadOnlyVariable("item", ((EObjectStructuralFeature) object).getItem()));
                         }
                         else {
                             return value;
@@ -202,6 +204,7 @@ public class AnnotatedInMemoryEmfModel extends InMemoryEmfModel {
     class EObjectStructuralFeature {
         protected EObject eObject;
         protected EStructuralFeature eStructuralFeature;
+        protected Object item;
 
         public EObjectStructuralFeature(EObject eObject, EStructuralFeature eStructuralFeature) {
             this.eObject = eObject;
@@ -231,6 +234,14 @@ public class AnnotatedInMemoryEmfModel extends InMemoryEmfModel {
 
         public EStructuralFeature getEStructuralFeature() {
             return eStructuralFeature;
+        }
+
+        public Object getItem() {
+            return item;
+        }
+
+        public void setItem(Object item) {
+            this.item = item;
         }
     }
 }

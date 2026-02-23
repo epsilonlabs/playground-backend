@@ -17,15 +17,6 @@ skinparam note {
     BorderColor<<_Success>> [%="TECHNOLOGY".darken()%]
 }
 
-[%for (n in `@node`.all){%]
-skinparam [%=n.getNodeShape()%] {
-    BorderColor<<[%=n.getNodeId()%]type>> [%=n.`border.color` ?: n.getColor().darken()%]
-    BackgroundColor<<[%=n.getNodeId()%]type>> [%=n.getColor()%]
-    [%=n.skinParam("FontColor", n.`font.color`)%]
-    [%=n.skinParam("FontSize", n.`font.size`)%]
-}
-[%}%]
-
 [%
 var containedNodes = `@node`.all.select(n|n.contents.isDefined()).^contents.flatten().asSet();
 var topLevelNodes = `@node`.all.excludingAll(containedNodes);
@@ -35,9 +26,23 @@ var topLevelNodes = `@node`.all.excludingAll(containedNodes);
 [%=n.toPlantUml()%]
 [%}%]
 
-[%for (e in `@edge`.all){%]
+[%
+var visibleNodes = `@node`.all.select(n|n.isVisible());
+var visibleEdges = `@edge`.all.select(e|e.isVisible());
+%]
+
+[%for (n in visibleNodes){%]
+skinparam [%=n.getNodeShape()%] {
+    BorderColor<<[%=n.getNodeId()%]type>> [%=n.`border.color` ?: n.getColor().darken()%]
+    BackgroundColor<<[%=n.getNodeId()%]type>> [%=n.getColor()%]
+    [%=n.skinParam("FontColor", n.`font.color`)%]
+    [%=n.skinParam("FontSize", n.`font.size`)%]
+}
+[%}%]
+
+[%for (e in visibleEdges){%]
 [%if(e.needsEdgeNode()){%]
-rectangle " " as [%=e.getNodeId()%]
+circle " " as [%=e.getNodeId()%] #white
 [%=e.^source.getNodeId()%]-[%=e.getDecoration(true)%][%=e.getEdgeStyle()%]-[%=e.getNodeId()%]
 [%=e.getNodeId()%]-[%=e.getEdgeStyle()%]-[%=e.getDecoration(false)%][%=e.^target.getNodeId()%] [%if(e.label.isDefined()){%]: [%=e.^label%][%}%]
 
@@ -47,9 +52,10 @@ rectangle " " as [%=e.getNodeId()%]
 [%}%]
 [%}%]
 
-[%for (n in `@node`.all){%]
+[%for (n in visibleNodes){%]
     [%for (f in n.`@edge`){%]
-    [%for (v in f.getValues().select(v|v.isTypeOf(`@node`))){%]
+    [%for (v in f.getValues().select(v|v.isTypeOf(`@node`) and v.isVisible())){%]
+    [%f.setItem(v);%]
 [%=n.getNodeId()%] [%=f.getDecoration(true)%]-[%=f.getEdgeStyle()%]-[%=f.getDecoration(false)%] [%=v.getNodeId()%] [%if(f.label.isDefined()){%]: [%=f.label%][%}%]
 
     [%}%]
@@ -80,13 +86,15 @@ note "[%=match.pattern.name%]" as [%=matchNodeId%]<<_Pattern>>
 [%var values = match.roleBindings.get(key).asSequence();%]
 [%for (value in values.select(v|v.hasNode())){%]
 [%=matchNodeId%] .. [%=value.getNodeId()%]: [%=key%]
+[%if(loopCount=1 and not hasMore){%][%=matchNodeId%] .[hidden]. [%=value.getNodeId()%]: [%=key%][%}%][*TODO: Fix hack*]
+
 [%}%]
 [%}%]
 [%}%]
 [%}%]
 
 @enduml
-
+[%out.toString().println();%]
 [%
 operation `@edge` getNodeId() {
     return 'e' + `@edge`.all.indexOf(self);
@@ -108,7 +116,7 @@ operation `@node` getNodeId() {
 
 operation `@node` getNodeShape() {
     if (self.contents.isDefined()) {
-        return "package";
+        return self.shape ?: "package";
     }
     else {
         return self.shape ?: "rectangle";
@@ -121,7 +129,7 @@ operation `@node` getPackageShape() {
 }
 
 operation Any hasNode() {
-    return self.isTypeOf(`@node`) or self.isTypeOf(`@edge`);
+    return visibleNodes.includes(self) or visibleEdges.includes(self);
 }
 
 operation Any getEdgeStyle() {
@@ -148,7 +156,8 @@ operation Any getEdgeStyle() {
 
 operation Any getDecoration(source : Boolean) : String {
     var decoration = source ? self.`source.decoration` : self.`target.decoration`;
-    if (decoration == "rhomb") return "o";
+    if (decoration == "none") return "";
+    else if (decoration == "rhomb") return "o";
     else if (decoration == "arrow") return source ? "<" : ">";
     else if (decoration == "arrow.filled") return source ? "<" : ">";
     else if (decoration == "arrow.empty") return "^";
@@ -166,9 +175,26 @@ operation `@node` skinParam(param : String, value : Any) {
     else return "";
 }
 
+operation `@node` isVisible() {
+    if (self.~visible.isDefined()) return self.~visible;
+    else return false;
+}
+
+@cached
+operation `@edge` isVisible() {
+    var visible = self.visible;
+    if (visible.isDefined()) visible = visible.asBoolean();
+    else visible = true;
+    return visible and self.^source.isVisible() and self.^target.isVisible();
+}
+
 @template
-operation `@node` toPlantUml() {%]
-[%=self.getNodeShape()%] "[%=self.^label%]" as [%=self.getNodeId()%] <<[%=self.getNodeId()%]type>> [%=self.getPackageShape()%] {
+operation `@node` toPlantUml() {
+    var visible = self.visible;
+    if (visible.isUndefined() or visible.asString() == "true") self.~visible = true;
+    else return "";
+%]
+[%=self.getNodeShape()%] "[%=self.^label%]" as [%=self.getNodeId()%] [%=self.getPackageShape()%] <<[%=self.getNodeId()%]type>> {
     [%if(self.contents.isDefined()){%]
     [%for(content in self.^contents.select(c|c.isTypeOf(`@node`))){%]
     [%=content.toPlantUml()%]
@@ -176,9 +202,3 @@ operation `@node` toPlantUml() {%]
     [%}%]
 }
 [%}%]
-
-[*
-- e.^source means get the source detail of the edge annotation and if it doesn't start with eol: interpret it as the value of the source feature,
-otherwise run the EOL expression against a regular EMF model underpinned by the same resource and return the result
-- e.color means get the color detail of the edge annotation and if it doesn't start with eol: get its value
-*]
