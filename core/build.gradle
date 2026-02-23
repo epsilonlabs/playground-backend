@@ -33,7 +33,7 @@ dependencies {
     implementation("org.eclipse.emf:org.eclipse.emf.common:2.23.0")
     implementation("org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.16.0")
     implementation("org.eclipse.emfatic:org.eclipse.emfatic.core:1.1.0")
-    implementation("net.sourceforge.plantuml:plantuml:1.2022.14")
+    implementation("net.sourceforge.plantuml:plantuml-epl:1.2026.1")
 
     // JSON EMC driver
     implementation("org.eclipse.epsilon:org.eclipse.epsilon.emc.json:${epsilonVersion}")
