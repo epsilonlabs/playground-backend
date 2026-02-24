@@ -69,10 +69,16 @@ note as NOUC<<_Success>>
 <U+2611> The model is valid.
 end note
 [%}%]
-[%for (uc in unsatisfiedConstraints.select(uc|uc.getInstance().hasNode())){%]
+[%for (uc in unsatisfiedConstraints){%]
+[%if(uc.getInstance().hasNode()){%]
 note top of [%=uc.getInstance().getNodeId()%]<<[%=uc.getConstraint().getConstraintStereotype()%]>>
 [%=uc.getConstraint().getConstraintIcon()%] [%=uc.getMessage()%]
 end note
+[%}else{%]
+note as UC[%=loopCount%]<<[%=uc.getConstraint().getConstraintStereotype()%]>>
+[%=uc.getConstraint().getConstraintIcon()%] [%=uc.getMessage()%]
+end note
+[%}%]
 [%}%]
 [%}%]
 
