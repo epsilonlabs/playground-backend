@@ -204,6 +204,11 @@ operation `@edge` isVisible() {
     return visible and self.^source.isVisible() and self.^target.isVisible();
 }
 
+// Fallback for unannotated elements and @text elements
+operation Any isVisible() {
+    return false;
+}
+
 operation `@text` toPlantUml() {
     return self.^label;
 }
