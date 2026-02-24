@@ -6,6 +6,10 @@ skinparam roundCorner 3
 skinparam defaultFontName system-ui
 skinparam ArrowColor #7A7A7A
 
+[%for (puml in `@node`.all.includingAll(`@edge`.all).puml.flatten().asSet()){%]
+[%=puml%]
+[%}%]
+
 skinparam note {
     BackgroundColor<<_Pattern>> [%=getPatternColor()%]
     BorderColor<<_Pattern>> [%=getPatternColor().darken()%]
@@ -54,10 +58,16 @@ circle " " as [%=e.getNodeId()%] #white
 
 [%for (n in visibleNodes){%]
     [%for (f in n.`@edge`){%]
-    [%for (v in f.getValues().select(v|v.isTypeOf(`@node`) and v.isVisible())){%]
-    [%f.setItem(v);%]
-[%=n.getNodeId()%] [%=f.getDecoration(true)%]-[%=f.getEdgeStyle()%]-[%=f.getDecoration(false)%] [%=v.getNodeId()%] [%if(f.label.isDefined()){%]: [%=f.label%][%}%]
+    [%for (v in f.getValues()){
+        f.setItem(v);
+        var target;
+        if (f.target.isDefined()) target = f.target;
+        else target = v;
+    %]
+    [%if (target.isTypeOf(`@node`) and target.isVisible()){%]
+[%=n.getNodeId()%] [%=f.getDecoration(true)%]-[%=f.getEdgeStyle()%]-[%=f.getDecoration(false)%] [%=target.getNodeId()%] [%if(f.label.isDefined()){%]: [%=f.label%][%}%]
 
+    [%}%]
     [%}%]
     [%}%]
 [%}%]
@@ -194,6 +204,10 @@ operation `@edge` isVisible() {
     return visible and self.^source.isVisible() and self.^target.isVisible();
 }
 
+operation `@text` toPlantUml() {
+    return self.^label;
+}
+
 @template
 operation `@node` toPlantUml() {
     var visible = self.visible;
@@ -202,9 +216,10 @@ operation `@node` toPlantUml() {
 %]
 [%=self.getNodeShape()%] "[%=self.^label%]" as [%=self.getNodeId()%] [%=self.getPackageShape()%] <<[%=self.getNodeId()%]type>> {
     [%if(self.contents.isDefined()){%]
-    [%for(content in self.^contents.select(c|c.isTypeOf(`@node`))){%]
+    [%for(content in self.^contents.select(c|c.isTypeOf(`@node`) or c.isTypeOf(`@text`))){%]
     [%=content.toPlantUml()%]
     [%}%]
     [%}%]
 }
+
 [%}%]
