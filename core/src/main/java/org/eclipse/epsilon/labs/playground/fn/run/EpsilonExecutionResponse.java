@@ -32,7 +32,9 @@ public class EpsilonExecutionResponse extends AbstractPlaygroundResponse {
 
     private String targetModelDiagram;
     private String validatedModelDiagram;
+    private String validatedModelDiagramSource;
     private String patternMatchedModelDiagram;
+    private String patternMatchedModelDiagramSource;
     private String generatedText;
     private List<GeneratedFile> generatedFiles;
 
@@ -60,12 +62,28 @@ public class EpsilonExecutionResponse extends AbstractPlaygroundResponse {
         this.patternMatchedModelDiagram = patternMatchedModelDiagram;
     }
 
+    public String getPatternMatchedModelDiagramSource() {
+        return patternMatchedModelDiagramSource;
+    }
+
+    public void setPatternMatchedModelDiagramSource(String patternMatchedModelDiagramSource) {
+        this.patternMatchedModelDiagramSource = patternMatchedModelDiagramSource;
+    }
+
     public String getValidatedModelDiagram() {
         return validatedModelDiagram;
     }
 
     public void setValidatedModelDiagram(String validatedModelDiagram) {
         this.validatedModelDiagram = validatedModelDiagram;
+    }
+
+    public void setValidatedModelDiagramSource(String validatedModelDiagramSource) {
+        this.validatedModelDiagramSource = validatedModelDiagramSource;
+    }
+
+    public String getValidatedModelDiagramSource() {
+        return validatedModelDiagramSource;
     }
 
     public String getTargetModelDiagram() {

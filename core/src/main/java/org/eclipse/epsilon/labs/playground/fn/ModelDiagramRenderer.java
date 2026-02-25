@@ -29,13 +29,17 @@ public class ModelDiagramRenderer {
 
   public MetamodelDiagramResponse generateMetamodelDiagram(String emfatic) throws Exception {
     MetamodelDiagramResponse response = new MetamodelDiagramResponse();
-    response.setMetamodelDiagram(renderPlantUML(emfatic2plantuml(emfatic)));
+    String plantuml = emfatic2plantuml(emfatic);
+    response.setMetamodelDiagramSource(plantuml);
+    response.setMetamodelDiagram(renderPlantUML(plantuml));
     return response;
   }
 
   public ModelDiagramResponse generateModelDiagram(Model model, Variable... variables) throws Exception {
     ModelDiagramResponse diag = new ModelDiagramResponse();
-    diag.setModelDiagram(renderPlantUML(model2plantuml(model, variables)));
+    String plantuml = model2plantuml(model, variables);
+    diag.setModelDiagramSource(plantuml);
+    diag.setModelDiagram(renderPlantUML(plantuml));
     return diag;
   }
 
@@ -44,7 +48,9 @@ public class ModelDiagramRenderer {
 
     Model model = modelLoader.getInMemoryFlexmiModel(flexmi, emfatic);
     ModelDiagramResponse diag = new ModelDiagramResponse();
-    diag.setModelDiagram(renderPlantUML(model2plantuml(model)));
+    String plantuml = model2plantuml(model);
+    diag.setModelDiagramSource(plantuml);
+    diag.setModelDiagram(renderPlantUML(plantuml));
     return diag;
   }
 
@@ -54,7 +60,9 @@ public class ModelDiagramRenderer {
   public ModelDiagramResponse generateDiagramFromXmi(String xmi, String emfatic) throws Exception {
     Model model = modelLoader.getInMemoryXmiModel(xmi, emfatic);
     ModelDiagramResponse diag = new ModelDiagramResponse();
-    diag.setModelDiagram(renderPlantUML(model2plantuml(model)));
+    String plantuml = model2plantuml(model);
+    diag.setModelDiagramSource(plantuml);
+    diag.setModelDiagram(renderPlantUML(plantuml));
     return diag;
   }
 

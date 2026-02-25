@@ -5,6 +5,7 @@ import io.micronaut.serde.annotation.Serdeable;
 @Serdeable
 public class ModelDiagramResponse extends AbstractPlaygroundResponse {
     private String modelDiagram;
+    private String modelDiagramSource;
 
     public String getModelDiagram() {
         return modelDiagram;
@@ -14,5 +15,11 @@ public class ModelDiagramResponse extends AbstractPlaygroundResponse {
         this.modelDiagram = modelDiagram;
     }
 
+    public String getModelDiagramSource() {
+        return modelDiagramSource;
+    }
 
+    public void setModelDiagramSource(String modelDiagramSource) {
+        this.modelDiagramSource = modelDiagramSource;
+    }
 }
