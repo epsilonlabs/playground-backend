@@ -117,7 +117,7 @@ note "[%=match.pattern.name%]" as [%=matchNodeId%]<<_Pattern>>
 [%}%]
 
 @enduml
-[%out.toString().println();%]
+
 [%
 operation `@edge` getNodeId() {
     return 'e' + `@edge`.all.indexOf(self);
