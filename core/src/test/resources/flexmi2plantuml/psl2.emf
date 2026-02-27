@@ -31,7 +31,7 @@ class Manager extends Person {
 
 }
 
-@edge(source="person", target="eol:self.eContainer()", thickness="eol: self.percentage/10", direction="down", label="eol:self.percentage < 100 ? self.percentage+'%' : ''")
+@edge(source="person", target="eol:self.eContainer()", thickness="eolp: return self.percentage/10;", direction="down", label="eol:self.percentage < 100 ? self.percentage+'%' : ''")
 class Effort {
     @diagram(direction="up")
 	ref Person person;

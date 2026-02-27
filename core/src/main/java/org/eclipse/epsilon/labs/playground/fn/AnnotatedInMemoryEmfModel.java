@@ -202,13 +202,18 @@ public class AnnotatedInMemoryEmfModel extends InMemoryEmfModel {
 
 
     protected boolean isEol(String value) {
-        return value.startsWith("eol:");
+        return value.startsWith("eol:") || value.startsWith("eolp:");
     }
 
     protected Object runEol(String code, Variable... variables) throws EolRuntimeException {
         try {
-            code = code.substring(4);
-            code = "return " + code + ";";
+            if (code.startsWith("eol:")) {
+                code = code.substring(4);
+                code = "return " + code + ";";
+            }
+            else {
+                code = code.substring(5);
+            }
             EolModule module = new EolModule();
             module.parse(code);
             for (Variable variable : variables) {
