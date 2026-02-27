@@ -1,0 +1,82 @@
+@startuml
+hide stereotypes
+skinparam roundCorner 3
+skinparam defaultFontName system-ui
+skinparam ArrowColor #7A7A7A
+
+
+
+
+skinparam note {
+    BackgroundColor<<_Pattern>> gold
+    BorderColor<<_Pattern>> %darken("gold",60)
+    BackgroundColor<<_Critique>> khaki
+    BorderColor<<_Critique>> %darken("khaki",60)
+    BackgroundColor<<_Constraint>> mistyrose
+    BorderColor<<_Constraint>> %darken("mistyrose",60)
+    BackgroundColor<<_Success>> TECHNOLOGY
+    BorderColor<<_Success>> %darken("TECHNOLOGY",60)
+}
+
+
+package "C" as n0 <<rectangle>> <<n0type>> {
+    package "My Documents" as n1 <<rectangle>> <<n1type>> {
+        rectangle "image.bmp" as n2  <<n2type>> {
+        }
+    }
+    node "image.lnk" as n3  <<n3type>> {
+    }
+    rectangle "synced.bmp" as n4  <<n4type>> {
+    }
+}
+
+
+skinparam package {
+    BorderColor<<n0type>> %darken("azure",60)
+    BackgroundColor<<n0type>> azure
+    
+    
+    
+    
+}
+skinparam package {
+    BorderColor<<n1type>> %darken("azure",60)
+    BackgroundColor<<n1type>> azure
+    
+    
+    
+    
+}
+skinparam rectangle {
+    BorderColor<<n2type>> %darken("azure",60)
+    BackgroundColor<<n2type>> azure
+    
+    
+    
+    
+}
+skinparam node {
+    BorderColor<<n3type>> %darken("azure",60)
+    BackgroundColor<<n3type>> azure
+    
+    
+    
+    
+}
+skinparam rectangle {
+    BorderColor<<n4type>> %darken("azure",60)
+    BackgroundColor<<n4type>> azure
+    
+    
+    
+    
+}
+
+n4 -[#green]right-> n2
+
+n3 -[#red]right-> n2: sync
+
+
+
+@enduml
+

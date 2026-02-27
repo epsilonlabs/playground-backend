@@ -81,7 +81,7 @@ skinparam note {
 
 [%if (not elements.isEmpty()){%]
 skinparam object {
-[%for (eClass in elements.collect(e|e.eClass()).asSet()){%]
+[%for (eClass in elements.collect(e|e.eClass()).asOrderedSet()){%]
 	backgroundColor<<[%=eClass.name%]>> [%=eClass.getColor()%] 
 	borderColor<<[%=eClass.name%]>> [%=eClass.getColor().darken()%]
 [%}%]

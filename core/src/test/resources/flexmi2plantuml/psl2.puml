@@ -1,0 +1,95 @@
+@startuml
+hide stereotypes
+skinparam roundCorner 3
+skinparam defaultFontName system-ui
+skinparam ArrowColor #7A7A7A
+
+
+
+
+skinparam note {
+    BackgroundColor<<_Pattern>> gold
+    BorderColor<<_Pattern>> %darken("gold",60)
+    BackgroundColor<<_Critique>> khaki
+    BorderColor<<_Critique>> %darken("khaki",60)
+    BackgroundColor<<_Constraint>> mistyrose
+    BorderColor<<_Constraint>> %darken("mistyrose",60)
+    BackgroundColor<<_Success>> TECHNOLOGY
+    BorderColor<<_Success>> %darken("TECHNOLOGY",60)
+}
+
+
+package "ACME" as n0 <<rectangle>> <<n0type>> {
+    node "<<Task>>\nAnalysis" as n1  <<n1type>> {
+    }
+    node "<<Task>>\nDesign" as n2  <<n2type>> {
+    }
+    node "<<Task>>\nImplementation" as n3  <<n3type>> {
+    }
+}
+cloud "Alice" as n4  <<n4type>> {
+}
+cloud "Manager: Bob" as n5  <<n5type>> {
+}
+
+
+skinparam package {
+    BorderColor<<n0type>> %darken("azure",60)
+    BackgroundColor<<n0type>> azure
+    
+    
+    
+    
+}
+skinparam node {
+    BorderColor<<n1type>> %darken("beige",60)
+    BackgroundColor<<n1type>> beige
+    FontColor<<n1type>> green
+    
+    
+    
+}
+skinparam node {
+    BorderColor<<n2type>> %darken("beige",60)
+    BackgroundColor<<n2type>> beige
+    FontColor<<n2type>> green
+    
+    
+    
+}
+skinparam node {
+    BorderColor<<n3type>> %darken("beige",60)
+    BackgroundColor<<n3type>> beige
+    FontColor<<n3type>> green
+    
+    
+    
+}
+skinparam cloud {
+    BorderColor<<n4type>> %darken("azure",60)
+    BackgroundColor<<n4type>> azure
+    FontColor<<n4type>> magenta
+    FontSize<<n4type>> 20
+    
+    
+}
+skinparam cloud {
+    BorderColor<<n5type>> %darken("green",60)
+    BackgroundColor<<n5type>> green
+    FontColor<<n5type>> white
+    FontSize<<n5type>> 20
+    
+    
+}
+
+n4 -[thickness=10]down-> n1
+n5 -[thickness=10]down-> n2
+n5 -[thickness=5]down-> n3: 50%
+n4 -[thickness=5]down-> n3: 50%
+
+n2 -[#red,dashed,thickness=2]right-> n4: leads
+
+
+
+@enduml
+

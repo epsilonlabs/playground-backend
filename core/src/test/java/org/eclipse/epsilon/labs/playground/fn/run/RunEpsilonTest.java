@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
+import org.eclipse.epsilon.labs.playground.fn.PlaygroundTest;
 import org.eclipse.epsilon.labs.playground.fn.run.EpsilonExecutionResponse.GeneratedFile;
 import org.junit.jupiter.api.Test;
 import org.junit.matchers.JUnitMatchers;
@@ -19,7 +20,7 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 
 @MicronautTest
-public class RunEpsilonTest {
+public class RunEpsilonTest extends PlaygroundTest {
     
     @Inject
     RunEpsilonClient client;
@@ -119,11 +120,6 @@ public class RunEpsilonTest {
         req.setProgram("x.println();");
         var response = client.execute(req);
         assertThat(response.getError(), JUnitMatchers.containsString("program.eol"));
-    }
-
-    private String getResourceAsString(String resource) throws IOException {
-        var inputStream = getClass().getResourceAsStream(resource);
-        return CharStreams.toString(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
     }
     
 }

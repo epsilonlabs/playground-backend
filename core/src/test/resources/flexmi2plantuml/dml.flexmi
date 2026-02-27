@@ -1,0 +1,10 @@
+<?nsuri dml?>
+<model>
+    <entity name="Project">
+        <feature name="tasks" type="Task" many="true"/>
+    </entity>
+    <entity name="Task">
+        <feature name="name" type="String"/>
+    </entity>
+    <datatype name="String"/>
+</model>

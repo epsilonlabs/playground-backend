@@ -1,0 +1,54 @@
+@startuml
+hide stereotypes
+skinparam roundCorner 3
+skinparam defaultFontName system-ui
+skinparam ArrowColor #7A7A7A
+
+
+hide circle
+hide methods
+
+skinparam note {
+    BackgroundColor<<_Pattern>> gold
+    BorderColor<<_Pattern>> %darken("gold",60)
+    BackgroundColor<<_Critique>> khaki
+    BorderColor<<_Critique>> %darken("khaki",60)
+    BackgroundColor<<_Constraint>> mistyrose
+    BorderColor<<_Constraint>> %darken("mistyrose",60)
+    BackgroundColor<<_Success>> TECHNOLOGY
+    BorderColor<<_Success>> %darken("TECHNOLOGY",60)
+}
+
+
+class "Project" as n0 <<class>> <<n0type>> {
+    tasks:Task[*]
+}
+class "Task" as n1 <<class>> <<n1type>> {
+    name:String
+}
+
+
+skinparam class {
+    BorderColor<<n0type>> %darken("floralwhite",60)
+    BackgroundColor<<n0type>> floralwhite
+    
+    
+    
+    
+}
+skinparam class {
+    BorderColor<<n1type>> %darken("floralwhite",60)
+    BackgroundColor<<n1type>> floralwhite
+    
+    
+    
+    
+}
+
+
+n0 -right-> n1: *
+
+
+
+@enduml
+

@@ -1,0 +1,110 @@
+@startuml
+hide stereotypes
+skinparam roundCorner 3
+skinparam defaultFontName system-ui
+skinparam ArrowColor #7A7A7A
+
+
+
+
+skinparam note {
+    BackgroundColor<<_Pattern>> gold
+    BorderColor<<_Pattern>> %darken("gold",60)
+    BackgroundColor<<_Critique>> khaki
+    BorderColor<<_Critique>> %darken("khaki",60)
+    BackgroundColor<<_Constraint>> mistyrose
+    BorderColor<<_Constraint>> %darken("mistyrose",60)
+    BackgroundColor<<_Success>> TECHNOLOGY
+    BorderColor<<_Success>> %darken("TECHNOLOGY",60)
+}
+
+
+component "Not" as n0  <<n0type>> {
+}
+rectangle "in" as n1  <<n1type>> {
+}
+
+component "And" as n3  <<n3type>> {
+}
+rectangle "a" as n4  <<n4type>> {
+}
+rectangle "b" as n5  <<n5type>> {
+}
+
+component "Or" as n7  <<n7type>> {
+}
+
+
+rectangle "out" as n10  <<n10type>> {
+}
+
+
+skinparam component {
+    BorderColor<<n0type>> %darken("azure",60)
+    BackgroundColor<<n0type>> azure
+    
+    
+    
+    
+}
+skinparam rectangle {
+    BorderColor<<n1type>> %darken("floralwhite",60)
+    BackgroundColor<<n1type>> floralwhite
+    
+    
+    
+    
+}
+skinparam component {
+    BorderColor<<n3type>> %darken("azure",60)
+    BackgroundColor<<n3type>> azure
+    
+    
+    
+    
+}
+skinparam rectangle {
+    BorderColor<<n4type>> %darken("floralwhite",60)
+    BackgroundColor<<n4type>> floralwhite
+    
+    
+    
+    
+}
+skinparam rectangle {
+    BorderColor<<n5type>> %darken("floralwhite",60)
+    BackgroundColor<<n5type>> floralwhite
+    
+    
+    
+    
+}
+skinparam component {
+    BorderColor<<n7type>> %darken("azure",60)
+    BackgroundColor<<n7type>> azure
+    
+    
+    
+    
+}
+skinparam rectangle {
+    BorderColor<<n10type>> %darken("lemonchiffon",60)
+    BackgroundColor<<n10type>> lemonchiffon
+    
+    
+    
+    
+}
+
+n0 -down-> n7: out→a
+n3 -down-> n7: out→b
+
+n0 <-up- n1
+n3 <-up- n4
+n3 <-up- n5
+n7 -down-> n10
+
+
+
+@enduml
+

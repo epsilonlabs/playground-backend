@@ -1,0 +1,39 @@
+@namespace(uri="psl", prefix="")
+package psl;
+
+@node(label="title", contents="tasks")
+class Project {
+	attr String title;
+	attr String description;
+	val Task[*] tasks;
+	@diagram(direction="right")
+	val Person[*] people;
+}
+
+@node(label="eol:'<<Task>>\\n' + self.title", shape="node", font.color="green")
+class Task {
+	attr String title;
+	attr int start;
+	attr int duration;
+	@diagram(direction="right")
+	val Effort[*] effort;
+	@edge(label="leads", color="red", style="dashed", thickness="2")
+	ref Person lead;
+}
+
+@node(label="name", color="azure", shape="cloud", font.color="magenta", font.size="20")
+class Person {
+	attr String name;
+}
+
+@node(label="eol: 'Manager: ' + self.name", color="green", font.color="white")
+class Manager extends Person {
+
+}
+
+@edge(source="person", target="eol:self.eContainer()", thickness="eol: self.percentage/10", direction="down", label="eol:self.percentage < 100 ? self.percentage+'%' : ''")
+class Effort {
+    @diagram(direction="up")
+	ref Person person;
+	attr int percentage = 100;
+}

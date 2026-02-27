@@ -1,0 +1,64 @@
+@startuml
+hide stereotypes
+skinparam roundCorner 3
+skinparam defaultFontName system-ui
+skinparam ArrowColor #7A7A7A
+
+
+
+
+skinparam note {
+    BackgroundColor<<_Pattern>> gold
+    BorderColor<<_Pattern>> %darken("gold",60)
+    BackgroundColor<<_Critique>> khaki
+    BorderColor<<_Critique>> %darken("khaki",60)
+    BackgroundColor<<_Constraint>> mistyrose
+    BorderColor<<_Constraint>> %darken("mistyrose",60)
+    BackgroundColor<<_Success>> TECHNOLOGY
+    BorderColor<<_Success>> %darken("TECHNOLOGY",60)
+}
+
+
+rectangle "A" as n0  <<n0type>> {
+}
+rectangle "B" as n1  <<n1type>> {
+}
+rectangle "C" as n2  <<n2type>> {
+}
+
+
+skinparam rectangle {
+    BorderColor<<n0type>> %darken("beige",60)
+    BackgroundColor<<n0type>> beige
+    
+    
+    
+    
+}
+skinparam rectangle {
+    BorderColor<<n1type>> %darken("beige",60)
+    BackgroundColor<<n1type>> beige
+    
+    
+    
+    
+}
+skinparam rectangle {
+    BorderColor<<n2type>> %darken("beige",60)
+    BackgroundColor<<n2type>> beige
+    
+    
+    
+    
+}
+
+n0 -down-> n1
+n1 -down-> n2
+n0 -down-> n0
+n2 -down-> n0
+
+
+
+
+@enduml
+

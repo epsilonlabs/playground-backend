@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.eclipse.epsilon.labs.playground.fn.ModelDiagramResponse;
+import org.eclipse.epsilon.labs.playground.fn.PlaygroundTest;
 import org.junit.jupiter.api.Test;
 
 import com.google.common.net.HttpHeaders;
@@ -17,7 +18,7 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 
 @MicronautTest
-public class Flexmi2PlantUMLTest {
+public class Flexmi2PlantUMLTest extends PlaygroundTest {
 
     @Inject
     Flexmi2PlantUMLClient client;
@@ -50,62 +51,35 @@ public class Flexmi2PlantUMLTest {
     }
 
     @Test
-    public void annotated() {
-        var req = new Flexmi2PlantUMLRequest();
-
-        req.setEmfatic("""
-                  package filesystem;
-                
-                  class Filesystem {
-                      val Drive[*] drives;
-                      val Sync[*] syncs;
-                  }
-                
-                  class Drive extends Folder {}
-                
-                  @node(contents="contents")
-                  class Folder extends File {
-                      val File[*] contents;
-                  }
-                
-                  @node(shape="node")
-                  class Shortcut extends File {
-                      @edge(color="red", label="eol:'sync'")
-                      ref File target;
-                  }
-                
-                  @edge(source="source", target="target", color="green")
-                  class Sync {
-                      ref File source;
-                      ref File target;
-                  }
-                
-                  @node(label = "name", color = "azure")
-                  class File {
-                      attr String name;
-                  }
-                """);
-
-        req.setFlexmi("""
-                <?nsuri filesystem?>
-                <filesystem>
-                    <drive name="C">
-                        <folder name="My Documents">
-                            <file name="image.bmp"/>
-                        </folder>
-                        <shortcut name="image.lnk" target="image.bmp"/>
-                        <file name="synced.bmp"/>
-                    </drive>
-                    <sync source="synced.bmp" target="image.bmp"/>
-                </filesystem>
-                """);
-
-        ModelDiagramResponse result = client.convert(req);
-        assertNull(result.getError());
-        assertNull(result.getOutput());
-        assertNotNull(result.getModelDiagram());
+    public void ccl() throws Exception {
+        process("ccl.emf", "ccl.flexmi", "ccl.puml");
     }
 
+    @Test
+    public void dml() throws Exception {
+        process("dml.emf", "dml.flexmi", "dml.puml");
+    }
+
+    @Test
+    public void stm() throws Exception {
+        process("stm.emf", "stm.flexmi", "stm.puml");
+    }
+
+    @Test
+    public void filesystem() throws Exception {
+        process("filesystem.emf", "filesystem.flexmi", "filesystem.puml");
+    }
+    
+    @Test
+    public void psl() throws Exception {
+        process("psl.emf", "psl.flexmi", "psl.puml");
+    }
+
+    @Test
+    public void psl2() throws Exception {
+        process("psl2.emf", "psl2.flexmi", "psl2.puml");
+    }
+    
     @Test
     public void eglTemplate() {
         var req = new Flexmi2PlantUMLRequest();
@@ -116,6 +90,19 @@ public class Flexmi2PlantUMLTest {
         assertNull(result.getError());
         assertNull(result.getOutput());
         assertNotNull(result.getModelDiagram());
+    }
+    
+    public void process(String emfatic, String flexmi, String puml) throws Exception {
+        var req = new Flexmi2PlantUMLRequest();
+
+        req.setEmfatic(getResourceAsString("/flexmi2plantuml/" + emfatic));
+        req.setFlexmi(getResourceAsString("/flexmi2plantuml/" + flexmi));
+
+        ModelDiagramResponse result = client.convert(req);
+        assertNull(result.getError());
+        assertNull(result.getOutput());
+        assertNotNull(result.getModelDiagram());
+        assertEquals(getResourceAsString("/flexmi2plantuml/" + puml), result.getModelDiagramSource());
     }
 
 }
