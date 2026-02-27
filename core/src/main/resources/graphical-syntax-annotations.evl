@@ -32,7 +32,7 @@ context EAnnotation {
     
     constraint Source {
         guard: self.getDetail("source").isDefined()
-        check: self.eContainer().eAllStructuralFeatures.exists(r:EReference|r.name = self.getDetail("source"))
+        check: self.eContainer().eAllStructuralFeatures.exists(r:EReference|r.name = self.getDetail("source") and not r.isMany())
         message: "Edge source '" + self.getDetail("source") + "' does not match the name of a single-valued reference of class " + self.eContainer().name
     }
     
@@ -43,7 +43,7 @@ context EAnnotation {
     
     constraint Target {
         guard: self.getDetail("target").isDefined()
-        check: self.eContainer().eAllStructuralFeatures.exists(r:EReference|r.name = self.getDetail("target"))
+        check: self.eContainer().eAllStructuralFeatures.exists(r:EReference|r.name = self.getDetail("target") and not r.isMany())
         message: "Edge target '" + self.getDetail("target") + "' does not match the name of a single-valued reference of class " + self.eContainer().name
     }
     

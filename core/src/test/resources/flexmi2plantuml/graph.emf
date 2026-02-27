@@ -27,3 +27,9 @@ class Edge {
 class Edge1 extends Edge {
 
 }
+
+@edge(source="nodes1", target="nodes2")
+class Edge2 extends Edge {
+    ref Node[*] nodes1;
+    ref Node[*] nodes2;
+}

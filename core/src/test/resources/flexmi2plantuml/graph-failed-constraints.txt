@@ -6,6 +6,8 @@ Edge class Edge must specify a source reference
 Edge class Edge must specify a target reference
 Edge source 'foo' does not match the name of a single-valued reference of class Edge1
 Edge target 'foo' does not match the name of a single-valued reference of class Edge1
+Edge source 'nodes1' does not match the name of a single-valued reference of class Edge2
+Edge target 'nodes2' does not match the name of a single-valued reference of class Edge2
 Invalid value 'foo' for the direction of edge Node.pointer
 Invalid value 'foo' for the source decoration of edge Node.pointer
 Invalid value 'foo' for the target decoration of edge Node.pointer
