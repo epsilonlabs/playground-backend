@@ -1,0 +1,7 @@
+<?nsuri psl?>
+<_>
+    <language name="eol"/>
+    <language name="etl" extends="eol"/>
+    <language name="evl" extends="eol"/>
+    <language name="eml" extends="etl"/>
+</_>

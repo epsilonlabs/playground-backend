@@ -39,7 +39,7 @@ var visibleEdges = `@edge`.all.select(e|e.isVisible());
 
 [%for (n in visibleNodes){%]
 skinparam [%=n.getNodeShape()%] {
-    BorderColor<<[%=n.getNodeId()%]type>> [%=n.`border.color` ?: n.getColor().darken()%]
+    BorderColor<<[%=n.getNodeId()%]type>> [%=n.getBorderColor()%]
     BackgroundColor<<[%=n.getNodeId()%]type>> [%=n.getColor()%]
     [%=n.skinParam("FontColor", n.`font.color`)%]
     [%=n.skinParam("FontSize", n.`font.size`)%]
@@ -142,7 +142,9 @@ operation `@node` getNodeShape() {
         return self.shape ?: "package";
     }
     else {
-        return self.shape ?: "rectangle";
+        if (self.shape.isDefined()) return self.shape;
+        else if (self.image.isDefined()) return "object";
+        else return "rectangle";
     }
 }
 
@@ -190,7 +192,15 @@ operation Any getDecoration(source : Boolean) : String {
 }
 
 operation `@node` getColor() {
-    return self.color ?: self.eClass().getColor();
+    if (self.color.isDefined()) return self.color;
+    else if (self.image.isDefined()) return "white";
+    else return self.eClass().getColor();
+}
+
+operation `@node` getBorderColor() {
+    if (self.`border.color`.isDefined()) return self.`border.color`;
+    else if (self.image.isDefined()) return "white";
+    else return self.getColor().darken();
 }
 
 operation `@node` skinParam(param : String, value : Any) {
@@ -234,7 +244,7 @@ operation `@node` toPlantUml() {
         self.~instances = self.~instances + 1;
     }
 %]
-[%=self.getNodeShape()%] "[%=self.^label ?: ' '%]" as [%=nodeId%] [%=self.getPackageShape()%] <<[%=self.getNodeId()%]type>> {
+[%=self.getNodeShape()%] "[%=self.image.isDefined() ? ("<img:" + self.image + ">\\n") : ""%][%=self.^label ?: ' '%]" as [%=nodeId%] [%=self.getPackageShape()%] <<[%=self.getNodeId()%]type>> {
     [%if(self.contents.isDefined() and self.~instances == 1){%]
     [%for(content in self.^contents.select(c|c.isTypeOf(`@node`) or c.isTypeOf(`@text`))){%]
     [%=content.toPlantUml()%]

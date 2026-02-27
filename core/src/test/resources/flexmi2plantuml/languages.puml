@@ -1,0 +1,73 @@
+@startuml
+hide stereotypes
+skinparam roundCorner 3
+skinparam defaultFontName system-ui
+skinparam ArrowColor #7A7A7A
+
+
+
+
+skinparam note {
+    BackgroundColor<<_Pattern>> gold
+    BorderColor<<_Pattern>> %darken("gold",60)
+    BackgroundColor<<_Critique>> khaki
+    BorderColor<<_Critique>> %darken("khaki",60)
+    BackgroundColor<<_Constraint>> mistyrose
+    BorderColor<<_Constraint>> %darken("mistyrose",60)
+    BackgroundColor<<_Success>> TECHNOLOGY
+    BorderColor<<_Success>> %darken("TECHNOLOGY",60)
+}
+
+
+object "<img:https://eclipse.dev/epsilon/playground/images/eol.png>\neol" as n0  <<n0type>> {
+}
+object "<img:https://eclipse.dev/epsilon/playground/images/etl.png>\netl" as n1  <<n1type>> {
+}
+object "<img:https://eclipse.dev/epsilon/playground/images/evl.png>\nevl" as n2  <<n2type>> {
+}
+object "<img:https://eclipse.dev/epsilon/playground/images/eml.png>\neml" as n3  <<n3type>> {
+}
+
+
+skinparam object {
+    BorderColor<<n0type>> white
+    BackgroundColor<<n0type>> white
+    
+    
+    
+    
+}
+skinparam object {
+    BorderColor<<n1type>> white
+    BackgroundColor<<n1type>> white
+    
+    
+    
+    
+}
+skinparam object {
+    BorderColor<<n2type>> white
+    BackgroundColor<<n2type>> white
+    
+    
+    
+    
+}
+skinparam object {
+    BorderColor<<n3type>> white
+    BackgroundColor<<n3type>> white
+    
+    
+    
+    
+}
+
+
+n1 -up-> n0
+n2 -up-> n0
+n3 -up-> n1
+
+
+
+@enduml
+

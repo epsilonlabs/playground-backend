@@ -1,0 +1,9 @@
+@namespace(uri="languages", prefix="")
+package languages;
+
+@node(label="name", image="eol: 'https://eclipse.dev/epsilon/playground/images/' + self.name + '.png'")
+class Language {
+	attr String name;
+    @edge(direction="up")
+    ref Language ~extends;
+}
