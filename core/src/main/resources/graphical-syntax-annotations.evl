@@ -1,0 +1,98 @@
+pre {
+    var edgeDecorations = Set{"none", "rhomb", "arrow", "arrow.filled", "arrow.empty", "diamond", "diamond.empty"};
+    var directions = Set{"up", "down", "left", "right"};
+}
+
+context EAnnotation {
+    
+    guard: self.source = "edge" or self.source = "node" and self.eContainer().isTypeOf(EClass)
+    
+    constraint Label {
+        guard: self.getDetail("label").isDefined()
+        check: self.eContainer().eAllStructuralFeatures.exists(a:EAttribute|a.name = self.getDetail("label"))
+        message: "Label '" + self.getDetail("label") + "' does not match the name of an attribute of class " + self.eContainer().name
+    }
+    
+    constraint Visible {
+        guard: self.getDetail("visible").isDefined()
+        check: self.getDetail("visible").isBoolean()
+        message: "The 'visible' flag of class " + self.eContainer().name + " must be set to true or false"
+    }
+    
+}
+
+context EAnnotation {
+    
+    guard: self.source = "edge" and self.eContainer().isTypeOf(EClass)
+    
+    constraint SourceDefined {
+        check: self.hasDetail("source")
+        message: "Edge class " + self.eContainer().name + " must specify a source reference"
+    }
+    
+    constraint Source {
+        guard: self.getDetail("source").isDefined()
+        check: self.eContainer().eAllStructuralFeatures.exists(r:EReference|r.name = self.getDetail("source"))
+        message: "Edge source '" + self.getDetail("source") + "' does not match the name of a single-valued reference of class " + self.eContainer().name
+    }
+    
+    constraint TargetDefined {
+        check: self.hasDetail("target")
+        message: "Edge class " + self.eContainer().name + " must specify a target reference"
+    }
+    
+    constraint Target {
+        guard: self.getDetail("target").isDefined()
+        check: self.eContainer().eAllStructuralFeatures.exists(r:EReference|r.name = self.getDetail("target"))
+        message: "Edge target '" + self.getDetail("target") + "' does not match the name of a single-valued reference of class " + self.eContainer().name
+    }
+    
+}
+
+context EAnnotation {
+    
+    guard: self.source = "edge" and (self.eContainer.isTypeOf(EClass) or self.eContainer.isTypeOf(EReference))
+
+    constraint Direction {
+        guard: self.getDetail("direction").isDefined()
+        check: self.isValidDetail("direction", directions)
+        message: "Invalid value '" + self.getDetail("direction") + "' for the direction of edge " + self.getClassOrReferenceName()
+    }
+    
+    constraint SourceDecoration {
+        guard: self.getDetail("source.decoration").isDefined()
+        check: self.isValidDetail("source.decoration", edgeDecorations)
+        message: "Invalid value '" + self.getDetail("source.decoration") + "' for the source decoration of edge " + self.getClassOrReferenceName()
+    }
+    
+    constraint TargetDecoration {
+        guard: self.getDetail("target.decoration").isDefined()
+        check: self.isValidDetail("target.decoration", edgeDecorations)
+        message: "Invalid value '" + self.getDetail("target.decoration") + "' for the target decoration of edge " + self.getClassOrReferenceName()
+    }
+    
+}
+
+operation EAnnotation hasDetail(detail : String) : Boolean {
+    var value = self.details.get(detail);
+    if (value.isDefined()) return true;
+    else return false;
+}
+
+operation EAnnotation isValidDetail(detail : String, validOptions : Set) : Boolean {
+    return validOptions.includes(self.getDetail(detail));
+}
+
+operation EAnnotation getDetail(detail : String) : String {
+    var value = self.details.get(detail);
+    if (value.isDefined() and not value.startsWith("eol:")) return value;
+    else return null;
+}
+
+operation EAnnotation getClassOrReferenceName() : String {
+    return self.eContainer().isTypeOf(EClass) ? self.eContainer().name : (self.eContainer().eContainer().name + '.' + self.eContainer().name);
+}
+
+operation String isBoolean() {
+    return self == "true" or self == "false";
+}

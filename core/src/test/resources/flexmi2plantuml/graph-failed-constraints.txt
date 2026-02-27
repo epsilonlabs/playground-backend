@@ -1,0 +1,14 @@
+Label 'foo' does not match the name of an attribute of class Node1
+The 'visible' flag of class Node1 must be set to true or false
+Label 'foo' does not match the name of an attribute of class Edge1
+The 'visible' flag of class Edge1 must be set to true or false
+Edge class Edge must specify a source reference
+Edge class Edge must specify a target reference
+Edge source 'foo' does not match the name of a single-valued reference of class Edge1
+Edge target 'foo' does not match the name of a single-valued reference of class Edge1
+Invalid value 'foo' for the direction of edge Node.pointer
+Invalid value 'foo' for the source decoration of edge Node.pointer
+Invalid value 'foo' for the target decoration of edge Node.pointer
+Invalid value 'foo' for the direction of edge Edge1
+Invalid value 'foo' for the source decoration of edge Edge1
+Invalid value 'foo' for the target decoration of edge Edge1

@@ -8,13 +8,17 @@ import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
 import net.sourceforge.plantuml.core.DiagramDescription;
 import org.eclipse.epsilon.egl.EglModule;
+import org.eclipse.epsilon.emc.emf.InMemoryEmfModel;
 import org.eclipse.epsilon.eol.EolModule;
 import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.eclipse.epsilon.eol.models.Model;
+import org.eclipse.epsilon.evl.EvlModule;
+import org.eclipse.epsilon.evl.execute.UnsatisfiedConstraint;
 import org.eclipse.epsilon.labs.playground.execution.ScriptTimeoutTerminator;
 import org.eclipse.epsilon.labs.playground.fn.emfatic2plantuml.MetamodelDiagramResponse;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
@@ -45,9 +49,25 @@ public class ModelDiagramRenderer {
 
   @Cacheable("flexmi-to-svg")
   public ModelDiagramResponse generateDiagramFromFlexmi(String flexmi, String emfatic) throws Exception {
-
-    Model model = modelLoader.getInMemoryFlexmiModel(flexmi, emfatic);
     ModelDiagramResponse diag = new ModelDiagramResponse();
+
+    if (modelLoader.isAnnotated(emfatic)) {
+      InMemoryEmfModel emfaticModel = modelLoader.getInMemoryEmfaticModel(emfatic);
+      EvlModule module = new EvlModule();
+      module.parse(getClass().getResource("/graphical-syntax-annotations.evl").toURI());
+      module.getContext().getModelRepository().addModel(emfaticModel);
+      module.execute();
+      if (!module.getContext().getUnsatisfiedConstraints().isEmpty()) {
+        StringBuffer buffer = new StringBuffer();
+        for (UnsatisfiedConstraint uc : module.getContext().getUnsatisfiedConstraints()) {
+          buffer.append(uc.getMessage() + System.lineSeparator());
+        }
+        diag.setError(buffer.toString());
+        return diag;
+      }
+    }
+    
+    Model model = modelLoader.getInMemoryFlexmiModel(flexmi, emfatic);
     String plantuml = model2plantuml(model);
     diag.setModelDiagramSource(plantuml);
     diag.setModelDiagram(renderPlantUML(plantuml));

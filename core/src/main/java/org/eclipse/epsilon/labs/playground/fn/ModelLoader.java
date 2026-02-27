@@ -42,7 +42,7 @@ public class ModelLoader {
         return model;
     }
 
-    protected boolean isAnnotated(String emfatic) throws Exception {
+    public boolean isAnnotated(String emfatic) throws Exception {
         Model emfaticModel = getInMemoryEmfaticModel(emfatic);
         EolModule checker = new EolModule();
         checker.parse("return EClass.all.exists(c|c.eAnnotations.exists(a|a.source = 'node' or a.source = 'edge'));");

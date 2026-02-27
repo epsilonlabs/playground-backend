@@ -92,6 +92,20 @@ public class Flexmi2PlantUMLTest extends PlaygroundTest {
         assertNotNull(result.getModelDiagram());
     }
     
+    @Test
+    public void graphicalSyntaxAnnotationValidation() throws Exception {
+        var req = new Flexmi2PlantUMLRequest();
+
+        req.setEmfatic(getResourceAsString("/flexmi2plantuml/graph.emf"));
+        req.setFlexmi("<_/>");
+
+        ModelDiagramResponse result = client.convert(req);
+        assertEquals(getResourceAsString("/flexmi2plantuml/graph-failed-constraints.txt"), result.getError());
+        assertNull(result.getOutput());
+        assertNull(result.getModelDiagram());
+        assertNull(result.getModelDiagramSource());
+    }
+    
     public void process(String emfatic, String flexmi, String puml) throws Exception {
         var req = new Flexmi2PlantUMLRequest();
 
