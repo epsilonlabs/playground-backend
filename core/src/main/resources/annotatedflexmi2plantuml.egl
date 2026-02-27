@@ -43,6 +43,8 @@ skinparam [%=n.getNodeShape()%] {
     BackgroundColor<<[%=n.getNodeId()%]type>> [%=n.getColor()%]
     [%=n.skinParam("FontColor", n.`font.color`)%]
     [%=n.skinParam("FontSize", n.`font.size`)%]
+    [%=n.skinParam("FontStyle", n.`font.style`)%]
+    [%=n.skinParam("FontName", n.`font.name`)%]
 }
 [%}%]
 
@@ -62,12 +64,15 @@ circle " " as [%=e.getNodeId()%] #white
     [%for (f in n.`@edge`){%]
     [%for (v in f.getValues()){
         f.setItem(v);
+        var source;
         var target;
+        if (f.source.isDefined()) source = f.source;
+        else source = n;
         if (f.target.isDefined()) target = f.target;
         else target = v;
     %]
     [%if (target.isTypeOf(`@node`) and target.isVisible()){%]
-[%=n.getNodeId()%] [%=f.getDecoration(true)%]-[%=f.getEdgeStyle()%]-[%=f.getDecoration(false)%] [%=target.getNodeId()%] [%if(f.label.isDefined()){%]: [%=f.label%][%}%]
+[%=source.getNodeId()%] [%=f.getDecoration(true)%]-[%=f.getEdgeStyle()%]-[%=f.getDecoration(false)%] [%=target.getNodeId()%] [%if(f.label.isDefined()){%]: [%=f.label%][%}%]
 
     [%}%]
     [%}%]
@@ -220,9 +225,17 @@ operation `@node` toPlantUml() {
     var visible = self.visible;
     if (visible.isUndefined() or visible.asString() == "true") self.~visible = true;
     else return "";
+    var nodeId = self.getNodeId();
+    if (not self.~instances.isDefined()) {
+        self.~instances = 1;
+    }
+    else {
+        nodeId = nodeId + "_" + self.~instances;
+        self.~instances = self.~instances + 1;
+    }
 %]
-[%=self.getNodeShape()%] "[%=self.^label ?: ' '%]" as [%=self.getNodeId()%] [%=self.getPackageShape()%] <<[%=self.getNodeId()%]type>> {
-    [%if(self.contents.isDefined()){%]
+[%=self.getNodeShape()%] "[%=self.^label ?: ' '%]" as [%=nodeId%] [%=self.getPackageShape()%] <<[%=self.getNodeId()%]type>> {
+    [%if(self.contents.isDefined() and self.~instances == 1){%]
     [%for(content in self.^contents.select(c|c.isTypeOf(`@node`) or c.isTypeOf(`@text`))){%]
     [%=content.toPlantUml()%]
     [%}%]
