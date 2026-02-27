@@ -6,6 +6,8 @@ skinparam roundCorner 3
 skinparam defaultFontName system-ui
 skinparam ArrowColor #7A7A7A
 
+[%M.supportedAnnotations = Set{"node", "edge", "text"};%]
+
 [%for (puml in `@node`.all.includingAll(`@edge`.all).puml.flatten().asSet()){%]
 [%=puml%]
 [%}%]
@@ -219,7 +221,7 @@ operation `@node` toPlantUml() {
     if (visible.isUndefined() or visible.asString() == "true") self.~visible = true;
     else return "";
 %]
-[%=self.getNodeShape()%] "[%=self.^label%]" as [%=self.getNodeId()%] [%=self.getPackageShape()%] <<[%=self.getNodeId()%]type>> {
+[%=self.getNodeShape()%] "[%=self.^label ?: ' '%]" as [%=self.getNodeId()%] [%=self.getPackageShape()%] <<[%=self.getNodeId()%]type>> {
     [%if(self.contents.isDefined()){%]
     [%for(content in self.^contents.select(c|c.isTypeOf(`@node`) or c.isTypeOf(`@text`))){%]
     [%=content.toPlantUml()%]

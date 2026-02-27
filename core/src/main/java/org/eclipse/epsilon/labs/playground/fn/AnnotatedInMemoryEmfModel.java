@@ -24,13 +24,18 @@ public class AnnotatedInMemoryEmfModel extends InMemoryEmfModel {
 
     protected AnnotatedEmfPropertyGetter propertyGetter = new AnnotatedEmfPropertyGetter();
     protected InMemoryEmfModel inMemoryEmfModel = null;
+    protected Set<String> supportedAnnotations = null;
 
     public AnnotatedInMemoryEmfModel(String name, Resource modelImpl) {
         super(name, modelImpl);
     }
 
-    public AnnotatedInMemoryEmfModel(Resource modelImpl) {
-        super(modelImpl);
+    public void setSupportedAnnotations(Set<String> supportedAnnotations) {
+        this.supportedAnnotations = supportedAnnotations;
+    }
+
+    public Set<String> getSupportedAnnotations() {
+        return supportedAnnotations;
     }
 
     @Override
@@ -82,11 +87,15 @@ public class AnnotatedInMemoryEmfModel extends InMemoryEmfModel {
     protected List<EAnnotation> getEAnnotations(EObject instance) {
         List<EAnnotation> eAnnotations = new ArrayList<>();
         for (EAnnotation annotation : instance.eClass().getEAnnotations()) {
-            eAnnotations.add(annotation);
+            if (supportsAnnotation(annotation)) {
+                eAnnotations.add(annotation);
+            }
         }
         for (EClass superType : instance.eClass().getEAllSuperTypes()) {
             for (EAnnotation annotation : superType.getEAnnotations()) {
-                eAnnotations.add(annotation);
+                if (supportsAnnotation(annotation)) {
+                    eAnnotations.add(annotation);
+                }
             }
         }
         return eAnnotations;
@@ -94,7 +103,7 @@ public class AnnotatedInMemoryEmfModel extends InMemoryEmfModel {
 
     @Override
     public boolean hasType(String type) {
-        return type.startsWith("@");
+        return type.startsWith("@") && supportsAnnotation(stripAt(type));
     }
 
     protected String stripAt(String type) {
@@ -130,6 +139,7 @@ public class AnnotatedInMemoryEmfModel extends InMemoryEmfModel {
 
             if (object instanceof EObjectStructuralFeature) {
                 for (EAnnotation eAnnotation : ((EObjectStructuralFeature) object).getEStructuralFeature().getEAnnotations()) {
+                    if (!supportsAnnotation(eAnnotation)) continue;
                     if (eAnnotation.getDetails().containsKey(property)) {
                         String value = eAnnotation.getDetails().get(property);
                         if (isEol(value)) {
@@ -180,6 +190,16 @@ public class AnnotatedInMemoryEmfModel extends InMemoryEmfModel {
             return null;
         }
     }
+
+    protected boolean supportsAnnotation(EAnnotation annotation) {
+        return supportsAnnotation(annotation.getSource());
+    }
+
+    protected boolean supportsAnnotation(String annotation) {
+        if (supportedAnnotations == null) return false;
+        else return supportedAnnotations.contains(annotation);
+    }
+
 
     protected boolean isEol(String value) {
         return value.startsWith("eol:");
