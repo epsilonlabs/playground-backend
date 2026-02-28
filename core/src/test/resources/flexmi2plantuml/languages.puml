@@ -7,60 +7,76 @@ skinparam ArrowColor #7A7A7A
 
 
 
-skinparam note {
-    BackgroundColor<<_Pattern>> gold
-    BorderColor<<_Pattern>> %darken("gold",60)
-    BackgroundColor<<_Critique>> khaki
-    BorderColor<<_Critique>> %darken("khaki",60)
-    BackgroundColor<<_Constraint>> mistyrose
-    BorderColor<<_Constraint>> %darken("mistyrose",60)
-    BackgroundColor<<_Success>> TECHNOLOGY
-    BorderColor<<_Success>> %darken("TECHNOLOGY",60)
+
+rectangle "<img:https://plantuml.com/logo3.png>\neol" as n0  <<n0type>> {
+}
+rectangle "<img:https://plantuml.com/logo3.png>\netl" as n1  <<n1type>> {
+}
+rectangle "<img:https://plantuml.com/logo3.png>\nevl" as n2  <<n2type>> {
+}
+rectangle "<img:https://plantuml.com/logo3.png>\neml" as n3  <<n3type>> {
 }
 
 
-object "<img:https://eclipse.dev/epsilon/playground/images/eol.png>\neol" as n0  <<n0type>> {
-}
-object "<img:https://eclipse.dev/epsilon/playground/images/etl.png>\netl" as n1  <<n1type>> {
-}
-object "<img:https://eclipse.dev/epsilon/playground/images/evl.png>\nevl" as n2  <<n2type>> {
-}
-object "<img:https://eclipse.dev/epsilon/playground/images/eml.png>\neml" as n3  <<n3type>> {
+<style>
+
+._Pattern {
+    BackgroundColor gold
+    LineColor %darken("gold",60)
 }
 
+._Critique {
+    BackgroundColor khaki
+    LineColor %darken("khaki",60)    
+}
 
-skinparam object {
-    BorderColor<<n0type>> white
-    BackgroundColor<<n0type>> white
-    
-    
-    
-    
+._Constraint {
+    BackgroundColor mistyrose
+    LineColor %darken("mistyrose",60)
 }
-skinparam object {
-    BorderColor<<n1type>> white
-    BackgroundColor<<n1type>> white
-    
-    
-    
-    
+
+._Success {
+    BackgroundColor TECHNOLOGY
+    LineColor %darken("TECHNOLOGY",60)
 }
-skinparam object {
-    BorderColor<<n2type>> white
-    BackgroundColor<<n2type>> white
+
+.n0type {
+    LineColor white
+    BackgroundColor white
     
     
     
     
+    HorizontalAlignment center
 }
-skinparam object {
-    BorderColor<<n3type>> white
-    BackgroundColor<<n3type>> white
+.n1type {
+    LineColor white
+    BackgroundColor white
     
     
     
     
+    HorizontalAlignment center
 }
+.n2type {
+    LineColor white
+    BackgroundColor white
+    
+    
+    
+    
+    HorizontalAlignment center
+}
+.n3type {
+    LineColor white
+    BackgroundColor white
+    
+    
+    
+    
+    HorizontalAlignment center
+}
+</style>
 
 
 n1 -up-> n0

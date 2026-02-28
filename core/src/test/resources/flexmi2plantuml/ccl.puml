@@ -7,17 +7,6 @@ skinparam ArrowColor #7A7A7A
 
 
 
-skinparam note {
-    BackgroundColor<<_Pattern>> gold
-    BorderColor<<_Pattern>> %darken("gold",60)
-    BackgroundColor<<_Critique>> khaki
-    BorderColor<<_Critique>> %darken("khaki",60)
-    BackgroundColor<<_Constraint>> mistyrose
-    BorderColor<<_Constraint>> %darken("mistyrose",60)
-    BackgroundColor<<_Success>> TECHNOLOGY
-    BorderColor<<_Success>> %darken("TECHNOLOGY",60)
-}
-
 
 component "Not" as n0  <<n0type>> {
 }
@@ -39,62 +28,92 @@ rectangle "out" as n10  <<n10type>> {
 }
 
 
-skinparam component {
-    BorderColor<<n0type>> %darken("azure",60)
-    BackgroundColor<<n0type>> azure
+<style>
+
+._Pattern {
+    BackgroundColor gold
+    LineColor %darken("gold",60)
+}
+
+._Critique {
+    BackgroundColor khaki
+    LineColor %darken("khaki",60)    
+}
+
+._Constraint {
+    BackgroundColor mistyrose
+    LineColor %darken("mistyrose",60)
+}
+
+._Success {
+    BackgroundColor TECHNOLOGY
+    LineColor %darken("TECHNOLOGY",60)
+}
+
+.n0type {
+    LineColor %darken("azure",60)
+    BackgroundColor azure
+    
     
     
     
     
 }
-skinparam rectangle {
-    BorderColor<<n1type>> %darken("floralwhite",60)
-    BackgroundColor<<n1type>> floralwhite
+.n1type {
+    LineColor %darken("floralwhite",60)
+    BackgroundColor floralwhite
     
-    
-    
-    
-}
-skinparam component {
-    BorderColor<<n3type>> %darken("azure",60)
-    BackgroundColor<<n3type>> azure
     
     
     
     
 }
-skinparam rectangle {
-    BorderColor<<n4type>> %darken("floralwhite",60)
-    BackgroundColor<<n4type>> floralwhite
+.n3type {
+    LineColor %darken("azure",60)
+    BackgroundColor azure
     
-    
-    
-    
-}
-skinparam rectangle {
-    BorderColor<<n5type>> %darken("floralwhite",60)
-    BackgroundColor<<n5type>> floralwhite
     
     
     
     
 }
-skinparam component {
-    BorderColor<<n7type>> %darken("azure",60)
-    BackgroundColor<<n7type>> azure
+.n4type {
+    LineColor %darken("floralwhite",60)
+    BackgroundColor floralwhite
     
-    
-    
-    
-}
-skinparam rectangle {
-    BorderColor<<n10type>> %darken("lemonchiffon",60)
-    BackgroundColor<<n10type>> lemonchiffon
     
     
     
     
 }
+.n5type {
+    LineColor %darken("floralwhite",60)
+    BackgroundColor floralwhite
+    
+    
+    
+    
+    
+}
+.n7type {
+    LineColor %darken("azure",60)
+    BackgroundColor azure
+    
+    
+    
+    
+    
+}
+.n10type {
+    LineColor %darken("lemonchiffon",60)
+    BackgroundColor lemonchiffon
+    
+    
+    
+    
+    
+}
+</style>
 
 n0 -down-> n7: out→a
 n3 -down-> n7: out→b

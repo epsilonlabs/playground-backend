@@ -12,17 +12,6 @@ skinparam ArrowColor #7A7A7A
 [%=puml%]
 [%}%]
 
-skinparam note {
-    BackgroundColor<<_Pattern>> [%=getPatternColor()%]
-    BorderColor<<_Pattern>> [%=getPatternColor().darken()%]
-    BackgroundColor<<_Critique>> [%=getCritiqueColor()%]
-    BorderColor<<_Critique>> [%=getCritiqueColor().darken()%]
-    BackgroundColor<<_Constraint>> [%=getConstraintColor()%]
-    BorderColor<<_Constraint>> [%=getConstraintColor().darken()%]
-    BackgroundColor<<_Success>> [%="TECHNOLOGY"%]
-    BorderColor<<_Success>> [%="TECHNOLOGY".darken()%]
-}
-
 [%
 var containedNodes = `@node`.all.select(n|n.contents.isDefined()).^contents.flatten().asSet();
 var topLevelNodes = `@node`.all.excludingAll(containedNodes);
@@ -37,16 +26,40 @@ var visibleNodes = `@node`.all.select(n|n.isVisible());
 var visibleEdges = `@edge`.all.select(e|e.isVisible());
 %]
 
+<style>
+
+._Pattern {
+    BackgroundColor [%=getPatternColor()%]
+    LineColor [%=getPatternColor().darken()%]
+}
+
+._Critique {
+    BackgroundColor [%=getCritiqueColor()%]
+    LineColor [%=getCritiqueColor().darken()%]    
+}
+
+._Constraint {
+    BackgroundColor [%=getConstraintColor()%]
+    LineColor [%=getConstraintColor().darken()%]
+}
+
+._Success {
+    BackgroundColor [%="TECHNOLOGY"%]
+    LineColor [%="TECHNOLOGY".darken()%]
+}
+
 [%for (n in visibleNodes){%]
-skinparam [%=n.getNodeShape()%] {
-    BorderColor<<[%=n.getNodeId()%]type>> [%=n.getBorderColor()%]
-    BackgroundColor<<[%=n.getNodeId()%]type>> [%=n.getColor()%]
+.[%=n.getNodeId()%]type {
+    LineColor [%=n.getLineColor()%]
+    BackgroundColor [%=n.getColor()%]
     [%=n.skinParam("FontColor", n.`font.color`)%]
     [%=n.skinParam("FontSize", n.`font.size`)%]
     [%=n.skinParam("FontStyle", n.`font.style`)%]
     [%=n.skinParam("FontName", n.`font.name`)%]
+    [%=n.getHorizontalAlignment() ?: ''%]
 }
 [%}%]
+</style>
 
 [%for (e in visibleEdges){%]
 [%if(e.needsEdgeNode()){%]
@@ -142,9 +155,7 @@ operation `@node` getNodeShape() {
         return self.shape ?: "package";
     }
     else {
-        if (self.shape.isDefined()) return self.shape;
-        else if (self.image.isDefined()) return "object";
-        else return "rectangle";
+        return self.shape ?: "rectangle";
     }
 }
 
@@ -197,14 +208,20 @@ operation `@node` getColor() {
     else return self.eClass().getColor();
 }
 
-operation `@node` getBorderColor() {
-    if (self.`border.color`.isDefined()) return self.`border.color`;
+operation `@node` getLineColor() {
+    if (self.`line.color`.isDefined()) return self.`line.color`;
     else if (self.image.isDefined()) return "white";
     else return self.getColor().darken();
 }
 
+operation `@node` getHorizontalAlignment() {
+    if (self.halign.isDefined()) return "HorizontalAlignment " + self.halign;
+    else if (self.image.isDefined()) return "HorizontalAlignment center";
+    else return null;
+}
+
 operation `@node` skinParam(param : String, value : Any) {
-    if (value.isDefined()) return param + "<<" + self.getNodeId() + "type>> " + value;
+    if (value.isDefined()) return param + " " + value;
     else return "";
 }
 

@@ -7,17 +7,6 @@ skinparam ArrowColor #7A7A7A
 
 
 
-skinparam note {
-    BackgroundColor<<_Pattern>> gold
-    BorderColor<<_Pattern>> %darken("gold",60)
-    BackgroundColor<<_Critique>> khaki
-    BorderColor<<_Critique>> %darken("khaki",60)
-    BackgroundColor<<_Constraint>> mistyrose
-    BorderColor<<_Constraint>> %darken("mistyrose",60)
-    BackgroundColor<<_Success>> TECHNOLOGY
-    BorderColor<<_Success>> %darken("TECHNOLOGY",60)
-}
-
 
 rectangle "A" as n0  <<n0type>> {
 }
@@ -27,30 +16,56 @@ rectangle "C" as n2  <<n2type>> {
 }
 
 
-skinparam rectangle {
-    BorderColor<<n0type>> %darken("beige",60)
-    BackgroundColor<<n0type>> beige
+<style>
+
+._Pattern {
+    BackgroundColor gold
+    LineColor %darken("gold",60)
+}
+
+._Critique {
+    BackgroundColor khaki
+    LineColor %darken("khaki",60)    
+}
+
+._Constraint {
+    BackgroundColor mistyrose
+    LineColor %darken("mistyrose",60)
+}
+
+._Success {
+    BackgroundColor TECHNOLOGY
+    LineColor %darken("TECHNOLOGY",60)
+}
+
+.n0type {
+    LineColor %darken("beige",60)
+    BackgroundColor beige
+    
     
     
     
     
 }
-skinparam rectangle {
-    BorderColor<<n1type>> %darken("beige",60)
-    BackgroundColor<<n1type>> beige
+.n1type {
+    LineColor %darken("beige",60)
+    BackgroundColor beige
     
-    
-    
-    
-}
-skinparam rectangle {
-    BorderColor<<n2type>> %darken("beige",60)
-    BackgroundColor<<n2type>> beige
     
     
     
     
 }
+.n2type {
+    LineColor %darken("beige",60)
+    BackgroundColor beige
+    
+    
+    
+    
+    
+}
+</style>
 
 n0 -down-> n1
 n1 -down-> n2

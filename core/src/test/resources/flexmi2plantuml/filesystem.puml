@@ -7,17 +7,6 @@ skinparam ArrowColor #7A7A7A
 
 
 
-skinparam note {
-    BackgroundColor<<_Pattern>> gold
-    BorderColor<<_Pattern>> %darken("gold",60)
-    BackgroundColor<<_Critique>> khaki
-    BorderColor<<_Critique>> %darken("khaki",60)
-    BackgroundColor<<_Constraint>> mistyrose
-    BorderColor<<_Constraint>> %darken("mistyrose",60)
-    BackgroundColor<<_Success>> TECHNOLOGY
-    BorderColor<<_Success>> %darken("TECHNOLOGY",60)
-}
-
 
 package "C" as n0 <<rectangle>> <<n0type>> {
     package "My Documents" as n1 <<rectangle>> <<n1type>> {
@@ -31,46 +20,74 @@ package "C" as n0 <<rectangle>> <<n0type>> {
 }
 
 
-skinparam package {
-    BorderColor<<n0type>> %darken("azure",60)
-    BackgroundColor<<n0type>> azure
+<style>
+
+._Pattern {
+    BackgroundColor gold
+    LineColor %darken("gold",60)
+}
+
+._Critique {
+    BackgroundColor khaki
+    LineColor %darken("khaki",60)    
+}
+
+._Constraint {
+    BackgroundColor mistyrose
+    LineColor %darken("mistyrose",60)
+}
+
+._Success {
+    BackgroundColor TECHNOLOGY
+    LineColor %darken("TECHNOLOGY",60)
+}
+
+.n0type {
+    LineColor %darken("azure",60)
+    BackgroundColor azure
+    
     
     
     
     
 }
-skinparam package {
-    BorderColor<<n1type>> %darken("azure",60)
-    BackgroundColor<<n1type>> azure
+.n1type {
+    LineColor %darken("azure",60)
+    BackgroundColor azure
     
-    
-    
-    
-}
-skinparam rectangle {
-    BorderColor<<n2type>> %darken("azure",60)
-    BackgroundColor<<n2type>> azure
     
     
     
     
 }
-skinparam node {
-    BorderColor<<n3type>> %darken("azure",60)
-    BackgroundColor<<n3type>> azure
+.n2type {
+    LineColor %darken("azure",60)
+    BackgroundColor azure
     
-    
-    
-    
-}
-skinparam rectangle {
-    BorderColor<<n4type>> %darken("azure",60)
-    BackgroundColor<<n4type>> azure
     
     
     
     
 }
+.n3type {
+    LineColor %darken("azure",60)
+    BackgroundColor azure
+    
+    
+    
+    
+    
+}
+.n4type {
+    LineColor %darken("azure",60)
+    BackgroundColor azure
+    
+    
+    
+    
+    
+}
+</style>
 
 n4 -[#green]right-> n2
 

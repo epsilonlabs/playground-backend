@@ -7,17 +7,6 @@ skinparam ArrowColor #7A7A7A
 
 
 
-skinparam note {
-    BackgroundColor<<_Pattern>> gold
-    BorderColor<<_Pattern>> %darken("gold",60)
-    BackgroundColor<<_Critique>> khaki
-    BorderColor<<_Critique>> %darken("khaki",60)
-    BackgroundColor<<_Constraint>> mistyrose
-    BorderColor<<_Constraint>> %darken("mistyrose",60)
-    BackgroundColor<<_Success>> TECHNOLOGY
-    BorderColor<<_Success>> %darken("TECHNOLOGY",60)
-}
-
 
 package "ACME" as n0 <<rectangle>> <<n0type>> {
     node "<<Task>>\nAnalysis" as n1  <<n1type>> {
@@ -33,54 +22,83 @@ cloud "Manager: Bob" as n5  <<n5type>> {
 }
 
 
-skinparam package {
-    BorderColor<<n0type>> %darken("azure",60)
-    BackgroundColor<<n0type>> azure
+<style>
+
+._Pattern {
+    BackgroundColor gold
+    LineColor %darken("gold",60)
+}
+
+._Critique {
+    BackgroundColor khaki
+    LineColor %darken("khaki",60)    
+}
+
+._Constraint {
+    BackgroundColor mistyrose
+    LineColor %darken("mistyrose",60)
+}
+
+._Success {
+    BackgroundColor TECHNOLOGY
+    LineColor %darken("TECHNOLOGY",60)
+}
+
+.n0type {
+    LineColor %darken("azure",60)
+    BackgroundColor azure
+    
     
     
     
     
 }
-skinparam node {
-    BorderColor<<n1type>> %darken("beige",60)
-    BackgroundColor<<n1type>> beige
-    FontColor<<n1type>> green
+.n1type {
+    LineColor %darken("beige",60)
+    BackgroundColor beige
+    FontColor green
     
-    
-    
-}
-skinparam node {
-    BorderColor<<n2type>> %darken("beige",60)
-    BackgroundColor<<n2type>> beige
-    FontColor<<n2type>> green
     
     
     
 }
-skinparam node {
-    BorderColor<<n3type>> %darken("beige",60)
-    BackgroundColor<<n3type>> beige
-    FontColor<<n3type>> green
+.n2type {
+    LineColor %darken("beige",60)
+    BackgroundColor beige
+    FontColor green
+    
+    
+    
+    
+}
+.n3type {
+    LineColor %darken("beige",60)
+    BackgroundColor beige
+    FontColor green
+    
     
     
     
 }
-skinparam cloud {
-    BorderColor<<n4type>> %darken("azure",60)
-    BackgroundColor<<n4type>> azure
-    FontColor<<n4type>> magenta
-    FontSize<<n4type>> 20
+.n4type {
+    LineColor %darken("azure",60)
+    BackgroundColor azure
+    FontColor magenta
+    FontSize 20
     
-    
-}
-skinparam cloud {
-    BorderColor<<n5type>> %darken("green",60)
-    BackgroundColor<<n5type>> green
-    FontColor<<n5type>> white
-    FontSize<<n5type>> 20
     
     
 }
+.n5type {
+    LineColor %darken("green",60)
+    BackgroundColor green
+    FontColor white
+    FontSize 20
+    
+    
+    
+}
+</style>
 
 n4 -[thickness=10]down-> n1
 n5 -[thickness=10]down-> n2
