@@ -85,6 +85,11 @@ public class Flexmi2PlantUMLTest extends PlaygroundTest {
     }
 
     @Test
+    public void psl2Uppercase() throws Exception {
+        process("psl2-uppercase.emf", "psl2.flexmi", "psl2.puml");
+    }
+
+    @Test
     public void languages() throws Exception {
         process("languages.emf", "languages.flexmi", "languages.puml");
     }

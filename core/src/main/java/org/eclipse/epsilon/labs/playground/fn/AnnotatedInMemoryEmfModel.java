@@ -17,7 +17,6 @@ import org.eclipse.epsilon.eol.execute.introspection.AbstractPropertyGetter;
 import org.eclipse.epsilon.eol.execute.introspection.IPropertyGetter;
 import org.eclipse.epsilon.eol.types.EolOrderedSet;
 
-import java.sql.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -82,7 +81,7 @@ public class AnnotatedInMemoryEmfModel extends InMemoryEmfModel {
 
     @Override
     public boolean isOfType(Object instance, String metaClass) throws EolModelElementTypeNotFoundException {
-        return getEAnnotations((EObject) instance).stream().anyMatch(eAnnotation -> eAnnotation.getSource().equals(stripAt(metaClass)));
+        return getEAnnotations((EObject) instance).stream().anyMatch(eAnnotation -> eAnnotation.getSource().equalsIgnoreCase(stripAt(metaClass)));
     }
 
     protected List<EAnnotation> getEAnnotations(EObject instance) {
@@ -127,7 +126,13 @@ public class AnnotatedInMemoryEmfModel extends InMemoryEmfModel {
         }
         return inMemoryEmfModel;
     }
-
+    
+    protected String getDetail(EAnnotation annotation, String detail) {
+        String realDetail = annotation.getDetails().keySet().stream().filter(d -> d.equalsIgnoreCase(detail)).findFirst().orElse(null);
+        if (realDetail != null) return annotation.getDetails().get(realDetail);
+        else return null;
+    }
+    
     class AnnotatedEmfPropertyGetter extends AbstractPropertyGetter {
 
         @Override
@@ -141,8 +146,8 @@ public class AnnotatedInMemoryEmfModel extends InMemoryEmfModel {
             if (object instanceof EObjectStructuralFeature) {
                 for (EAnnotation eAnnotation : ((EObjectStructuralFeature) object).getEStructuralFeature().getEAnnotations()) {
                     if (!supportsAnnotation(eAnnotation)) continue;
-                    if (eAnnotation.getDetails().containsKey(property)) {
-                        String value = eAnnotation.getDetails().get(property);
+                    String value = getDetail(eAnnotation, property);
+                    if (value != null) {
                         if (isEol(value)) {
                             return runEol(value,
                                     Variable.createReadOnlyVariable("self", ((EObjectStructuralFeature) object).getEObject()),
@@ -161,7 +166,8 @@ public class AnnotatedInMemoryEmfModel extends InMemoryEmfModel {
                     property = property.substring(1);
                     ArrayList<EObjectStructuralFeature> objectStructuralFeatures = new ArrayList<>();
                     for (EStructuralFeature eStructuralFeature : eObject.eClass().getEAllStructuralFeatures()) {
-                        if (eStructuralFeature.getEAnnotation(property) != null) {
+                        final String theProperty = property;
+                        if (eStructuralFeature.getEAnnotations().stream().anyMatch(a -> a.getSource().equalsIgnoreCase(theProperty))) {
                             objectStructuralFeatures.add(new EObjectStructuralFeature(eObject, eStructuralFeature));
                         }
                     }
@@ -220,7 +226,7 @@ public class AnnotatedInMemoryEmfModel extends InMemoryEmfModel {
 
     protected boolean supportsAnnotation(String annotation) {
         if (supportedAnnotations == null) return false;
-        else return supportedAnnotations.contains(annotation);
+        else return supportedAnnotations.stream().anyMatch(sa -> sa.equalsIgnoreCase(annotation));
     }
 
 
