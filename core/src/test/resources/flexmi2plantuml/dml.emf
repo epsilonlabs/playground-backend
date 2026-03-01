@@ -12,8 +12,7 @@ class Type {
 class DataType extends Type {
 }
 
-@node(shape="class", label="name", contents="features", 
-      puml="eol: Sequence{'hide circle','hide methods'}")
+@node(shape="class", label="name", contents="features", preamble="hide circle, hide methods")
 @diagram(inheritance.direction="up")
 class Entity extends Type {
 	ref Entity superType;

@@ -8,12 +8,12 @@ skinparam ArrowColor #7A7A7A
 
 [%M.supportedAnnotations = Set{"node", "edge", "text"};%]
 
-[%for (puml in `@node`.all.includingAll(`@edge`.all).puml.flatten().asSet()){%]
-[%=puml%]
+[%for (preamble in `@node`.all.includingAll(`@edge`.all).preamble.flatten().asOrderedSet().excluding(null).collect(p|p.split(",")).flatten().collect(p|p.trim()).asOrderedSet()){%]
+[%=preamble%]
 [%}%]
 
 [%
-var containedNodes = `@node`.all.select(n|n.contents.isDefined()).^contents.flatten().asSet();
+var containedNodes = `@node`.all.select(n|n.contents.isDefined()).^^contents.flatten().asOrderedSet();
 var topLevelNodes = `@node`.all.excludingAll(containedNodes);
 %]
 
@@ -52,15 +52,18 @@ var visibleEdges = `@edge`.all.select(e|e.isVisible());
 .[%=n.getNodeId()%]type {
     LineColor [%=n.getLineColor()%]
     BackgroundColor [%=n.getColor()%]
-    [%=n.skinParam("FontColor", n.`font.color`)%]
-    [%=n.skinParam("FontSize", n.`font.size`)%]
-    [%=n.skinParam("FontStyle", n.`font.style`)%]
-    [%=n.skinParam("FontName", n.`font.name`)%]
     [%=n.getHorizontalAlignment() ?: ''%]
+    [%if(n.style.isDefined()){%]
+    [%for(line in n.style.split(",")){%]
+    [%=line.trim()%]
+    [%}%]
+    [%}%]
 }
 [%}%]
 </style>
 
+[* I tried using stereotypes and styles for edges too but this caused PlantUML to fail. 
+See https://github.com/plantuml/plantuml/discussions/2570 *]
 [%for (e in visibleEdges){%]
 [%if(e.needsEdgeNode()){%]
 circle " " as [%=e.getNodeId()%] #white
@@ -151,12 +154,7 @@ operation `@node` getNodeId() {
 }
 
 operation `@node` getNodeShape() {
-    if (self.contents.isDefined()) {
-        return self.shape ?: "package";
-    }
-    else {
-        return self.shape ?: "rectangle";
-    }
+    return self.shape ?: "rectangle";
 }
 
 operation `@node` getPackageShape() {
@@ -172,7 +170,7 @@ operation Any getEdgeStyle() {
     var styles : Sequence;
 
     if (self.color.isDefined()) styles.add("#" + self.color);
-    if (self.style.isDefined()) styles.add(self.style);
+    if (self.pattern.isDefined()) styles.add(self.pattern);
     if (self.thickness.isDefined()) styles.add("thickness=" + self.thickness);
 
     var direction = self.direction;
@@ -263,7 +261,7 @@ operation `@node` toPlantUml() {
 %]
 [%=self.getNodeShape()%] "[%=self.image.isDefined() ? ("<img:" + self.image + ">\\n") : ""%][%=self.^label ?: ' '%]" as [%=nodeId%] [%=self.getPackageShape()%] <<[%=self.getNodeId()%]type>> {
     [%if(self.contents.isDefined() and self.~instances == 1){%]
-    [%for(content in self.^contents.select(c|c.isTypeOf(`@node`) or c.isTypeOf(`@text`))){%]
+    [%for(content in self.^^contents.select(c|c.isTypeOf(`@node`) or c.isTypeOf(`@text`))){%]
     [%=content.toPlantUml()%]
     [%}%]
     [%}%]

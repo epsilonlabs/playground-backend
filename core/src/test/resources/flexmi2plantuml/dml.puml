@@ -43,18 +43,10 @@ class "Task" as n1 <<class>> <<n1type>> {
     LineColor %darken("floralwhite",60)
     BackgroundColor floralwhite
     
-    
-    
-    
-    
 }
 .n1type {
     LineColor %darken("floralwhite",60)
     BackgroundColor floralwhite
-    
-    
-    
-    
     
 }
 </style>

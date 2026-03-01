@@ -5,12 +5,27 @@ pre {
 
 context EAnnotation {
     
+    guard: self.source = "node" and self.eContainer().isTypeOf(EClass)
+    
+    constraint Contents {
+        guard: self.getDetail("contents").isDefined()
+        check {
+            var unknownFeatures = self.getDetail("contents").split(",").collect(n|n.trim()).
+            reject(name|self.eContainer().eAllStructuralFeatures.exists(r:EReference|r.name = name));
+            return unknownFeatures.isEmpty();
+        }
+        message: "Content feature" + (unknownFeatures.size() > 1 ? "s" : "") + " '" + unknownFeatures.concat(", ") + "' not found in class " + self.eContainer().name
+    }
+}
+
+context EAnnotation {
+    
     guard: self.source = "edge" or self.source = "node" and self.eContainer().isTypeOf(EClass)
     
     constraint Label {
         guard: self.getDetail("label").isDefined()
         check: self.eContainer().eAllStructuralFeatures.exists(a:EAttribute|a.name = self.getDetail("label"))
-        message: "Label '" + self.getDetail("label") + "' does not match the name of an attribute of class " + self.eContainer().name
+        message: "Label feature '" + self.getDetail("label") + "' not found in class " + self.eContainer().name
     }
     
     constraint Visible {
@@ -33,7 +48,7 @@ context EAnnotation {
     constraint Source {
         guard: self.getDetail("source").isDefined()
         check: self.eContainer().eAllStructuralFeatures.exists(r:EReference|r.name = self.getDetail("source") and not r.isMany())
-        message: "Edge source '" + self.getDetail("source") + "' does not match the name of a single-valued reference of class " + self.eContainer().name
+        message: "Edge source '" + self.getDetail("source") + "' is not a single-valued reference of class " + self.eContainer().name
     }
     
     constraint TargetDefined {
@@ -44,7 +59,7 @@ context EAnnotation {
     constraint Target {
         guard: self.getDetail("target").isDefined()
         check: self.eContainer().eAllStructuralFeatures.exists(r:EReference|r.name = self.getDetail("target") and not r.isMany())
-        message: "Edge target '" + self.getDetail("target") + "' does not match the name of a single-valued reference of class " + self.eContainer().name
+        message: "Edge target '" + self.getDetail("target") + "' is not a single-valued reference of class " + self.eContainer().name
     }
     
 }

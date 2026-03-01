@@ -15,6 +15,7 @@ import org.eclipse.epsilon.eol.execute.context.IEolContext;
 import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.eclipse.epsilon.eol.execute.introspection.AbstractPropertyGetter;
 import org.eclipse.epsilon.eol.execute.introspection.IPropertyGetter;
+import org.eclipse.epsilon.eol.types.EolOrderedSet;
 
 import java.sql.Array;
 import java.util.*;
@@ -166,8 +167,13 @@ public class AnnotatedInMemoryEmfModel extends InMemoryEmfModel {
                     }
                     return objectStructuralFeatures;
                 } else {
-                    boolean caret = property.startsWith("^");
-                    if (caret) {
+                    boolean doubleCaret = property.startsWith("^^");
+                    boolean caret = !doubleCaret && property.startsWith("^");
+                    
+                    if (doubleCaret) {
+                        property = property.substring(2);
+                    }
+                    else if (caret) {
                         property = property.substring(1);
                     }
 
@@ -177,6 +183,23 @@ public class AnnotatedInMemoryEmfModel extends InMemoryEmfModel {
                             String value = eAnnotation.getDetails().get(property);
                             if (isEol(value)) {
                                 return runEol(value, Variable.createReadOnlyVariable("self", object));
+                            }
+                            else if (doubleCaret) {
+                                String[] features = value.split(",");
+                                Set<Object> objects = new EolOrderedSet<>();
+                                for (String feature : features) {
+                                    feature = feature.trim();
+                                    EStructuralFeature sf = eObject.eClass().getEStructuralFeature(feature);
+                                    if (sf != null) {
+                                        if (sf.isMany()) {
+                                            objects.addAll((Collection<?>) eObject.eGet(sf));
+                                        } else {
+                                            Object sfValue = eObject.eGet(sf);
+                                            if (sfValue != null) objects.add(sfValue);
+                                        }
+                                    }
+                                }
+                                return objects;
                             }
                             else if (caret) {
                                 return eObject.eGet(eObject.eClass().getEStructuralFeature(value));

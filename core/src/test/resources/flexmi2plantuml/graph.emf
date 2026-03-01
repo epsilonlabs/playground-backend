@@ -1,10 +1,17 @@
 @namespace(uri="graph", prefix="")
 package graph;
 
+@node(contents="foo")
 class Graph {
     val Node[*] nodes;
     val Edge[*] edges;
 }
+
+@node(contents="nodes, foo")
+class Graph1 extends Graph {}
+
+@node(contents="foo, nodes")
+class Graph2 extends Graph {}
 
 @node
 class Node {

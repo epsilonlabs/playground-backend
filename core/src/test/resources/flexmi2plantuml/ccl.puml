@@ -7,7 +7,6 @@ skinparam ArrowColor #7A7A7A
 
 
 
-
 component "Not" as n0  <<n0type>> {
 }
 rectangle "in" as n1  <<n1type>> {
@@ -54,63 +53,35 @@ rectangle "out" as n10  <<n10type>> {
     LineColor %darken("azure",60)
     BackgroundColor azure
     
-    
-    
-    
-    
 }
 .n1type {
     LineColor %darken("floralwhite",60)
     BackgroundColor floralwhite
-    
-    
-    
-    
     
 }
 .n3type {
     LineColor %darken("azure",60)
     BackgroundColor azure
     
-    
-    
-    
-    
 }
 .n4type {
     LineColor %darken("floralwhite",60)
     BackgroundColor floralwhite
-    
-    
-    
-    
     
 }
 .n5type {
     LineColor %darken("floralwhite",60)
     BackgroundColor floralwhite
     
-    
-    
-    
-    
 }
 .n7type {
     LineColor %darken("azure",60)
     BackgroundColor azure
     
-    
-    
-    
-    
 }
 .n10type {
     LineColor %darken("lemonchiffon",60)
     BackgroundColor lemonchiffon
-    
-    
-    
-    
     
 }
 </style>

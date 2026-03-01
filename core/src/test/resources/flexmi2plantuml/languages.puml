@@ -7,7 +7,6 @@ skinparam ArrowColor #7A7A7A
 
 
 
-
 rectangle "<img:https://plantuml.com/logo3.png>\neol" as n0  <<n0type>> {
 }
 rectangle "<img:https://plantuml.com/logo3.png>\netl" as n1  <<n1type>> {
@@ -43,37 +42,21 @@ rectangle "<img:https://plantuml.com/logo3.png>\neml" as n3  <<n3type>> {
 .n0type {
     LineColor white
     BackgroundColor white
-    
-    
-    
-    
     HorizontalAlignment center
 }
 .n1type {
     LineColor white
     BackgroundColor white
-    
-    
-    
-    
     HorizontalAlignment center
 }
 .n2type {
     LineColor white
     BackgroundColor white
-    
-    
-    
-    
     HorizontalAlignment center
 }
 .n3type {
     LineColor white
     BackgroundColor white
-    
-    
-    
-    
     HorizontalAlignment center
 }
 </style>

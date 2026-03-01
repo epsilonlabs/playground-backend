@@ -1,7 +1,7 @@
 @namespace(uri="psl", prefix="")
 package psl;
 
-@node(label="title", contents="tasks")
+@node(label="title", contents="tasks, people")
 class Project {
 	attr String title;
 	attr String description;
@@ -10,23 +10,23 @@ class Project {
 	val Person[*] people;
 }
 
-@node(label="eol:'<<Task>>\\n' + self.title", shape="node", font.color="green")
+@node(label="eol:'<<Task>>\\n' + self.title", shape="node", style="fontcolor green")
 class Task {
 	attr String title;
 	attr int start;
 	attr int duration;
 	@diagram(direction="right")
 	val Effort[*] effort;
-	@edge(label="leads", color="red", style="dashed", thickness="2")
+	@edge(label="leads", color="red", pattern="dashed", thickness="2")
 	ref Person lead;
 }
 
-@node(label="name", color="azure", shape="cloud", font.color="magenta", font.size="20")
+@node(label="name", color="azure", shape="cloud", style="fontcolor magenta, fontsize 20")
 class Person {
 	attr String name;
 }
 
-@node(label="eol: 'Manager: ' + self.name", color="green", font.color="white")
+@node(label="eol: 'Manager: ' + self.name", color="green", style="fontcolor white")
 class Manager extends Person {
 
 }

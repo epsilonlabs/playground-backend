@@ -7,9 +7,8 @@ skinparam ArrowColor #7A7A7A
 
 
 
-
-package "C" as n0 <<rectangle>> <<n0type>> {
-    package "My Documents" as n1 <<rectangle>> <<n1type>> {
+rectangle "C" as n0 <<rectangle>> <<n0type>> {
+    rectangle "My Documents" as n1 <<rectangle>> <<n1type>> {
         rectangle "image.bmp" as n2  <<n2type>> {
         }
     }
@@ -46,45 +45,25 @@ package "C" as n0 <<rectangle>> <<n0type>> {
     LineColor %darken("azure",60)
     BackgroundColor azure
     
-    
-    
-    
-    
 }
 .n1type {
     LineColor %darken("azure",60)
     BackgroundColor azure
-    
-    
-    
-    
     
 }
 .n2type {
     LineColor %darken("azure",60)
     BackgroundColor azure
     
-    
-    
-    
-    
 }
 .n3type {
     LineColor %darken("azure",60)
     BackgroundColor azure
     
-    
-    
-    
-    
 }
 .n4type {
     LineColor %darken("azure",60)
     BackgroundColor azure
-    
-    
-    
-    
     
 }
 </style>

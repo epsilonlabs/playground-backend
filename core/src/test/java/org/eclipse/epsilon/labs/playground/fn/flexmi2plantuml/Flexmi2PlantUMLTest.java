@@ -17,6 +17,10 @@ import io.micronaut.http.client.annotation.Client;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 @MicronautTest
 public class Flexmi2PlantUMLTest extends PlaygroundTest {
 
@@ -118,6 +122,11 @@ public class Flexmi2PlantUMLTest extends PlaygroundTest {
         req.setFlexmi(getResourceAsString("/flexmi2plantuml/" + flexmi));
 
         ModelDiagramResponse result = client.convert(req);
+        
+        Path path = Path.of("src/test/resources/flexmi2plantuml/actual/" + puml);
+        Files.createDirectories(path.getParent());
+        Files.writeString(path, result.getModelDiagramSource(), StandardCharsets.UTF_8);
+        
         assertNull(result.getError());
         assertNull(result.getOutput());
         assertNotNull(result.getModelDiagram());
