@@ -1,5 +1,5 @@
 [%import "shared.eol";%]
-[%import "flexmi2plantuml.eol";%]
+[%import "model2plantuml.eol";%]
 @startuml
 hide stereotypes
 skinparam roundCorner 3

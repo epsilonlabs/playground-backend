@@ -9,7 +9,6 @@ import net.sourceforge.plantuml.SourceStringReader;
 import net.sourceforge.plantuml.core.DiagramDescription;
 import org.eclipse.epsilon.egl.EglModule;
 import org.eclipse.epsilon.emc.emf.InMemoryEmfModel;
-import org.eclipse.epsilon.eol.EolModule;
 import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.eclipse.epsilon.eol.models.Model;
 import org.eclipse.epsilon.evl.EvlModule;
@@ -18,7 +17,6 @@ import org.eclipse.epsilon.labs.playground.execution.ScriptTimeoutTerminator;
 import org.eclipse.epsilon.labs.playground.fn.emfatic2plantuml.MetamodelDiagramResponse;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
@@ -94,7 +92,7 @@ public class ModelDiagramRenderer {
     }
 
     String template = model instanceof AnnotatedInMemoryEmfModel ?
-            "/annotatedflexmi2plantuml.egl" : "/flexmi2plantuml.egl";
+            "/annotatedmodel2plantuml.egl" : "/model2plantuml.egl";
     module.parse(getClass().getResource(template).toURI());
     model.setName("M");
     module.getContext().getModelRepository().addModel(model);
@@ -116,7 +114,7 @@ public class ModelDiagramRenderer {
     model.setName("M");
 
     EglModule module = new EglModule();
-    module.parse(getClass().getResource("/emfatic2plantuml.egl").toURI());
+    module.parse(getClass().getResource("/ecore2plantuml.egl").toURI());
     module.getContext().getModelRepository().addModel(model);
     timeoutTerminator.scheduleScriptTimeout(module);
 
