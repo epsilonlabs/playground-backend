@@ -89,14 +89,16 @@ public class ModelDiagramRenderer {
 
     if (model instanceof AnnotatableInMemoryEmfModel) {
       model = ((AnnotatableInMemoryEmfModel) model).toAnnotatedInMemoryEmfModel();
+      ((AnnotatedInMemoryEmfModel) model).getOperationContributors().add(new PlantUMLOperationContributor());
     }
-
+    
     String template = model instanceof AnnotatedInMemoryEmfModel ?
             "/annotatedmodel2plantuml.egl" : "/model2plantuml.egl";
     module.parse(getClass().getResource(template).toURI());
     model.setName("M");
     module.getContext().getModelRepository().addModel(model);
     module.getContext().getFrameStack().put(variables);
+    module.getContext().getOperationContributorRegistry().add(new PlantUMLOperationContributor());
     timeoutTerminator.scheduleScriptTimeout(module);
 
     try {

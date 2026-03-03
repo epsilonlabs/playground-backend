@@ -1,6 +1,7 @@
 [%import "shared.eol";%]
 [%import "model2plantuml.eol";%]
 @startuml
+allowmixing
 hide stereotypes
 skinparam roundCorner 3
 skinparam defaultFontName system-ui
@@ -22,8 +23,8 @@ var topLevelNodes = `@node`.all.excludingAll(containedNodes);
 [%}%]
 
 [%
-var visibleNodes = `@node`.all.select(n|n.isVisible());
-var visibleEdges = `@edge`.all.select(e|e.isVisible());
+var createdNodes = `@node`.all.select(n|n.isCreated());
+var createdEdges = `@edge`.all.select(e|e.isCreated());
 %]
 
 <style>
@@ -48,7 +49,7 @@ var visibleEdges = `@edge`.all.select(e|e.isVisible());
     LineColor [%="TECHNOLOGY".darken()%]
 }
 
-[%for (n in visibleNodes){%]
+[%for (n in createdNodes){%]
 .[%=n.getNodeId()%]type {
     LineColor [%=n.getLineColor()%]
     BackgroundColor [%=n.getColor()%]
@@ -64,22 +65,23 @@ var visibleEdges = `@edge`.all.select(e|e.isVisible());
 
 [* I tried using stereotypes and styles for edges too but this caused PlantUML to fail. 
 See https://github.com/plantuml/plantuml/discussions/2570 *]
-[%for (e in visibleEdges){%]
+[%for (e in createdEdges){%]
 [%if(e.needsEdgeNode()){%]
 circle " " as [%=e.getNodeId()%] #white
 [%=e.^source.getNodeId()%]-[%=e.getDecoration(true)%][%=e.getEdgeStyle()%]-[%=e.getNodeId()%]
 [%=e.getNodeId()%]-[%=e.getEdgeStyle()%]-[%=e.getDecoration(false)%][%=e.^target.getNodeId()%] [%if(e.label.isDefined()){%]: [%=e.^label%][%}%]
 
 [%}else{%]
-[%=e.^source.getNodeId()%] [%=e.getDecoration(true)%]-[%=e.getEdgeStyle()%]-[%=e.getDecoration(false)%] [%=e.^target.getNodeId()%] [%if(e.label.isDefined()){%]: [%=e.^label%][%}%]
+[%=e.^source.getNodeId()%] [%=e.getDecoration(true)%]-[%=e.getEdgeStyle()%]-[%=e.getDecoration(false)%] [%=e.^target.getNodeId()%] [%if(e.label.isDefined() and e.^label.notWhitespace()){%]: [%=e.^label%][%}%]
 
 [%}%]
 [%}%]
 
-[%for (n in visibleNodes){%]
+[%for (n in createdNodes){%]
     [%for (f in n.`@edge`){%]
     [%for (v in f.getValues()){
         f.setItem(v);
+        if (f.created.isDefined() and f.created.asBoolean() == false) continue;
         var source;
         var target;
         if (f.source.isDefined()) source = f.source;
@@ -87,8 +89,8 @@ circle " " as [%=e.getNodeId()%] #white
         if (f.target.isDefined()) target = f.target;
         else target = v;
     %]
-    [%if (target.isTypeOf(`@node`) and target.isVisible()){%]
-[%=source.getNodeId()%] [%=f.getDecoration(true)%]-[%=f.getEdgeStyle()%]-[%=f.getDecoration(false)%] [%=target.getNodeId()%] [%if(f.label.isDefined()){%]: [%=f.label%][%}%]
+    [%if (target.isTypeOf(`@node`) and target.isCreated()){%]
+[%=source.getNodeId()%] [%=f.getDecoration(true)%]-[%=f.getEdgeStyle()%]-[%=f.getDecoration(false)%] [%=target.getNodeId()%] [%if(f.label.isDefined() and f.label.notWhitespace()){%]: [%=f.label%][%}%]
 
     [%}%]
     [%}%]
@@ -157,18 +159,18 @@ operation `@node` getNodeShape() {
     return self.shape ?: "rectangle";
 }
 
-operation `@node` getPackageShape() {
-    if (self.contents.isDefined()) return "<<" + (self.shape ?: "rectangle") + ">>";
-    else return "";
+operation Any hasNode() {
+    return createdNodes.includes(self) or createdEdges.includes(self);
 }
 
-operation Any hasNode() {
-    return visibleNodes.includes(self) or visibleEdges.includes(self);
+operation Any notWhitespace() {
+    return self.isDefined() and self.toString().trim().size() > 0;
 }
 
 operation Any getEdgeStyle() {
     var styles : Sequence;
 
+    if (self.visible.isDefined() and self.visible.asBoolean() == false) styles.add("hidden");
     if (self.color.isDefined()) styles.add("#" + self.color);
     if (self.pattern.isDefined()) styles.add(self.pattern);
     if (self.thickness.isDefined()) styles.add("thickness=" + self.thickness);
@@ -209,7 +211,7 @@ operation `@node` getColor() {
 operation `@node` getLineColor() {
     if (self.`line.color`.isDefined()) return self.`line.color`;
     else if (self.image.isDefined()) return "white";
-    else return self.getColor().darken();
+    else return self.getColor().darken(60);
 }
 
 operation `@node` getHorizontalAlignment() {
@@ -223,21 +225,21 @@ operation `@node` skinParam(param : String, value : Any) {
     else return "";
 }
 
-operation `@node` isVisible() {
-    if (self.~visible.isDefined()) return self.~visible;
+operation `@node` isCreated() {
+    if (self.~created.isDefined()) return self.~created;
     else return false;
 }
 
 @cached
-operation `@edge` isVisible() {
-    var visible = self.visible;
-    if (visible.isDefined()) visible = visible.asBoolean();
-    else visible = true;
-    return visible and self.^source.isVisible() and self.^target.isVisible();
+operation `@edge` isCreated() {
+    var created = self.created;
+    if (created.isDefined()) created = created.asBoolean();
+    else created = true;
+    return created and self.^source.isCreated() and self.^target.isCreated();
 }
 
 // Fallback for unannotated elements and @text elements
-operation Any isVisible() {
+operation Any isCreated() {
     return false;
 }
 
@@ -247,8 +249,8 @@ operation `@text` toPlantUml() {
 
 @template
 operation `@node` toPlantUml() {
-    var visible = self.visible;
-    if (visible.isUndefined() or visible.asString() == "true") self.~visible = true;
+    var created = self.created;
+    if (created.isUndefined() or created.asString() == "true") self.~created = true;
     else return "";
     var nodeId = self.getNodeId();
     if (not self.~instances.isDefined()) {
@@ -259,12 +261,10 @@ operation `@node` toPlantUml() {
         self.~instances = self.~instances + 1;
     }
 %]
-[%=self.getNodeShape()%] "[%=self.image.isDefined() ? ("<img:" + self.image + ">\\n") : ""%][%=self.^label ?: ' '%]" as [%=nodeId%] [%=self.getPackageShape()%] <<[%=self.getNodeId()%]type>> {
-    [%if(self.contents.isDefined() and self.~instances == 1){%]
+[%=self.getNodeShape()%] "[%=self.image.isDefined() ? ("<img:" + self.image + ">\\n") : ""%][%=self.^label ?: ' '%]" as [%=nodeId%] <<[%=self.getNodeId()%]type>> [%if(self.contents.isDefined() and self.~instances == 1){%] {
     [%for(content in self.^^contents.select(c|c.isTypeOf(`@node`) or c.isTypeOf(`@text`))){%]
     [%=content.toPlantUml()%]
     [%}%]
-    [%}%]
-}
+} [%}%]
 
 [%}%]

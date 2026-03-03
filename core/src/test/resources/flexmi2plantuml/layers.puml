@@ -1,0 +1,128 @@
+@startuml
+allowmixing
+hide stereotypes
+skinparam roundCorner 3
+skinparam defaultFontName system-ui
+skinparam ArrowColor #7A7A7A
+
+
+
+
+rectangle "Layer 2" as n0 <<n0type>>  {
+    rectangle "Component 1" as n1 <<n1type>> 
+    rectangle "Component 2" as n2 <<n2type>> 
+    rectangle "Component 3" as n3 <<n3type>> 
+} 
+rectangle "Layer 1" as n4 <<n4type>>  {
+    rectangle "Component 4" as n5 <<n5type>> 
+    rectangle "Component 5" as n6 <<n6type>> 
+    rectangle "Component 6" as n7 <<n7type>> 
+} 
+rectangle "Layer 0" as n8 <<n8type>>  {
+    rectangle "Component 7" as n9 <<n9type>> 
+    rectangle "Component 8" as n10 <<n10type>> 
+    rectangle "Component 9" as n11 <<n11type>> 
+} 
+
+
+<style>
+
+._Pattern {
+    BackgroundColor gold
+    LineColor %darken("gold",60)
+}
+
+._Critique {
+    BackgroundColor khaki
+    LineColor %darken("khaki",60)    
+}
+
+._Constraint {
+    BackgroundColor mistyrose
+    LineColor %darken("mistyrose",60)
+}
+
+._Success {
+    BackgroundColor TECHNOLOGY
+    LineColor %darken("TECHNOLOGY",60)
+}
+
+.n0type {
+    LineColor #625847
+    BackgroundColor wheat
+    
+    fontstyle normal
+}
+.n1type {
+    LineColor #646059
+    BackgroundColor #FBF1E0
+    
+}
+.n2type {
+    LineColor #646059
+    BackgroundColor #FBF1E0
+    
+}
+.n3type {
+    LineColor #646059
+    BackgroundColor #FBF1E0
+    
+}
+.n4type {
+    LineColor #606666
+    BackgroundColor azure
+    
+    fontstyle normal
+}
+.n5type {
+    LineColor #636666
+    BackgroundColor #F9FFFF
+    
+}
+.n6type {
+    LineColor #636666
+    BackgroundColor #F9FFFF
+    
+}
+.n7type {
+    LineColor #636666
+    BackgroundColor #F9FFFF
+    
+}
+.n8type {
+    LineColor #666460
+    BackgroundColor floralwhite
+    
+    fontstyle normal
+}
+.n9type {
+    LineColor #666563
+    BackgroundColor #FFFDF9
+    
+}
+.n10type {
+    LineColor #666563
+    BackgroundColor #FFFDF9
+    
+}
+.n11type {
+    LineColor #666563
+    BackgroundColor #FFFDF9
+    
+}
+</style>
+
+
+n1 -[hidden]right-> n2
+n2 -[hidden]right-> n3
+n0 -[hidden]down-> n4
+n5 -[hidden]right-> n6
+n6 -[hidden]right-> n7
+n4 -[hidden]down-> n8
+n9 -[hidden]right-> n10
+n10 -[hidden]right-> n11
+
+
+
+@enduml
+

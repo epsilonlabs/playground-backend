@@ -15,6 +15,7 @@ import org.eclipse.epsilon.eol.execute.context.IEolContext;
 import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.eclipse.epsilon.eol.execute.introspection.AbstractPropertyGetter;
 import org.eclipse.epsilon.eol.execute.introspection.IPropertyGetter;
+import org.eclipse.epsilon.eol.execute.operations.contributors.OperationContributor;
 import org.eclipse.epsilon.eol.types.EolOrderedSet;
 
 import java.util.*;
@@ -25,6 +26,7 @@ public class AnnotatedInMemoryEmfModel extends InMemoryEmfModel {
     protected AnnotatedEmfPropertyGetter propertyGetter = new AnnotatedEmfPropertyGetter();
     protected InMemoryEmfModel inMemoryEmfModel = null;
     protected Set<String> supportedAnnotations = null;
+    protected List<OperationContributor> operationContributors = new ArrayList<>();
 
     public AnnotatedInMemoryEmfModel(String name, Resource modelImpl) {
         super(name, modelImpl);
@@ -37,7 +39,11 @@ public class AnnotatedInMemoryEmfModel extends InMemoryEmfModel {
     public Set<String> getSupportedAnnotations() {
         return supportedAnnotations;
     }
-
+    
+    public List<OperationContributor> getOperationContributors() {
+        return operationContributors;
+    }
+    
     @Override
     protected Collection<EObject> allContentsFromModel() {
         return super.allContentsFromModel().stream().filter(c -> !getEAnnotations(c).isEmpty()).collect(Collectors.toList());
@@ -249,6 +255,10 @@ public class AnnotatedInMemoryEmfModel extends InMemoryEmfModel {
                 module.getContext().getFrameStack().put(variable);
             }
             module.getContext().getModelRepository().addModel(getInMemoryEmfModel());
+            for (OperationContributor operationContributor : operationContributors) {
+                System.out.println("Adding: " + operationContributor);
+                module.getContext().getOperationContributorRegistry().add(operationContributor);
+            }
             return module.execute();
         } catch (Exception e) {
             throw new EolInternalException(e);

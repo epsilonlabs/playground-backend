@@ -93,6 +93,16 @@ public class Flexmi2PlantUMLTest extends PlaygroundTest {
     public void languages() throws Exception {
         process("languages.emf", "languages.flexmi", "languages.puml");
     }
+
+    @Test
+    public void layers() throws Exception {
+        process("layers.emf", "layers.flexmi", "layers.puml");
+    }
+    
+    @Test
+    public void callcentre() throws Exception {
+        process("callcentre.emf", "callcentre.flexmi", "callcentre.puml");
+    }
     
     @Test
     public void eglTemplate() {
@@ -130,9 +140,9 @@ public class Flexmi2PlantUMLTest extends PlaygroundTest {
         
         Path path = Path.of("src/test/resources/flexmi2plantuml/actual/" + puml);
         Files.createDirectories(path.getParent());
-        Files.writeString(path, result.getModelDiagramSource(), StandardCharsets.UTF_8);
         
         assertNull(result.getError());
+        Files.writeString(path, result.getModelDiagramSource(), StandardCharsets.UTF_8);
         assertNull(result.getOutput());
         assertNotNull(result.getModelDiagram());
         assertEquals(getResourceAsString("/flexmi2plantuml/" + puml), result.getModelDiagramSource());
