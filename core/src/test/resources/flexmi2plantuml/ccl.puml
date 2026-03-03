@@ -1,4 +1,5 @@
 @startuml
+allowmixing
 hide stereotypes
 skinparam roundCorner 3
 skinparam defaultFontName system-ui
@@ -7,24 +8,17 @@ skinparam ArrowColor #7A7A7A
 
 
 
-component "Not" as n0  <<n0type>> {
-}
-rectangle "in" as n1  <<n1type>> {
-}
+component "Not" as n0 <<n0type>> 
+rectangle "in" as n1 <<n1type>> 
 
-component "And" as n3  <<n3type>> {
-}
-rectangle "a" as n4  <<n4type>> {
-}
-rectangle "b" as n5  <<n5type>> {
-}
+component "And" as n3 <<n3type>> 
+rectangle "a" as n4 <<n4type>> 
+rectangle "b" as n5 <<n5type>> 
 
-component "Or" as n7  <<n7type>> {
-}
+component "Or" as n7 <<n7type>> 
 
 
-rectangle "out" as n10  <<n10type>> {
-}
+rectangle "out" as n10 <<n10type>> 
 
 
 <style>
@@ -50,37 +44,37 @@ rectangle "out" as n10  <<n10type>> {
 }
 
 .n0type {
-    LineColor %darken("azure",60)
+    LineColor #606666
     BackgroundColor azure
     
 }
 .n1type {
-    LineColor %darken("floralwhite",60)
+    LineColor #666460
     BackgroundColor floralwhite
     
 }
 .n3type {
-    LineColor %darken("azure",60)
+    LineColor #606666
     BackgroundColor azure
     
 }
 .n4type {
-    LineColor %darken("floralwhite",60)
+    LineColor #666460
     BackgroundColor floralwhite
     
 }
 .n5type {
-    LineColor %darken("floralwhite",60)
+    LineColor #666460
     BackgroundColor floralwhite
     
 }
 .n7type {
-    LineColor %darken("azure",60)
+    LineColor #606666
     BackgroundColor azure
     
 }
 .n10type {
-    LineColor %darken("lemonchiffon",60)
+    LineColor #666452
     BackgroundColor lemonchiffon
     
 }

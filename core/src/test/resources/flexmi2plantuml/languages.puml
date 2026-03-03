@@ -1,4 +1,5 @@
 @startuml
+allowmixing
 hide stereotypes
 skinparam roundCorner 3
 skinparam defaultFontName system-ui
@@ -7,14 +8,10 @@ skinparam ArrowColor #7A7A7A
 
 
 
-rectangle "<img:https://plantuml.com/logo3.png>\neol" as n0  <<n0type>> {
-}
-rectangle "<img:https://plantuml.com/logo3.png>\netl" as n1  <<n1type>> {
-}
-rectangle "<img:https://plantuml.com/logo3.png>\nevl" as n2  <<n2type>> {
-}
-rectangle "<img:https://plantuml.com/logo3.png>\neml" as n3  <<n3type>> {
-}
+rectangle "<img:https://plantuml.com/logo3.png>\neol" as n0 <<n0type>> 
+rectangle "<img:https://plantuml.com/logo3.png>\netl" as n1 <<n1type>> 
+rectangle "<img:https://plantuml.com/logo3.png>\nevl" as n2 <<n2type>> 
+rectangle "<img:https://plantuml.com/logo3.png>\neml" as n3 <<n3type>> 
 
 
 <style>

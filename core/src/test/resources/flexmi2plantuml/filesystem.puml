@@ -1,4 +1,5 @@
 @startuml
+allowmixing
 hide stereotypes
 skinparam roundCorner 3
 skinparam defaultFontName system-ui
@@ -7,16 +8,13 @@ skinparam ArrowColor #7A7A7A
 
 
 
-rectangle "C" as n0 <<rectangle>> <<n0type>> {
-    rectangle "My Documents" as n1 <<rectangle>> <<n1type>> {
-        rectangle "image.bmp" as n2  <<n2type>> {
-        }
-    }
-    node "image.lnk" as n3  <<n3type>> {
-    }
-    rectangle "synced.bmp" as n4  <<n4type>> {
-    }
-}
+rectangle "C" as n0 <<n0type>>  {
+    rectangle "My Documents" as n1 <<n1type>>  {
+        rectangle "image.bmp" as n2 <<n2type>> 
+    } 
+    node "image.lnk" as n3 <<n3type>> 
+    rectangle "synced.bmp" as n4 <<n4type>> 
+} 
 
 
 <style>
@@ -42,27 +40,27 @@ rectangle "C" as n0 <<rectangle>> <<n0type>> {
 }
 
 .n0type {
-    LineColor %darken("azure",60)
+    LineColor #606666
     BackgroundColor azure
     
 }
 .n1type {
-    LineColor %darken("azure",60)
+    LineColor #606666
     BackgroundColor azure
     
 }
 .n2type {
-    LineColor %darken("azure",60)
+    LineColor #606666
     BackgroundColor azure
     
 }
 .n3type {
-    LineColor %darken("azure",60)
+    LineColor #606666
     BackgroundColor azure
     
 }
 .n4type {
-    LineColor %darken("azure",60)
+    LineColor #606666
     BackgroundColor azure
     
 }

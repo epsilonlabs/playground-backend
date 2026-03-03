@@ -1,4 +1,5 @@
 @startuml
+allowmixing
 hide stereotypes
 skinparam roundCorner 3
 skinparam defaultFontName system-ui
@@ -7,12 +8,9 @@ skinparam ArrowColor #7A7A7A
 
 
 
-rectangle "A" as n0  <<n0type>> {
-}
-rectangle "B" as n1  <<n1type>> {
-}
-rectangle "C" as n2  <<n2type>> {
-}
+rectangle "A" as n0 <<n0type>> 
+rectangle "B" as n1 <<n1type>> 
+rectangle "C" as n2 <<n2type>> 
 
 
 <style>
@@ -38,17 +36,17 @@ rectangle "C" as n2  <<n2type>> {
 }
 
 .n0type {
-    LineColor %darken("beige",60)
+    LineColor #626258
     BackgroundColor beige
     
 }
 .n1type {
-    LineColor %darken("beige",60)
+    LineColor #626258
     BackgroundColor beige
     
 }
 .n2type {
-    LineColor %darken("beige",60)
+    LineColor #626258
     BackgroundColor beige
     
 }
