@@ -16,7 +16,7 @@ abstract class Step {
 
 class Statement extends Step {}
 
-@node(shape="hexagon")
+@node(shape="hexagon", wrapLength="15")
 class Decision extends Step {}
 
 class CallRedirection extends Step {

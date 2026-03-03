@@ -9,11 +9,11 @@ skinparam ArrowColor #7A7A7A
 
 
 rectangle "Welcome to Acme Bank" as n0 <<n0type>> 
-hexagon "Are you an existing customer?" as n1 <<n1type>> 
-rectangle "Please enter your account number" as n2 <<n2type>> 
+hexagon "Are you an\nexisting\ncustomer?" as n1 <<n1type>> 
+rectangle "Please enter your account\nnumber" as n2 <<n2type>> 
 rectangle "Please enter your PIN" as n3 <<n3type>> 
-rectangle "Please be aware that the call may be recorded for training and quality purposes" as n4 <<n4type>> 
-hexagon "What would you like to talk to us about?" as n5 <<n5type>> 
+rectangle "Please be aware that the call\nmay be recorded for training\nand quality purposes" as n4 <<n4type>> 
+hexagon "What would you\nlike to talk to\nus about?" as n5 <<n5type>> 
 rectangle "Redirect to 01904 100000" as n6 <<n6type>> 
 rectangle "Redirect to 01904 100001" as n7 <<n7type>> 
 

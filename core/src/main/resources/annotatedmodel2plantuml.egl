@@ -69,10 +69,10 @@ See https://github.com/plantuml/plantuml/discussions/2570 *]
 [%if(e.needsEdgeNode()){%]
 circle " " as [%=e.getNodeId()%] #white
 [%=e.^source.getNodeId()%]-[%=e.getDecoration(true)%][%=e.getEdgeStyle()%]-[%=e.getNodeId()%]
-[%=e.getNodeId()%]-[%=e.getEdgeStyle()%]-[%=e.getDecoration(false)%][%=e.^target.getNodeId()%] [%if(e.label.isDefined()){%]: [%=e.^label%][%}%]
+[%=e.getNodeId()%]-[%=e.getEdgeStyle()%]-[%=e.getDecoration(false)%][%=e.^target.getNodeId()%] [%if(e.label.isDefined() and e.^label.notWhitespace()){%]: [%=e.getWrappedLabel()%][%}%]
 
 [%}else{%]
-[%=e.^source.getNodeId()%] [%=e.getDecoration(true)%]-[%=e.getEdgeStyle()%]-[%=e.getDecoration(false)%] [%=e.^target.getNodeId()%] [%if(e.label.isDefined() and e.^label.notWhitespace()){%]: [%=e.^label%][%}%]
+[%=e.^source.getNodeId()%] [%=e.getDecoration(true)%]-[%=e.getEdgeStyle()%]-[%=e.getDecoration(false)%] [%=e.^target.getNodeId()%] [%if(e.label.isDefined() and e.^label.notWhitespace()){%]: [%=e.getWrappedLabel()%][%}%]
 
 [%}%]
 [%}%]
@@ -90,7 +90,7 @@ circle " " as [%=e.getNodeId()%] #white
         else target = v;
     %]
     [%if (target.isTypeOf(`@node`) and target.isCreated()){%]
-[%=source.getNodeId()%] [%=f.getDecoration(true)%]-[%=f.getEdgeStyle()%]-[%=f.getDecoration(false)%] [%=target.getNodeId()%] [%if(f.label.isDefined() and f.label.notWhitespace()){%]: [%=f.label%][%}%]
+[%=source.getNodeId()%] [%=f.getDecoration(true)%]-[%=f.getEdgeStyle()%]-[%=f.getDecoration(false)%] [%=target.getNodeId()%] [%if(f.label.isDefined() and f.label.notWhitespace()){%]: [%=f.getWrappedLabel()%][%}%]
 
     [%}%]
     [%}%]
@@ -247,6 +247,19 @@ operation `@text` toPlantUml() {
     return self.^label;
 }
 
+operation Any getWrappedLabel() {
+    var label;
+    if (M.owns(self)) label = self.^label;
+    else label = self.label;
+    
+    if (not (self.wrap.isDefined() and not self.wrap.asBoolean())) {
+        var wrapLength = self.wrapLength.isDefined() ? self.wrapLength.asInteger() : 30;
+        label = label.wrap(wrapLength);
+    }
+    
+    return label;
+}
+
 @template
 operation `@node` toPlantUml() {
     var created = self.created;
@@ -261,7 +274,7 @@ operation `@node` toPlantUml() {
         self.~instances = self.~instances + 1;
     }
 %]
-[%=self.getNodeShape()%] "[%=self.image.isDefined() ? ("<img:" + self.image + ">\\n") : ""%][%=self.^label ?: ' '%]" as [%=nodeId%] <<[%=self.getNodeId()%]type>> [%if(self.contents.isDefined() and self.~instances == 1){%] {
+[%=self.getNodeShape()%] "[%=self.image.isDefined() ? ("<img:" + self.image + ">\\n") : ""%][%=self.^label.isDefined() ? self.getWrappedLabel() : ' '%]" as [%=nodeId%] <<[%=self.getNodeId()%]type>> [%if(self.contents.isDefined() and self.~instances == 1){%] {
     [%for(content in self.^^contents.select(c|c.isTypeOf(`@node`) or c.isTypeOf(`@text`))){%]
     [%=content.toPlantUml()%]
     [%}%]

@@ -3,6 +3,7 @@ package org.eclipse.epsilon.labs.playground.fn;
 import net.sourceforge.plantuml.klimt.color.ColorMapper;
 import net.sourceforge.plantuml.klimt.color.HColor;
 import net.sourceforge.plantuml.klimt.color.HColorSet;
+import org.apache.commons.text.WordUtils;
 import org.eclipse.epsilon.eol.execute.operations.contributors.OperationContributor;
 
 import java.awt.*;
@@ -31,7 +32,11 @@ public class PlantUMLOperationContributor extends OperationContributor  {
         int b = c.getBlue()  + ((255 - c.getBlue())  * p) / 100;
         return toHex(new Color(r, g, b, c.getAlpha()));
     }
-
+    
+    public String wrap(int n) {
+        return WordUtils.wrap(getTarget() + "", n , "\\n", false);
+    }
+    
     protected String toHex(Color c) {
         return String.format("#%02X%02X%02X", c.getRed(), c.getGreen(), c.getBlue());
     }
