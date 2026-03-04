@@ -178,12 +178,7 @@ operation Any getEdgeStyle() {
 
     var direction = self.direction;
     if (direction.isUndefined()) {
-        if (M.owns(self)) {
-            direction = "right";
-        }
-        else {
-            direction = self.getEStructuralFeature().isContainment() ? "down" : "right";
-        }
+        direction = "down";
     }
 
     var style;
