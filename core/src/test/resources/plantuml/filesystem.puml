@@ -21,46 +21,46 @@ rectangle "C" as n0 <<n0type>>  {
 
 ._Pattern {
     BackgroundColor gold
-    LineColor %darken("gold",60)
+    LineColor #665600
 }
 
 ._Critique {
     BackgroundColor khaki
-    LineColor %darken("khaki",60)    
+    LineColor #867B12    
 }
 
 ._Constraint {
     BackgroundColor mistyrose
-    LineColor %darken("mistyrose",60)
+    LineColor #C01300
 }
 
 ._Success {
     BackgroundColor TECHNOLOGY
-    LineColor %darken("TECHNOLOGY",60)
+    LineColor #00B600
 }
 
 .n0type {
-    LineColor #606666
+    LineColor #00C6C6
     BackgroundColor azure
     
 }
 .n1type {
-    LineColor #606666
+    LineColor #00C6C6
     BackgroundColor azure
     
 }
 .n2type {
-    LineColor #606666
+    LineColor #00C6C6
     BackgroundColor azure
     
 }
 .n3type {
-    LineColor #606666
+    LineColor #00C6C6
     BackgroundColor azure
     
 }
 .n4type {
-    LineColor #606666
+    LineColor #00C6C6
     BackgroundColor azure
     
 }

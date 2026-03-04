@@ -74,25 +74,25 @@ N7 --> N8
 
 skinparam note {
     BackgroundColor<<_Pattern>> gold
-    BorderColor<<_Pattern>> %darken("gold",60)
+    BorderColor<<_Pattern>> #665600
     BackgroundColor<<_Critique>> khaki
-    BorderColor<<_Critique>> %darken("khaki",60)
+    BorderColor<<_Critique>> #867B12
     BackgroundColor<<_Constraint>> mistyrose
-    BorderColor<<_Constraint>> %darken("mistyrose",60)
+    BorderColor<<_Constraint>> #C01300
     BackgroundColor<<_Success>> TECHNOLOGY
-    BorderColor<<_Success>> %darken("TECHNOLOGY",60)
+    BorderColor<<_Success>> #00B600
     
 }
 
 skinparam object {
 	backgroundColor<<Project>> azure 
-	borderColor<<Project>> %darken("azure",60)
+	borderColor<<Project>> #00C6C6
 	backgroundColor<<Task>> beige 
-	borderColor<<Task>> %darken("beige",60)
+	borderColor<<Task>> #919129
 	backgroundColor<<Effort>> lemonchiffon 
-	borderColor<<Effort>> %darken("lemonchiffon",60)
+	borderColor<<Effort>> #B8A600
 	backgroundColor<<Person>> floralwhite 
-	borderColor<<Person>> %darken("floralwhite",60)
+	borderColor<<Person>> #C68400
 }
 
 @enduml

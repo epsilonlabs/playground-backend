@@ -10,7 +10,7 @@ class Project {
 	val Person[*] people;
 }
 
-@node(label="eol:'<<Task>>\\n' + self.title", shape="node", style="fontcolor green")
+@node(label="eol:'<<Task>>\\n' + self.title", shape="node", fontColor="green")
 class Task {
 	attr String title;
 	attr int start;
@@ -21,12 +21,12 @@ class Task {
 	ref Person lead;
 }
 
-@node(label="name", color="azure", shape="cloud", style="fontcolor magenta, fontsize 20")
+@node(label="name", color="azure", shape="cloud", fontColor="magenta", fontSize="20")
 class Person {
 	attr String name;
 }
 
-@node(label="eol: 'Manager: ' + self.name", color="green", style="fontcolor white")
+@node(label="eol: 'Manager: ' + self.name", color="green", fontColor="white")
 class Manager extends Person {
 
 }

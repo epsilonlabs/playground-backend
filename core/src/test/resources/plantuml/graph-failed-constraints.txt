@@ -2,9 +2,7 @@ Content feature 'foo' not found in class Graph
 Content feature 'foo' not found in class Graph1
 Content feature 'foo' not found in class Graph2
 Label feature 'foo' not found in class Node1
-The 'visible' flag of class Node1 must be set to true or false
 Label feature 'foo' not found in class Edge1
-The 'visible' flag of class Edge1 must be set to true or false
 Edge class Edge must specify a source reference
 Edge class Edge must specify a target reference
 Edge source 'foo' is not a single-valued reference of class Edge1
@@ -14,6 +12,8 @@ Edge target 'nodes2' is not a single-valued reference of class Edge2
 Invalid value 'foo' for the direction of edge Node.pointer
 Invalid value 'foo' for the source decoration of edge Node.pointer
 Invalid value 'foo' for the target decoration of edge Node.pointer
+The 'visible' flag of class pointer must be set to true or false
 Invalid value 'foo' for the direction of edge Edge1
 Invalid value 'foo' for the source decoration of edge Edge1
 Invalid value 'foo' for the target decoration of edge Edge1
+The 'visible' flag of class Edge1 must be set to true or false

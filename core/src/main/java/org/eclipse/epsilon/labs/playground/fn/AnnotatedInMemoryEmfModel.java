@@ -256,7 +256,6 @@ public class AnnotatedInMemoryEmfModel extends InMemoryEmfModel {
             }
             module.getContext().getModelRepository().addModel(getInMemoryEmfModel());
             for (OperationContributor operationContributor : operationContributors) {
-                System.out.println("Adding: " + operationContributor);
                 module.getContext().getOperationContributorRegistry().add(operationContributor);
             }
             return module.execute();

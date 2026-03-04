@@ -118,6 +118,7 @@ public class ModelDiagramRenderer {
     EglModule module = new EglModule();
     module.parse(getClass().getResource("/ecore2plantuml.egl").toURI());
     module.getContext().getModelRepository().addModel(model);
+    module.getContext().getOperationContributorRegistry().add(new PlantUMLOperationContributor());
     timeoutTerminator.scheduleScriptTimeout(module);
 
     try {

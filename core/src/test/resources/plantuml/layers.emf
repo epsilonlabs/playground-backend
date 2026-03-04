@@ -1,6 +1,6 @@
 package layers;
 
-@node(contents="nodes", style="fontstyle normal", shape="rectangle")
+@node(contents="nodes", fontStyle="normal", shape="rectangle")
 class Layer extends Node {
 	@edge(created="eol: self.nodes.indexOf(item) < self.nodes.size() - 1", 
 	source="eol: item",

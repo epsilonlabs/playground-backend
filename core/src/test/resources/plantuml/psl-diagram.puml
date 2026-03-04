@@ -1,0 +1,35 @@
+@startuml
+hide circle
+skinparam roundCorner 3
+hide empty methods
+skinparam classBorderThickness 1
+skinparam defaultFontName system-ui
+skinparam ArrowColor #7A7A7A
+
+
+class Project #azure ##00C6C6 {
+	name : EString  
+	description : EString  
+	tasks : Task[*]  
+	people : Person[*]  
+}
+class Task #beige ##919129 {
+	name : EString  
+	start : EInt  
+	duration : EInt  
+	effort : Effort[*]  
+}
+class Person #floralwhite ##C68400 {
+	name : EString  
+}
+class Effort #lemonchiffon ##B8A600 {
+	person : Person  
+	task : Task  
+	percentage : EInt  
+}
+
+Project *--> Task: "	"
+Project *-> Person: "	"
+Person <-- Effort: "	"
+Task *-> Effort: "	"
+@enduml

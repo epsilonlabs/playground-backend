@@ -85,6 +85,11 @@ public class Flexmi2PlantUMLTest extends PlaygroundTest {
     }
 
     @Test
+    public void psl3() throws Exception {
+        process("psl3.emf", "psl3.flexmi", "psl3.puml");
+    }
+
+    @Test
     public void psl2Uppercase() throws Exception {
         process("psl2-uppercase.emf", "psl2.flexmi", "psl2.puml");
     }
@@ -120,11 +125,11 @@ public class Flexmi2PlantUMLTest extends PlaygroundTest {
     public void graphicalSyntaxAnnotationValidation() throws Exception {
         var req = new Flexmi2PlantUMLRequest();
 
-        req.setEmfatic(getResourceAsString("/flexmi2plantuml/graph.emf"));
+        req.setEmfatic(getResourceAsString("/plantuml/graph.emf"));
         req.setFlexmi("<_/>");
 
         ModelDiagramResponse result = client.convert(req);
-        assertEquals(getResourceAsString("/flexmi2plantuml/graph-failed-constraints.txt"), result.getError());
+        assertEquals(getResourceAsString("/plantuml/graph-failed-constraints.txt"), result.getError());
         assertNull(result.getOutput());
         assertNull(result.getModelDiagram());
         assertNull(result.getModelDiagramSource());
@@ -133,19 +138,19 @@ public class Flexmi2PlantUMLTest extends PlaygroundTest {
     public void process(String emfatic, String flexmi, String puml) throws Exception {
         var req = new Flexmi2PlantUMLRequest();
 
-        req.setEmfatic(getResourceAsString("/flexmi2plantuml/" + emfatic));
-        req.setFlexmi(getResourceAsString("/flexmi2plantuml/" + flexmi));
+        req.setEmfatic(getResourceAsString("/plantuml/" + emfatic));
+        req.setFlexmi(getResourceAsString("/plantuml/" + flexmi));
 
         ModelDiagramResponse result = client.convert(req);
         
-        Path path = Path.of("src/test/resources/flexmi2plantuml/actual/" + puml);
+        Path path = Path.of("src/test/resources/plantuml/actual/" + puml);
         Files.createDirectories(path.getParent());
         
         assertNull(result.getError());
         Files.writeString(path, result.getModelDiagramSource(), StandardCharsets.UTF_8);
         assertNull(result.getOutput());
         assertNotNull(result.getModelDiagram());
-        assertEquals(getResourceAsString("/flexmi2plantuml/" + puml), result.getModelDiagramSource());
+        assertEquals(getResourceAsString("/plantuml/" + puml), result.getModelDiagramSource());
     }
 
 }

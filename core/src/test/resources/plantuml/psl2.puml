@@ -21,59 +21,60 @@ rectangle "ACME" as n0 <<n0type>>  {
 
 ._Pattern {
     BackgroundColor gold
-    LineColor %darken("gold",60)
+    LineColor #665600
 }
 
 ._Critique {
     BackgroundColor khaki
-    LineColor %darken("khaki",60)    
+    LineColor #867B12    
 }
 
 ._Constraint {
     BackgroundColor mistyrose
-    LineColor %darken("mistyrose",60)
+    LineColor #C01300
 }
 
 ._Success {
     BackgroundColor TECHNOLOGY
-    LineColor %darken("TECHNOLOGY",60)
+    LineColor #00B600
 }
 
 .n0type {
-    LineColor #606666
+    LineColor #00C6C6
     BackgroundColor azure
     
 }
 .n1type {
-    LineColor #626258
+    LineColor #919129
     BackgroundColor beige
     
-    fontcolor green
+    fontColor green
 }
 .n2type {
-    LineColor #626258
+    LineColor #919129
     BackgroundColor beige
     
-    fontcolor green
+    fontColor green
 }
 .n3type {
-    LineColor #626258
+    LineColor #919129
     BackgroundColor beige
     
-    fontcolor green
+    fontColor green
 }
 .n4type {
-    LineColor #606666
+    LineColor #00C6C6
     BackgroundColor azure
     
-    fontcolor magenta
-    fontsize 20
+    fontColor magenta
+    fontSize 20
 }
 .n5type {
     LineColor #003300
     BackgroundColor green
     
-    fontcolor white
+    fontColor white
+    fontSize 20
 }
 </style>
 

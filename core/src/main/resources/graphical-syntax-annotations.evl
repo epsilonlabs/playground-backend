@@ -28,10 +28,10 @@ context EAnnotation {
         message: "Label feature '" + self.getDetail("label") + "' not found in class " + self.eContainer().name
     }
     
-    constraint Visible {
-        guard: self.getDetail("visible").isDefined()
-        check: self.getDetail("visible").isBoolean()
-        message: "The 'visible' flag of class " + self.eContainer().name + " must be set to true or false"
+    constraint Created {
+        guard: self.getDetail("created").isDefined()
+        check: self.getDetail("created").isBoolean()
+        message: "The 'created' flag of class " + self.eContainer().name + " must be set to true or false"
     }
     
 }
@@ -86,6 +86,11 @@ context EAnnotation {
         message: "Invalid value '" + self.getDetail("target.decoration") + "' for the target decoration of edge " + self.getClassOrReferenceName()
     }
     
+    constraint Visible {
+        guard: self.getDetail("visible").isDefined()
+        check: self.getDetail("visible").isBoolean()
+        message: "The 'visible' flag of class " + self.eContainer().name + " must be set to true or false"
+    }
 }
 
 operation EAnnotation hasDetail(detail : String) : Boolean {

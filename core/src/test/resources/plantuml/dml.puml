@@ -12,8 +12,12 @@ hide methods
 
 class "Project" as n0 <<n0type>>  {
     tasks:Task[*]
+    lead:Person
 } 
 class "Task" as n1 <<n1type>>  {
+    name:String
+} 
+class "Person" as n2 <<n2type>>  {
     name:String
 } 
 
@@ -22,31 +26,36 @@ class "Task" as n1 <<n1type>>  {
 
 ._Pattern {
     BackgroundColor gold
-    LineColor %darken("gold",60)
+    LineColor #665600
 }
 
 ._Critique {
     BackgroundColor khaki
-    LineColor %darken("khaki",60)    
+    LineColor #867B12    
 }
 
 ._Constraint {
     BackgroundColor mistyrose
-    LineColor %darken("mistyrose",60)
+    LineColor #C01300
 }
 
 ._Success {
     BackgroundColor TECHNOLOGY
-    LineColor %darken("TECHNOLOGY",60)
+    LineColor #00B600
 }
 
 .n0type {
-    LineColor #666460
+    LineColor #C68400
     BackgroundColor floralwhite
     
 }
 .n1type {
-    LineColor #666460
+    LineColor #C68400
+    BackgroundColor floralwhite
+    
+}
+.n2type {
+    LineColor #C68400
     BackgroundColor floralwhite
     
 }
@@ -54,6 +63,7 @@ class "Task" as n1 <<n1type>>  {
 
 
 n0 -right-> n1: *
+n0 -left-> n2
 
 
 

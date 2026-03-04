@@ -54,9 +54,10 @@ var createdEdges = `@edge`.all.select(e|e.isCreated());
     LineColor [%=n.getLineColor()%]
     BackgroundColor [%=n.getColor()%]
     [%=n.getHorizontalAlignment() ?: ''%]
-    [%if(n.style.isDefined()){%]
-    [%for(line in n.style.split(",")){%]
-    [%=line.trim()%]
+    [%for (style in Sequence{"fontName", "fontColor", "fontSize", "fontStyle", "hyperlinkColor", "roundedCorner", "diagronalCorner", "lineThickness", "lineStyle", "padding", "margin", "maximumWidth", "shadowing", "hyperlinkUnderlineStyle", "hyperlinkUnderlineThickness"}){%]
+    [%var styleValue = M.propertyGetter.invoke(n, style, System.context);%]
+    [%if (styleValue.notWhitespace()){%]
+    [%=style%] [%=styleValue%]
     [%}%]
     [%}%]
 }
@@ -211,7 +212,7 @@ operation `@node` getColor() {
 operation `@node` getLineColor() {
     if (self.`line.color`.isDefined()) return self.`line.color`;
     else if (self.image.isDefined()) return "white";
-    else return self.getColor().darken(60);
+    else return self.getColor().darken();
 }
 
 operation `@node` getHorizontalAlignment() {

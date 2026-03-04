@@ -22,61 +22,61 @@ rectangle "Redirect to 01904 100001" as n7 <<n7type>>
 
 ._Pattern {
     BackgroundColor gold
-    LineColor %darken("gold",60)
+    LineColor #665600
 }
 
 ._Critique {
     BackgroundColor khaki
-    LineColor %darken("khaki",60)    
+    LineColor #867B12    
 }
 
 ._Constraint {
     BackgroundColor mistyrose
-    LineColor %darken("mistyrose",60)
+    LineColor #C01300
 }
 
 ._Success {
     BackgroundColor TECHNOLOGY
-    LineColor %darken("TECHNOLOGY",60)
+    LineColor #00B600
 }
 
 .n0type {
-    LineColor #626258
+    LineColor #919129
     BackgroundColor beige
     
 }
 .n1type {
-    LineColor #666460
+    LineColor #C68400
     BackgroundColor floralwhite
     
 }
 .n2type {
-    LineColor #626664
+    LineColor #00C864
     BackgroundColor mintcream
     
 }
 .n3type {
-    LineColor #626664
+    LineColor #00C864
     BackgroundColor mintcream
     
 }
 .n4type {
-    LineColor #626258
+    LineColor #919129
     BackgroundColor beige
     
 }
 .n5type {
-    LineColor #666460
+    LineColor #C68400
     BackgroundColor floralwhite
     
 }
 .n6type {
-    LineColor #666452
+    LineColor #B8A600
     BackgroundColor lemonchiffon
     
 }
 .n7type {
-    LineColor #666452
+    LineColor #B8A600
     BackgroundColor lemonchiffon
     
 }

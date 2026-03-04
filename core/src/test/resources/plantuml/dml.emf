@@ -17,7 +17,7 @@ class DataType extends Type {
 class Entity extends Type {
 	ref Entity superType;
 	attr String doc;
-    @edge(target="eol:item.type", label="eol:item.many ? '*' : ''", direction="right")
+    @edge(target="eol:item.type", label="eol:item.many ? '*' : ''", direction="eol: item.direction")
 	@diagram(direction="up")
     val Feature[*] features;
 }
@@ -27,4 +27,5 @@ class Feature {
 	attr boolean many;
 	attr String name;
 	ref Type type;
+	attr String direction = "right";
 }

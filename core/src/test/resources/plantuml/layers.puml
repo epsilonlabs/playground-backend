@@ -29,85 +29,85 @@ rectangle "Layer 0" as n8 <<n8type>>  {
 
 ._Pattern {
     BackgroundColor gold
-    LineColor %darken("gold",60)
+    LineColor #665600
 }
 
 ._Critique {
     BackgroundColor khaki
-    LineColor %darken("khaki",60)    
+    LineColor #867B12    
 }
 
 ._Constraint {
     BackgroundColor mistyrose
-    LineColor %darken("mistyrose",60)
+    LineColor #C01300
 }
 
 ._Success {
     BackgroundColor TECHNOLOGY
-    LineColor %darken("TECHNOLOGY",60)
+    LineColor #00B600
 }
 
 .n0type {
-    LineColor #625847
+    LineColor #966914
     BackgroundColor wheat
     
-    fontstyle normal
+    fontStyle normal
 }
 .n1type {
-    LineColor #646059
-    BackgroundColor #FBF1E0
+    LineColor #666666
+    BackgroundColor #FFFFFF
     
 }
 .n2type {
-    LineColor #646059
-    BackgroundColor #FBF1E0
+    LineColor #666666
+    BackgroundColor #FFFFFF
     
 }
 .n3type {
-    LineColor #646059
-    BackgroundColor #FBF1E0
+    LineColor #666666
+    BackgroundColor #FFFFFF
     
 }
 .n4type {
-    LineColor #606666
+    LineColor #00C6C6
     BackgroundColor azure
     
-    fontstyle normal
+    fontStyle normal
 }
 .n5type {
-    LineColor #636666
-    BackgroundColor #F9FFFF
+    LineColor #666666
+    BackgroundColor #FFFFFF
     
 }
 .n6type {
-    LineColor #636666
-    BackgroundColor #F9FFFF
+    LineColor #666666
+    BackgroundColor #FFFFFF
     
 }
 .n7type {
-    LineColor #636666
-    BackgroundColor #F9FFFF
+    LineColor #666666
+    BackgroundColor #FFFFFF
     
 }
 .n8type {
-    LineColor #666460
+    LineColor #C68400
     BackgroundColor floralwhite
     
-    fontstyle normal
+    fontStyle normal
 }
 .n9type {
-    LineColor #666563
-    BackgroundColor #FFFDF9
+    LineColor #666666
+    BackgroundColor #FFFFFF
     
 }
 .n10type {
-    LineColor #666563
-    BackgroundColor #FFFDF9
+    LineColor #666666
+    BackgroundColor #FFFFFF
     
 }
 .n11type {
-    LineColor #666563
-    BackgroundColor #FFFDF9
+    LineColor #666666
+    BackgroundColor #FFFFFF
     
 }
 </style>

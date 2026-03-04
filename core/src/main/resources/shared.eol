@@ -31,7 +31,7 @@ operation Any /*EClass*/ getColor() {
 }
 
 operation String darken() {
-	return '%darken("' + self + '",60)';
+	return self.darken(60);
 }
 
 @cached
