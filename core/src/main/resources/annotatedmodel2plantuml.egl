@@ -54,7 +54,7 @@ var createdEdges = `@edge`.all.select(e|e.isCreated());
     LineColor [%=n.getLineColor()%]
     BackgroundColor [%=n.getColor()%]
     [%=n.getHorizontalAlignment() ?: ''%]
-    [%for (style in Sequence{"fontName", "fontColor", "fontSize", "fontStyle", "hyperlinkColor", "roundedCorner", "diagronalCorner", "lineThickness", "lineStyle", "padding", "margin", "maximumWidth", "shadowing", "hyperlinkUnderlineStyle", "hyperlinkUnderlineThickness"}){%]
+    [%for (style in Sequence{"fontName", "fontColor", "fontSize", "fontStyle", "hyperlinkColor", "roundCorner", "diagonalCorner", "lineThickness", "lineStyle", "padding", "margin", "maximumWidth", "shadowing", "hyperlinkUnderlineStyle", "hyperlinkUnderlineThickness"}){%]
     [%var styleValue = M.propertyGetter.invoke(n, style, System.context);%]
     [%if (styleValue.notWhitespace()){%]
     [%=style%] [%=styleValue%]
