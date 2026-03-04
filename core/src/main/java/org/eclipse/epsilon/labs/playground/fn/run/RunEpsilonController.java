@@ -26,6 +26,7 @@ import org.eclipse.epsilon.evl.EvlModule;
 import org.eclipse.epsilon.flock.FlockModule;
 import org.eclipse.epsilon.labs.playground.execution.ScriptTimeoutTerminator;
 import org.eclipse.epsilon.labs.playground.fn.ModelDiagramRenderer;
+import org.eclipse.epsilon.labs.playground.fn.ModelDiagramResponse;
 import org.eclipse.epsilon.labs.playground.fn.ModelLoader;
 import org.eclipse.epsilon.labs.playground.fn.flexmi2plantuml.Flexmi2PlantUMLController;
 import org.eclipse.epsilon.labs.playground.fn.run.EpsilonExecutionResponse.GeneratedFile;
@@ -251,10 +252,11 @@ public class RunEpsilonController {
 		module.getContext().getModelRepository().addModel(model);
 		module.execute();
 
-		response.setValidatedModelDiagram(renderer.generateModelDiagram(model,
-				Variable.createReadOnlyVariable("unsatisfiedConstraints",
-						module.getContext().getUnsatisfiedConstraints()))
-				.getModelDiagram());
+		ModelDiagramResponse modelDiagramResponse = renderer.generateModelDiagram(model,
+						Variable.createReadOnlyVariable("unsatisfiedConstraints",
+								module.getContext().getUnsatisfiedConstraints()));
+		response.setValidatedModelDiagram(modelDiagramResponse.getModelDiagram());
+		response.setValidatedModelDiagramSource(modelDiagramResponse.getModelDiagramSource());
 	}
 
 	protected void runEpl(EplModule module, RunEpsilonRequest request, EpsilonExecutionResponse response)
@@ -264,10 +266,11 @@ public class RunEpsilonController {
 		module.getContext().getModelRepository().addModel(model);
 		module.execute();
 
-		response.setPatternMatchedModelDiagram(renderer.generateModelDiagram(model,
+		ModelDiagramResponse modelDiagramResponse = renderer.generateModelDiagram(model,
 				Variable.createReadOnlyVariable("matches",
-						module.getContext().getPatternMatchTrace().getMatches()))
-				.getModelDiagram());
+						module.getContext().getPatternMatchTrace().getMatches()));
+		response.setPatternMatchedModelDiagram(modelDiagramResponse.getModelDiagram());
+		response.setPatternMatchedModelDiagramSource(modelDiagramResponse.getModelDiagramSource());
 	}
 
 	protected void runEgl(IEglModule module, RunEpsilonRequest request, EpsilonExecutionResponse response)

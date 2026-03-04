@@ -1,0 +1,19 @@
+package layers;
+
+@node(contents="nodes", fontStyle="normal", shape="rectangle")
+class Layer extends Node {
+	@edge(created="eol: self.nodes.indexOf(item) < self.nodes.size() - 1", 
+	source="eol: item",
+	target="eol: self.nodes.get(self.nodes.indexOf(item) + 1)",
+	visible="false", direction="right")
+	val Node[*] nodes;
+	
+	@edge(direction="down", visible="false")
+	ref Layer above;
+	attr String color = "wheat";
+}
+
+@node(label="name", color="eol: self.isTypeOf(Node) ? self.eContainer().color.lighten(60) : self.color")
+class Node {
+	attr String name;
+}

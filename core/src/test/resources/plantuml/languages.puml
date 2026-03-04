@@ -1,0 +1,69 @@
+@startuml
+allowmixing
+hide stereotypes
+skinparam roundCorner 3
+skinparam defaultFontName system-ui
+skinparam ArrowColor #7A7A7A
+
+
+
+
+rectangle "<img:https://plantuml.com/logo3.png>\neol" as n0 <<n0type>> 
+rectangle "<img:https://plantuml.com/logo3.png>\netl" as n1 <<n1type>> 
+rectangle "<img:https://plantuml.com/logo3.png>\nevl" as n2 <<n2type>> 
+rectangle "<img:https://plantuml.com/logo3.png>\neml" as n3 <<n3type>> 
+
+
+<style>
+
+._Pattern {
+    BackgroundColor gold
+    LineColor #665600
+}
+
+._Critique {
+    BackgroundColor khaki
+    LineColor #867B12    
+}
+
+._Constraint {
+    BackgroundColor mistyrose
+    LineColor #C01300
+}
+
+._Success {
+    BackgroundColor TECHNOLOGY
+    LineColor #00B600
+}
+
+.n0type {
+    LineColor white
+    BackgroundColor white
+    HorizontalAlignment center
+}
+.n1type {
+    LineColor white
+    BackgroundColor white
+    HorizontalAlignment center
+}
+.n2type {
+    LineColor white
+    BackgroundColor white
+    HorizontalAlignment center
+}
+.n3type {
+    LineColor white
+    BackgroundColor white
+    HorizontalAlignment center
+}
+</style>
+
+
+n1 -up-> n0
+n2 -up-> n0
+n3 -up-> n1
+
+
+
+@enduml
+

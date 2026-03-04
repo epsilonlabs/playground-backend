@@ -1,0 +1,90 @@
+@startuml
+allowmixing
+hide stereotypes
+skinparam roundCorner 3
+skinparam defaultFontName system-ui
+skinparam ArrowColor #7A7A7A
+
+
+
+
+rectangle "ACME" as n0 <<n0type>>  {
+    rectangle "Alice" as n4 <<n4type>>  {
+        rectangle "Analysis" as n1 <<n1type>>  {
+            rectangle "Alice" as n4_1 <<n4type>> 
+        } 
+        rectangle "Implementation" as n3 <<n3type>>  {
+            rectangle "Bob" as n5 <<n5type>>  {
+                rectangle "Design" as n2 <<n2type>>  {
+                    rectangle "Bob" as n5_1 <<n5type>> 
+                } 
+                rectangle "Implementation" as n3_1 <<n3type>> 
+            } 
+            rectangle "Alice" as n4_2 <<n4type>> 
+        } 
+    } 
+    rectangle "Bob" as n5_2 <<n5type>> 
+} 
+
+
+<style>
+
+._Pattern {
+    BackgroundColor gold
+    LineColor #665600
+}
+
+._Critique {
+    BackgroundColor khaki
+    LineColor #867B12    
+}
+
+._Constraint {
+    BackgroundColor mistyrose
+    LineColor #C01300
+}
+
+._Success {
+    BackgroundColor TECHNOLOGY
+    LineColor #00B600
+}
+
+.n0type {
+    LineColor #00C6C6
+    BackgroundColor azure
+    
+}
+.n1type {
+    LineColor #919129
+    BackgroundColor beige
+    
+}
+.n2type {
+    LineColor #919129
+    BackgroundColor beige
+    
+}
+.n3type {
+    LineColor #919129
+    BackgroundColor beige
+    
+}
+.n4type {
+    LineColor #C68400
+    BackgroundColor floralwhite
+    
+}
+.n5type {
+    LineColor #C68400
+    BackgroundColor floralwhite
+    
+}
+</style>
+
+
+n5 -right-> n4
+
+
+
+@enduml
+

@@ -1,0 +1,98 @@
+@startuml
+allowmixing
+hide stereotypes
+skinparam roundCorner 3
+skinparam defaultFontName system-ui
+skinparam ArrowColor #7A7A7A
+
+
+
+
+rectangle "Welcome to Acme Bank" as n0 <<n0type>> 
+hexagon "Are you an\nexisting\ncustomer?" as n1 <<n1type>> 
+rectangle "Please enter your account\nnumber" as n2 <<n2type>> 
+rectangle "Please enter your PIN" as n3 <<n3type>> 
+rectangle "Please be aware that the call\nmay be recorded for training\nand quality purposes" as n4 <<n4type>> 
+hexagon "What would you\nlike to talk to\nus about?" as n5 <<n5type>> 
+rectangle "Redirect to 01904 100000" as n6 <<n6type>> 
+rectangle "Redirect to 01904 100001" as n7 <<n7type>> 
+
+
+<style>
+
+._Pattern {
+    BackgroundColor gold
+    LineColor #665600
+}
+
+._Critique {
+    BackgroundColor khaki
+    LineColor #867B12    
+}
+
+._Constraint {
+    BackgroundColor mistyrose
+    LineColor #C01300
+}
+
+._Success {
+    BackgroundColor TECHNOLOGY
+    LineColor #00B600
+}
+
+.n0type {
+    LineColor #919129
+    BackgroundColor beige
+    
+}
+.n1type {
+    LineColor #C68400
+    BackgroundColor floralwhite
+    
+}
+.n2type {
+    LineColor #00C864
+    BackgroundColor mintcream
+    
+}
+.n3type {
+    LineColor #00C864
+    BackgroundColor mintcream
+    
+}
+.n4type {
+    LineColor #919129
+    BackgroundColor beige
+    
+}
+.n5type {
+    LineColor #C68400
+    BackgroundColor floralwhite
+    
+}
+.n6type {
+    LineColor #B8A600
+    BackgroundColor lemonchiffon
+    
+}
+.n7type {
+    LineColor #B8A600
+    BackgroundColor lemonchiffon
+    
+}
+</style>
+
+n0 -down-> n1
+n1 -down-> n2: Yes
+n1 -down-> n4: No
+n3 -down-> n4
+n4 -down-> n5
+n5 -down-> n6: Savings
+n5 -down-> n7: Mortgages
+n2 -down-> n3
+
+
+
+
+@enduml
+

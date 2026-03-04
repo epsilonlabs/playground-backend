@@ -1,0 +1,98 @@
+@startuml
+hide stereotypes
+skinparam roundCorner 3
+skinparam objectBorderThickness 1
+skinparam defaultFontName system-ui
+skinparam ArrowColor #7A7A7A
+
+
+object ":Project " as N0<<Project>> {
+	name = ACME
+}
+object ":Task " as N1<<Task>> {
+	name = Analysis
+	start = 1
+	duration = 3
+}
+object ":Effort " as N2<<Effort>> {
+	percentage = 100
+}
+object ":Task " as N3<<Task>> {
+	name = Design
+	start = 4
+	duration = 6
+}
+object ":Effort " as N4<<Effort>> {
+	percentage = 100
+}
+object ":Task " as N5<<Task>> {
+	name = Implementation
+	start = 7
+	duration = 3
+}
+object ":Effort " as N6<<Effort>> {
+	percentage = 50
+}
+object ":Effort " as N7<<Effort>> {
+	percentage = 50
+}
+object ":Person " as N8<<Person>> {
+	name = Alice
+}
+object ":Person " as N9<<Person>> {
+	name = Bob
+}
+
+
+N0 --> N1 
+
+N0 --> N3 
+
+N0 --> N5 
+
+N0 --> N8 
+
+N0 --> N9 
+
+N1 --> N2 
+
+N2 --> N8 
+
+N3 --> N4 
+
+N4 --> N9 
+
+N5 --> N6 
+
+N5 --> N7 
+
+N6 --> N9 
+
+N7 --> N8 
+
+
+
+skinparam note {
+    BackgroundColor<<_Pattern>> gold
+    BorderColor<<_Pattern>> #665600
+    BackgroundColor<<_Critique>> khaki
+    BorderColor<<_Critique>> #867B12
+    BackgroundColor<<_Constraint>> mistyrose
+    BorderColor<<_Constraint>> #C01300
+    BackgroundColor<<_Success>> TECHNOLOGY
+    BorderColor<<_Success>> #00B600
+    
+}
+
+skinparam object {
+	backgroundColor<<Project>> azure 
+	borderColor<<Project>> #00C6C6
+	backgroundColor<<Task>> beige 
+	borderColor<<Task>> #919129
+	backgroundColor<<Effort>> lemonchiffon 
+	borderColor<<Effort>> #B8A600
+	backgroundColor<<Person>> floralwhite 
+	borderColor<<Person>> #C68400
+}
+
+@enduml

@@ -1,0 +1,18 @@
+<?nsuri layers?>
+<_>
+    <layer name="Layer 2" above="Layer 1">
+        <node name="Component 1"/>
+        <node name="Component 2"/>
+        <node name="Component 3"/>
+    </layer>
+    <layer name="Layer 1" above="Layer 0" color="azure">
+        <node name="Component 4"/>
+        <node name="Component 5"/>
+        <node name="Component 6"/>
+    </layer>
+    <layer name="Layer 0" color="floralwhite">
+        <node name="Component 7"/>
+        <node name="Component 8"/>
+        <node name="Component 9"/>
+    </layer>
+</_>

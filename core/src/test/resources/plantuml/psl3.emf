@@ -1,0 +1,34 @@
+@namespace(uri="psl", prefix="")
+package psl;
+
+@node(label="name", contents="eol: self.people")
+class Project {
+	attr String name;
+	attr String description;
+	val Task[*] tasks;
+	@diagram(direction="right")
+	val Person[*] people;
+}
+
+@node(label="name", contents="eol: self.effort.person")
+class Task {
+	attr String name;
+	attr int start;
+	attr int duration;
+	@diagram(direction="right")
+	val Effort[*]#task effort;
+}
+
+@node(label="name", contents="eol: Task.all.select(t|t.effort.exists(e|e.person = self))")
+class Person {
+	attr String name;
+	@edge()
+	ref Person manager;
+}
+
+class Effort {
+    @diagram(direction="up")
+	ref Person person;
+	ref Task#effort task;
+	attr int percentage = 100;
+}

@@ -1,0 +1,29 @@
+package ccl;
+
+@node(label="name", shape="component")
+class Component {
+    attr String name;
+    @edge(direction="eol: item.isTypeOf(InPort) ? 'up' : 'down'", 
+        source.decoration="eol: item.isTypeOf(OutPort) ? 'none' : 'arrow'",
+        target.decoration="eol: item.isTypeOf(InPort) ? 'none' : 'arrow'")
+    val Port[*]#component ports;
+}
+
+@edge(label="eol:self.source.name + '→' + self.target.name", source="eol:self.source.eContainer()", target="eol:self.target.eContainer()", direction="down")
+class Connector {
+    @diagram(direction="up")
+    ref OutPort source;
+    @diagram(direction="up")
+    ref InPort target;
+}
+
+class InPort extends Port {}
+
+class OutPort extends Port {}
+
+@node(label="name", created="eol: not Connector.all.exists(c|c.source = self or c.target = self)")
+abstract class Port {
+    attr String name;
+    attr String type = "boolean";
+    ref Component#ports component;
+}

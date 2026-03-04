@@ -1,0 +1,11 @@
+<?nsuri filesystem?>
+<filesystem>
+    <drive name="C">
+        <folder name="My Documents">
+            <file name="image.bmp"/>
+        </folder>
+        <shortcut name="image.lnk" target="image.bmp"/>
+        <file name="synced.bmp"/>
+    </drive>
+    <sync source="synced.bmp" target="image.bmp"/>
+</filesystem>

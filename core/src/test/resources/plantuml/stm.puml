@@ -1,0 +1,64 @@
+@startuml
+allowmixing
+hide stereotypes
+skinparam roundCorner 3
+skinparam defaultFontName system-ui
+skinparam ArrowColor #7A7A7A
+
+
+
+
+rectangle "A" as n0 <<n0type>> 
+rectangle "B" as n1 <<n1type>> 
+rectangle "C" as n2 <<n2type>> 
+
+
+<style>
+
+._Pattern {
+    BackgroundColor gold
+    LineColor #665600
+}
+
+._Critique {
+    BackgroundColor khaki
+    LineColor #867B12    
+}
+
+._Constraint {
+    BackgroundColor mistyrose
+    LineColor #C01300
+}
+
+._Success {
+    BackgroundColor TECHNOLOGY
+    LineColor #00B600
+}
+
+.n0type {
+    LineColor #919129
+    BackgroundColor beige
+    
+}
+.n1type {
+    LineColor #919129
+    BackgroundColor beige
+    
+}
+.n2type {
+    LineColor #919129
+    BackgroundColor beige
+    
+}
+</style>
+
+n0 -down-> n1
+n1 -down-> n2
+n0 -down-> n0
+n2 -down-> n0
+
+
+
+
+@enduml
+

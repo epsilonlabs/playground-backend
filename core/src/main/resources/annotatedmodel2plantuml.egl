@@ -1,0 +1,284 @@
+[%import "shared.eol";%]
+[%import "model2plantuml.eol";%]
+@startuml
+allowmixing
+hide stereotypes
+skinparam roundCorner 3
+skinparam defaultFontName system-ui
+skinparam ArrowColor #7A7A7A
+
+[%M.supportedAnnotations = Set{"node", "edge", "text"};%]
+
+[%for (preamble in `@node`.all.includingAll(`@edge`.all).preamble.flatten().asOrderedSet().excluding(null).collect(p|p.split(",")).flatten().collect(p|p.trim()).asOrderedSet()){%]
+[%=preamble%]
+[%}%]
+
+[%
+var containedNodes = `@node`.all.select(n|n.contents.isDefined()).^^contents.flatten().asOrderedSet();
+var topLevelNodes = `@node`.all.excludingAll(containedNodes);
+%]
+
+[%for (n in topLevelNodes){%]
+[%=n.toPlantUml()%]
+[%}%]
+
+[%
+var createdNodes = `@node`.all.select(n|n.isCreated());
+var createdEdges = `@edge`.all.select(e|e.isCreated());
+%]
+
+<style>
+
+._Pattern {
+    BackgroundColor [%=getPatternColor()%]
+    LineColor [%=getPatternColor().darken()%]
+}
+
+._Critique {
+    BackgroundColor [%=getCritiqueColor()%]
+    LineColor [%=getCritiqueColor().darken()%]    
+}
+
+._Constraint {
+    BackgroundColor [%=getConstraintColor()%]
+    LineColor [%=getConstraintColor().darken()%]
+}
+
+._Success {
+    BackgroundColor [%="TECHNOLOGY"%]
+    LineColor [%="TECHNOLOGY".darken()%]
+}
+
+[%for (n in createdNodes){%]
+.[%=n.getNodeId()%]type {
+    LineColor [%=n.getLineColor()%]
+    BackgroundColor [%=n.getColor()%]
+    [%=n.getHorizontalAlignment() ?: ''%]
+    [%for (style in Sequence{"fontName", "fontColor", "fontSize", "fontStyle", "hyperlinkColor", "roundedCorner", "diagronalCorner", "lineThickness", "lineStyle", "padding", "margin", "maximumWidth", "shadowing", "hyperlinkUnderlineStyle", "hyperlinkUnderlineThickness"}){%]
+    [%var styleValue = M.propertyGetter.invoke(n, style, System.context);%]
+    [%if (styleValue.notWhitespace()){%]
+    [%=style%] [%=styleValue%]
+    [%}%]
+    [%}%]
+}
+[%}%]
+</style>
+
+[* I tried using stereotypes and styles for edges too but this caused PlantUML to fail. 
+See https://github.com/plantuml/plantuml/discussions/2570 *]
+[%for (e in createdEdges){%]
+[%if(e.needsEdgeNode()){%]
+circle " " as [%=e.getNodeId()%] #white
+[%=e.^source.getNodeId()%]-[%=e.getDecoration(true)%][%=e.getEdgeStyle()%]-[%=e.getNodeId()%]
+[%=e.getNodeId()%]-[%=e.getEdgeStyle()%]-[%=e.getDecoration(false)%][%=e.^target.getNodeId()%] [%if(e.label.isDefined() and e.^label.notWhitespace()){%]: [%=e.getWrappedLabel()%][%}%]
+
+[%}else{%]
+[%=e.^source.getNodeId()%] [%=e.getDecoration(true)%]-[%=e.getEdgeStyle()%]-[%=e.getDecoration(false)%] [%=e.^target.getNodeId()%] [%if(e.label.isDefined() and e.^label.notWhitespace()){%]: [%=e.getWrappedLabel()%][%}%]
+
+[%}%]
+[%}%]
+
+[%for (n in createdNodes){%]
+    [%for (f in n.`@edge`){%]
+    [%for (v in f.getValues()){
+        f.setItem(v);
+        if (f.created.isDefined() and f.created.asBoolean() == false) continue;
+        var source;
+        var target;
+        if (f.source.isDefined()) source = f.source;
+        else source = n;
+        if (f.target.isDefined()) target = f.target;
+        else target = v;
+    %]
+    [%if (target.isTypeOf(`@node`) and target.isCreated()){%]
+[%=source.getNodeId()%] [%=f.getDecoration(true)%]-[%=f.getEdgeStyle()%]-[%=f.getDecoration(false)%] [%=target.getNodeId()%] [%if(f.label.isDefined() and f.label.notWhitespace()){%]: [%=f.getWrappedLabel()%][%}%]
+
+    [%}%]
+    [%}%]
+    [%}%]
+[%}%]
+
+[*Generate validation nodes*]
+[%if (unsatisfiedConstraints.isDefined()){%]
+[%if(unsatisfiedConstraints.isEmpty()){%]
+note as NOUC<<_Success>>
+<U+2611> The model is valid.
+end note
+[%}%]
+[%for (uc in unsatisfiedConstraints){%]
+[%if(uc.getInstance().hasNode()){%]
+note top of [%=uc.getInstance().getNodeId()%]<<[%=uc.getConstraint().getConstraintStereotype()%]>>
+[%=uc.getConstraint().getConstraintIcon()%] [%=uc.getMessage()%]
+end note
+[%}else{%]
+note as UC[%=loopCount%]<<[%=uc.getConstraint().getConstraintStereotype()%]>>
+[%=uc.getConstraint().getConstraintIcon()%] [%=uc.getMessage()%]
+end note
+[%}%]
+[%}%]
+[%}%]
+
+[*Generate pattern nodes*]
+[%if (matches.isDefined()){%]
+[%for (match in matches){%]
+[%var matchNodeId = "match" + loopCount;%]
+note "[%=match.pattern.name%]" as [%=matchNodeId%]<<_Pattern>>
+
+[%for (key in match.roleBindings.keySet()){%]
+[%var values = match.roleBindings.get(key).asSequence();%]
+[%for (value in values.select(v|v.hasNode())){%]
+[%=matchNodeId%] .. [%=value.getNodeId()%]: [%=key%]
+[%if(loopCount=1 and not hasMore){%][%=matchNodeId%] .[hidden]. [%=value.getNodeId()%]: [%=key%][%}%][*TODO: Fix hack*]
+
+[%}%]
+[%}%]
+[%}%]
+[%}%]
+
+@enduml
+
+[%
+operation `@edge` getNodeId() {
+    return 'e' + `@edge`.all.indexOf(self);
+}
+
+operation `@edge` needsEdgeNode() {
+    if (unsatisfiedConstraints.isDefined()) {
+        return unsatisfiedConstraints.exists(uc|uc.instance = self);
+    }
+    if (matches.isDefined()) {
+        return matches.exists(m|m.roleBindings.values.flatten().includes(self));
+    }
+    return false;
+}
+
+operation `@node` getNodeId() {
+    return "n" + `@node`.all.indexOf(self);
+}
+
+operation `@node` getNodeShape() {
+    return self.shape ?: "rectangle";
+}
+
+operation Any hasNode() {
+    return createdNodes.includes(self) or createdEdges.includes(self);
+}
+
+operation Any notWhitespace() {
+    return self.isDefined() and self.toString().trim().size() > 0;
+}
+
+operation Any getEdgeStyle() {
+    var styles : Sequence;
+
+    if (self.visible.isDefined() and self.visible.asBoolean() == false) styles.add("hidden");
+    if (self.color.isDefined()) styles.add("#" + self.color);
+    if (self.pattern.isDefined()) styles.add(self.pattern);
+    if (self.thickness.isDefined()) styles.add("thickness=" + self.thickness);
+
+    var direction = self.direction;
+    if (direction.isUndefined()) {
+        if (M.owns(self)) {
+            direction = "right";
+        }
+        else {
+            direction = self.getEStructuralFeature().isContainment() ? "down" : "right";
+        }
+    }
+
+    var style;
+    if (styles.notEmpty()) style = "[" + styles.concat(",") + "]";
+    return style + direction;
+}
+
+operation Any getDecoration(source : Boolean) : String {
+    var decoration = source ? self.`source.decoration` : self.`target.decoration`;
+    if (decoration == "none") return "";
+    else if (decoration == "rhomb") return "o";
+    else if (decoration == "arrow") return source ? "<" : ">";
+    else if (decoration == "arrow.filled") return source ? "<" : ">";
+    else if (decoration == "arrow.empty") return "^";
+    else if (decoration == "diamond") return "*";
+    else if (decoration == "diamond.empty") return "o";
+    else return source ? "" : ">";
+}
+
+operation `@node` getColor() {
+    if (self.color.isDefined()) return self.color;
+    else if (self.image.isDefined()) return "white";
+    else return self.eClass().getColor();
+}
+
+operation `@node` getLineColor() {
+    if (self.`line.color`.isDefined()) return self.`line.color`;
+    else if (self.image.isDefined()) return "white";
+    else return self.getColor().darken();
+}
+
+operation `@node` getHorizontalAlignment() {
+    if (self.halign.isDefined()) return "HorizontalAlignment " + self.halign;
+    else if (self.image.isDefined()) return "HorizontalAlignment center";
+    else return null;
+}
+
+operation `@node` skinParam(param : String, value : Any) {
+    if (value.isDefined()) return param + " " + value;
+    else return "";
+}
+
+operation `@node` isCreated() {
+    if (self.~created.isDefined()) return self.~created;
+    else return false;
+}
+
+@cached
+operation `@edge` isCreated() {
+    var created = self.created;
+    if (created.isDefined()) created = created.asBoolean();
+    else created = true;
+    return created and self.^source.isCreated() and self.^target.isCreated();
+}
+
+// Fallback for unannotated elements and @text elements
+operation Any isCreated() {
+    return false;
+}
+
+operation `@text` toPlantUml() {
+    return self.^label;
+}
+
+operation Any getWrappedLabel() {
+    var label;
+    if (M.owns(self)) label = self.^label;
+    else label = self.label;
+    
+    if (not (self.wrap.isDefined() and not self.wrap.asBoolean())) {
+        var wrapLength = self.wrapLength.isDefined() ? self.wrapLength.asInteger() : 30;
+        label = label.wrap(wrapLength);
+    }
+    
+    return label;
+}
+
+@template
+operation `@node` toPlantUml() {
+    var created = self.created;
+    if (created.isUndefined() or created.asString() == "true") self.~created = true;
+    else return "";
+    var nodeId = self.getNodeId();
+    if (not self.~instances.isDefined()) {
+        self.~instances = 1;
+    }
+    else {
+        nodeId = nodeId + "_" + self.~instances;
+        self.~instances = self.~instances + 1;
+    }
+%]
+[%=self.getNodeShape()%] "[%=self.image.isDefined() ? ("<img:" + self.image + ">\\n") : ""%][%=self.^label.isDefined() ? self.getWrappedLabel() : ' '%]" as [%=nodeId%] <<[%=self.getNodeId()%]type>> [%if(self.contents.isDefined() and self.~instances == 1){%] {
+    [%for(content in self.^^contents.select(c|c.isTypeOf(`@node`) or c.isTypeOf(`@text`))){%]
+    [%=content.toPlantUml()%]
+    [%}%]
+} [%}%]
+
+[%}%]

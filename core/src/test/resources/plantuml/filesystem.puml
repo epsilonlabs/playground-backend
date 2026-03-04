@@ -1,0 +1,76 @@
+@startuml
+allowmixing
+hide stereotypes
+skinparam roundCorner 3
+skinparam defaultFontName system-ui
+skinparam ArrowColor #7A7A7A
+
+
+
+
+rectangle "C" as n0 <<n0type>>  {
+    rectangle "My Documents" as n1 <<n1type>>  {
+        rectangle "image.bmp" as n2 <<n2type>> 
+    } 
+    node "image.lnk" as n3 <<n3type>> 
+    rectangle "synced.bmp" as n4 <<n4type>> 
+} 
+
+
+<style>
+
+._Pattern {
+    BackgroundColor gold
+    LineColor #665600
+}
+
+._Critique {
+    BackgroundColor khaki
+    LineColor #867B12    
+}
+
+._Constraint {
+    BackgroundColor mistyrose
+    LineColor #C01300
+}
+
+._Success {
+    BackgroundColor TECHNOLOGY
+    LineColor #00B600
+}
+
+.n0type {
+    LineColor #00C6C6
+    BackgroundColor azure
+    
+}
+.n1type {
+    LineColor #00C6C6
+    BackgroundColor azure
+    
+}
+.n2type {
+    LineColor #00C6C6
+    BackgroundColor azure
+    
+}
+.n3type {
+    LineColor #00C6C6
+    BackgroundColor azure
+    
+}
+.n4type {
+    LineColor #00C6C6
+    BackgroundColor azure
+    
+}
+</style>
+
+n4 -[#green]right-> n2
+
+n3 -[#red]right-> n2: sync
+
+
+
+@enduml
+

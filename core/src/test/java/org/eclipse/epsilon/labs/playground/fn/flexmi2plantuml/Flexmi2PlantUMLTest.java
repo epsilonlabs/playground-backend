@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.eclipse.epsilon.labs.playground.fn.ModelDiagramResponse;
+import org.eclipse.epsilon.labs.playground.fn.PlaygroundTest;
 import org.junit.jupiter.api.Test;
 
 import com.google.common.net.HttpHeaders;
@@ -16,9 +17,13 @@ import io.micronaut.http.client.annotation.Client;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 @MicronautTest
-public class Flexmi2PlantUMLTest {
-    
+public class Flexmi2PlantUMLTest extends PlaygroundTest {
+
     @Inject
     Flexmi2PlantUMLClient client;
 
@@ -29,9 +34,9 @@ public class Flexmi2PlantUMLTest {
     @Test
     public void corsPreflight() {
         var request = HttpRequest
-            .OPTIONS("/")
-            .header(HttpHeaders.ORIGIN, "http://localhost:1234")
-            .header(HttpHeaders.ACCESS_CONTROL_REQUEST_METHOD, "POST");
+                .OPTIONS("/")
+                .header(HttpHeaders.ORIGIN, "http://localhost:1234")
+                .header(HttpHeaders.ACCESS_CONTROL_REQUEST_METHOD, "POST");
 
         var response = rawClient.toBlocking().exchange(request);
         assertEquals(HttpStatus.OK, response.getStatus());
@@ -50,15 +55,102 @@ public class Flexmi2PlantUMLTest {
     }
 
     @Test
+    public void ccl() throws Exception {
+        process("ccl.emf", "ccl.flexmi", "ccl.puml");
+    }
+
+    @Test
+    public void dml() throws Exception {
+        process("dml.emf", "dml.flexmi", "dml.puml");
+    }
+
+    @Test
+    public void stm() throws Exception {
+        process("stm.emf", "stm.flexmi", "stm.puml");
+    }
+
+    @Test
+    public void filesystem() throws Exception {
+        process("filesystem.emf", "filesystem.flexmi", "filesystem.puml");
+    }
+    
+    @Test
+    public void psl() throws Exception {
+        process("psl.emf", "psl.flexmi", "psl.puml");
+    }
+
+    @Test
+    public void psl2() throws Exception {
+        process("psl2.emf", "psl2.flexmi", "psl2.puml");
+    }
+
+    @Test
+    public void psl3() throws Exception {
+        process("psl3.emf", "psl3.flexmi", "psl3.puml");
+    }
+
+    @Test
+    public void psl2Uppercase() throws Exception {
+        process("psl2-uppercase.emf", "psl2.flexmi", "psl2.puml");
+    }
+
+    @Test
+    public void languages() throws Exception {
+        process("languages.emf", "languages.flexmi", "languages.puml");
+    }
+
+    @Test
+    public void layers() throws Exception {
+        process("layers.emf", "layers.flexmi", "layers.puml");
+    }
+    
+    @Test
+    public void callcentre() throws Exception {
+        process("callcentre.emf", "callcentre.flexmi", "callcentre.puml");
+    }
+    
+    @Test
     public void eglTemplate() {
         var req = new Flexmi2PlantUMLRequest();
         req.setFlexmi("<_><foo/><:template name=\"foo\"><content language=\"EGL\"></content></:template></_>");
         req.setEmfatic("");
-        
+
         ModelDiagramResponse result = client.convert(req);
         assertNull(result.getError());
         assertNull(result.getOutput());
         assertNotNull(result.getModelDiagram());
+    }
+    
+    @Test
+    public void graphicalSyntaxAnnotationValidation() throws Exception {
+        var req = new Flexmi2PlantUMLRequest();
+
+        req.setEmfatic(getResourceAsString("/plantuml/graph.emf"));
+        req.setFlexmi("<_/>");
+
+        ModelDiagramResponse result = client.convert(req);
+        assertEquals(getResourceAsString("/plantuml/graph-failed-constraints.txt"), result.getError());
+        assertNull(result.getOutput());
+        assertNull(result.getModelDiagram());
+        assertNull(result.getModelDiagramSource());
+    }
+    
+    public void process(String emfatic, String flexmi, String puml) throws Exception {
+        var req = new Flexmi2PlantUMLRequest();
+
+        req.setEmfatic(getResourceAsString("/plantuml/" + emfatic));
+        req.setFlexmi(getResourceAsString("/plantuml/" + flexmi));
+
+        ModelDiagramResponse result = client.convert(req);
+        
+        Path path = Path.of("src/test/resources/plantuml/actual/" + puml);
+        Files.createDirectories(path.getParent());
+        
+        assertNull(result.getError());
+        Files.writeString(path, result.getModelDiagramSource(), StandardCharsets.UTF_8);
+        assertNull(result.getOutput());
+        assertNotNull(result.getModelDiagram());
+        assertEquals(getResourceAsString("/plantuml/" + puml), result.getModelDiagramSource());
     }
 
 }

@@ -1,0 +1,42 @@
+@namespace(uri="graph", prefix="")
+package graph;
+
+@node(contents="foo")
+class Graph {
+    val Node[*] nodes;
+    val Edge[*] edges;
+}
+
+@node(contents="nodes, foo")
+class Graph1 extends Graph {}
+
+@node(contents="foo, nodes")
+class Graph2 extends Graph {}
+
+@node
+class Node {
+    attr String name;
+    @edge(visible="foo", direction="foo", source.decoration="foo", target.decoration="foo")
+    ref Node pointer;
+}
+
+@node(label="foo", visible="foo")
+class Node1 extends Node {
+    
+}
+
+@edge
+class Edge {
+    attr String name;
+}
+
+@edge(label="foo", source="foo", target="foo", visible="foo", direction="foo", source.decoration="foo", target.decoration="foo")
+class Edge1 extends Edge {
+
+}
+
+@edge(source="nodes1", target="nodes2")
+class Edge2 extends Edge {
+    ref Node[*] nodes1;
+    ref Node[*] nodes2;
+}

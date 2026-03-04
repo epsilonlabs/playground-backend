@@ -12,6 +12,8 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.emf.emfatic.core.EmfaticResource;
 import org.eclipse.epsilon.emc.emf.InMemoryEmfModel;
 import org.eclipse.epsilon.emc.json.JsonModel;
+import org.eclipse.epsilon.eol.EolModule;
+import org.eclipse.epsilon.eol.models.Model;
 import org.eclipse.epsilon.flexmi.FlexmiResourceFactory;
 
 import jakarta.inject.Singleton;
@@ -23,7 +25,7 @@ public class ModelLoader {
 		InMemoryEmfModel model = new InMemoryEmfModel(getEPackage(emfatic).eResource());
 		model.setName("M");
 		return model;
-	}    
+	}
 
     public InMemoryEmfModel getInMemoryFlexmiModel(String flexmi, String emfatic) throws Exception {
         ResourceSet resourceSet = new ResourceSetImpl();
@@ -35,11 +37,19 @@ public class ModelLoader {
         Resource resource = resourceSet.createResource(URI.createFileURI("/flexmi.flexmi"));
         resource.load(new ByteArrayInputStream(flexmi.getBytes()), null);
 
-        InMemoryEmfModel model = new InMemoryEmfModel(resource);
+        InMemoryEmfModel model = isAnnotated(emfatic) ? new AnnotatableInMemoryEmfModel(resource) : new InMemoryEmfModel(resource);
         model.setName("M");
         return model;
     }
-    
+
+    public boolean isAnnotated(String emfatic) throws Exception {
+        Model emfaticModel = getInMemoryEmfaticModel(emfatic);
+        EolModule checker = new EolModule();
+        checker.parse("return EClass.all.exists(c|c.eAnnotations.exists(a|a.source.equalsIgnoreCase('node') or a.source.equalsIgnoreCase('edge')));");
+        checker.getContext().getModelRepository().addModel(emfaticModel);
+        return (Boolean) checker.execute();
+    }
+
     public InMemoryEmfModel getInMemoryXmiModel(String xmi, String emfatic) throws Exception {
         ResourceSet resourceSet = new ResourceSetImpl();
         EPackage ePackage = getEPackage(emfatic);
@@ -48,7 +58,7 @@ public class ModelLoader {
         Resource resource = resourceSet.createResource(URI.createURI("xmi.xmi"));
         resource.load(new ByteArrayInputStream(xmi.getBytes()), null);
 
-        InMemoryEmfModel model = new InMemoryEmfModel(resource);
+        InMemoryEmfModel model = isAnnotated(emfatic) ? new AnnotatableInMemoryEmfModel(resource) : new InMemoryEmfModel(resource);
         model.setName("M");
         return model;
     }
@@ -60,8 +70,8 @@ public class ModelLoader {
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
 		Resource resource = resourceSet.createResource(URI.createURI("xmi.xmi"));
 
-		InMemoryEmfModel model = new InMemoryEmfModel(resource);
-		model.setName("M");
+        InMemoryEmfModel model = isAnnotated(emfatic) ? new AnnotatableInMemoryEmfModel(resource) : new InMemoryEmfModel(resource);
+        model.setName("M");
 		return model;
 	}
 

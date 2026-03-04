@@ -1,0 +1,31 @@
+@diagram(monochrome="true")
+package dml;
+
+class DomainModel {
+	val Type[*] types;
+}
+
+class Type {
+	attr String name;
+}
+
+class DataType extends Type {
+}
+
+@node(shape="class", label="name", contents="features", preamble="hide circle, hide methods")
+@diagram(inheritance.direction="up")
+class Entity extends Type {
+	ref Entity superType;
+	attr String doc;
+    @edge(target="eol:item.type", label="eol:item.many ? '*' : ''", direction="eol: item.direction")
+	@diagram(direction="up")
+    val Feature[*] features;
+}
+
+@text(label="eol: self.name + ':' + self.type.name + (self.many ? '[*]' : '')")
+class Feature {
+	attr boolean many;
+	attr String name;
+	ref Type type;
+	attr String direction = "right";
+}
