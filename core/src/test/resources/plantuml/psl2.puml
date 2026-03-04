@@ -83,7 +83,7 @@ n5 -[thickness=10]down-> n2
 n5 -[thickness=5]down-> n3: 50%
 n4 -[thickness=5]down-> n3: 50%
 
-n2 -[#red,dashed,thickness=2]right-> n4: leads
+n2 -[#red,dashed,thickness=2]down-> n4: leads
 
 
 

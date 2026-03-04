@@ -82,7 +82,7 @@ rectangle "ACME" as n0 <<n0type>>  {
 </style>
 
 
-n5 -right-> n4
+n5 -down-> n4
 
 
 

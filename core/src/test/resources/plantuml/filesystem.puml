@@ -66,9 +66,9 @@ rectangle "C" as n0 <<n0type>>  {
 }
 </style>
 
-n4 -[#green]right-> n2
+n4 -[#green]down-> n2
 
-n3 -[#red]right-> n2: sync
+n3 -[#red]down-> n2: sync
 
 
 
