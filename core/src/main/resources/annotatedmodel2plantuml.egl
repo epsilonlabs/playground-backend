@@ -187,7 +187,7 @@ operation Any getEdgeStyle() {
 }
 
 operation Any getDecoration(source : Boolean) : String {
-    var decoration = source ? self.`source.decoration` : self.`target.decoration`;
+    var decoration = source ? self.sourceDecoration : self.targetDecoration;
     if (decoration == "none") return "";
     else if (decoration == "rhomb") return "o";
     else if (decoration == "arrow") return source ? "<" : ">";

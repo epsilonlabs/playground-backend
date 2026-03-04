@@ -4,8 +4,8 @@ package ccl;
 class Component {
     attr String name;
     @edge(direction="eol: item.isTypeOf(InPort) ? 'up' : 'down'", 
-        source.decoration="eol: item.isTypeOf(OutPort) ? 'none' : 'arrow'",
-        target.decoration="eol: item.isTypeOf(InPort) ? 'none' : 'arrow'")
+        sourceDecoration="eol: item.isTypeOf(OutPort) ? 'none' : 'arrow'",
+        targetDecoration="eol: item.isTypeOf(InPort) ? 'none' : 'arrow'")
     val Port[*]#component ports;
 }
 

@@ -75,15 +75,15 @@ context EAnnotation {
     }
     
     constraint SourceDecoration {
-        guard: self.getDetail("source.decoration").isDefined()
-        check: self.isValidDetail("source.decoration", edgeDecorations)
-        message: "Invalid value '" + self.getDetail("source.decoration") + "' for the source decoration of edge " + self.getClassOrReferenceName()
+        guard: self.getDetail("sourceDecoration").isDefined()
+        check: self.isValidDetail("sourceDecoration", edgeDecorations)
+        message: "Invalid value '" + self.getDetail("sourceDecoration") + "' for the source decoration of edge " + self.getClassOrReferenceName()
     }
     
     constraint TargetDecoration {
-        guard: self.getDetail("target.decoration").isDefined()
-        check: self.isValidDetail("target.decoration", edgeDecorations)
-        message: "Invalid value '" + self.getDetail("target.decoration") + "' for the target decoration of edge " + self.getClassOrReferenceName()
+        guard: self.getDetail("targetDecoration").isDefined()
+        check: self.isValidDetail("targetDecoration", edgeDecorations)
+        message: "Invalid value '" + self.getDetail("targetDecoration") + "' for the target decoration of edge " + self.getClassOrReferenceName()
     }
     
     constraint Visible {

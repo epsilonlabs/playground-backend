@@ -16,7 +16,7 @@ class Graph2 extends Graph {}
 @node
 class Node {
     attr String name;
-    @edge(visible="foo", direction="foo", source.decoration="foo", target.decoration="foo")
+    @edge(visible="foo", direction="foo", sourceDecoration="foo", targetDecoration="foo")
     ref Node pointer;
 }
 
@@ -30,7 +30,7 @@ class Edge {
     attr String name;
 }
 
-@edge(label="foo", source="foo", target="foo", visible="foo", direction="foo", source.decoration="foo", target.decoration="foo")
+@edge(label="foo", source="foo", target="foo", visible="foo", direction="foo", sourceDecoration="foo", targetDecoration="foo")
 class Edge1 extends Edge {
 
 }
