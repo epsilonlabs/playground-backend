@@ -16,6 +16,6 @@ operation Any getConstraintStereotype() {
 }
 
 operation Any getConstraintIcon() {
-	if (self.isCritique()) return "<U+26A0>";
-	else return "<U+24E7>";
+	if (self.isCritique()) return "⚠";
+	else return "ⓧ";
 }

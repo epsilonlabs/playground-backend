@@ -30,4 +30,8 @@ public class PlantUMLOperationContributor extends OperationContributor  {
     public String wrap(int n) {
         return WordUtils.wrap(getTarget() + "", n , "\\n", false);
     }
+
+    public String wrap(int n, String newLineStr) {
+        return WordUtils.wrap(getTarget() + "", n , newLineStr, false);
+    }
 }

@@ -42,11 +42,11 @@ end note
 [%for (uc in unsatisfiedConstraints){%]
 [%if(elements.includes(uc.instance)){%]
 note top of [%=uc.getInstance().getNodeId()%]<<[%=uc.getConstraint().getConstraintStereotype()%]>>
-[%=uc.getConstraint().getConstraintIcon()%] [%=uc.getMessage()%]
+[%=(uc.getConstraint().getConstraintIcon() + " " + uc.getMessage()).wrap(30, "\n")%]
 end note
 [%}else{%]
 note as UC[%=loopCount%]<<[%=uc.getConstraint().getConstraintStereotype()%]>>
-[%=uc.getConstraint().getConstraintIcon()%] [%=uc.getMessage()%]
+[%=(uc.getConstraint().getConstraintIcon() + " " + uc.getMessage()).wrap(30, "\n")%]
 end note
 [%}%]
 [%}%]
