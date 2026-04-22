@@ -108,6 +108,11 @@ public class Flexmi2PlantUMLTest extends PlaygroundTest {
     public void callcentre() throws Exception {
         process("callcentre.emf", "callcentre.flexmi", "callcentre.puml");
     }
+
+    @Test
+    public void callcentreWithDanglingTransitions() throws Exception {
+        process("callcentre.emf", "callcentre-dangling-transitions.flexmi", "callcentre-dangling-transitions.puml");
+    }
     
     @Test
     public void eglTemplate() {

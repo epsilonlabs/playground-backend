@@ -1,0 +1,9 @@
+<?nsuri callcentre?>
+<model name="AcmeBank">
+  <statement name="WelcomeStatement" text="Welcome to Acme Bank"/>
+  <decision name="ExistingCustomerDecision" text="Are you an existing customer?"/>
+  <transitions from="WelcomeStatement" to="ExistingCustomerDecision"/>
+  <transitions from="WelcomeStatement" to="nothing"/>
+  <transitions from="nothing" to="ExistingCustomerDecision"/>
+  <transitions from="nothing" to="nothing"/>    
+</model>

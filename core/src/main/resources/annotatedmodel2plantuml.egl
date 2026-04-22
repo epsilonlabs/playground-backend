@@ -231,7 +231,7 @@ operation `@edge` isCreated() {
     var created = self.created;
     if (created.isDefined()) created = created.asBoolean();
     else created = true;
-    return created and self.^source.isCreated() and self.^target.isCreated();
+    return created and self.^source.isDefined() and self.^source.isCreated() and self.^target.isDefined() and self.^target.isCreated();
 }
 
 // Fallback for unannotated elements and @text elements
