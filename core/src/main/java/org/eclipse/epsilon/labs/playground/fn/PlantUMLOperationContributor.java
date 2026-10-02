@@ -1,8 +1,8 @@
 package org.eclipse.epsilon.labs.playground.fn;
 
-import net.sourceforge.plantuml.klimt.color.ColorMapper;
 import net.sourceforge.plantuml.klimt.color.HColor;
 import net.sourceforge.plantuml.klimt.color.HColorSet;
+import net.sourceforge.plantuml.klimt.color.NoSuchColorException;
 import org.apache.commons.text.WordUtils;
 import org.eclipse.epsilon.eol.execute.operations.contributors.OperationContributor;
 
@@ -27,6 +27,18 @@ public class PlantUMLOperationContributor extends OperationContributor  {
         return color.asString();
     }
     
+    /**
+     * Converts a PlantUML color (e.g. "azure", "FFE45D" or "#FFE45D") to a CSS hex color.
+     * Colors unknown to PlantUML are returned as-is, as they may still be valid CSS colors.
+     */
+    public String toCssColor() {
+        try {
+            return HColorSet.instance().getColor(getTarget() + "").asString();
+        } catch (NoSuchColorException e) {
+            return getTarget() + "";
+        }
+    }
+
     public String wrap(int n) {
         return WordUtils.wrap(getTarget() + "", n , "\\n", false);
     }

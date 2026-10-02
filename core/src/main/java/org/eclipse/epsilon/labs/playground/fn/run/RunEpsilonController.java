@@ -146,7 +146,7 @@ public class RunEpsilonController {
         model.setName("M");
         module.getContext().getModelRepository().addModel(model);
         module.execute();
-		response.setTargetModelDiagram(renderer.generateModelDiagram(model).getModelDiagram());
+		setTargetModelDiagram(request, response, model);
     }
 
 	protected void runPinset(PinsetModule module, RunEpsilonRequest request, EpsilonExecutionResponse response) throws Exception {
@@ -208,7 +208,7 @@ public class RunEpsilonController {
 
 		module.execute();
 
-		response.setTargetModelDiagram(renderer.generateModelDiagram(mergedModel).getModelDiagram());
+		setTargetModelDiagram(request, response, mergedModel);
 	}
 
 	protected void runEtl(EtlModule module, RunEpsilonRequest request, EpsilonExecutionResponse response)
@@ -223,7 +223,7 @@ public class RunEpsilonController {
 
 		module.execute();
 
-		response.setTargetModelDiagram(renderer.generateModelDiagram(targetModel).getModelDiagram());
+		setTargetModelDiagram(request, response, targetModel);
 	}
 
 	protected void runFlock(FlockModule module, RunEpsilonRequest request, EpsilonExecutionResponse response)
@@ -242,7 +242,7 @@ public class RunEpsilonController {
 
 		module.execute();
 
-		response.setTargetModelDiagram(renderer.generateModelDiagram(migratedModel).getModelDiagram());
+		setTargetModelDiagram(request, response, migratedModel);
 	}
 
 	protected void runEvl(EvlModule module, RunEpsilonRequest request, EpsilonExecutionResponse response)
@@ -252,11 +252,15 @@ public class RunEpsilonController {
 		module.getContext().getModelRepository().addModel(model);
 		module.execute();
 
-		ModelDiagramResponse modelDiagramResponse = renderer.generateModelDiagram(model,
-						Variable.createReadOnlyVariable("unsatisfiedConstraints",
-								module.getContext().getUnsatisfiedConstraints()));
-		response.setValidatedModelDiagram(modelDiagramResponse.getModelDiagram());
-		response.setValidatedModelDiagramSource(modelDiagramResponse.getModelDiagramSource());
+		Variable unsatisfiedConstraints = Variable.createReadOnlyVariable("unsatisfiedConstraints",
+				module.getContext().getUnsatisfiedConstraints());
+		if (request.usesGraphDiagramFormat()) {
+			response.setModelGraph(renderer.generateModelGraph(model, unsatisfiedConstraints));
+		} else {
+			ModelDiagramResponse modelDiagramResponse = renderer.generateModelDiagram(model, unsatisfiedConstraints);
+			response.setValidatedModelDiagram(modelDiagramResponse.getModelDiagram());
+			response.setValidatedModelDiagramSource(modelDiagramResponse.getModelDiagramSource());
+		}
 	}
 
 	protected void runEpl(EplModule module, RunEpsilonRequest request, EpsilonExecutionResponse response)
@@ -266,11 +270,15 @@ public class RunEpsilonController {
 		module.getContext().getModelRepository().addModel(model);
 		module.execute();
 
-		ModelDiagramResponse modelDiagramResponse = renderer.generateModelDiagram(model,
-				Variable.createReadOnlyVariable("matches",
-						module.getContext().getPatternMatchTrace().getMatches()));
-		response.setPatternMatchedModelDiagram(modelDiagramResponse.getModelDiagram());
-		response.setPatternMatchedModelDiagramSource(modelDiagramResponse.getModelDiagramSource());
+		Variable matches = Variable.createReadOnlyVariable("matches",
+				module.getContext().getPatternMatchTrace().getMatches());
+		if (request.usesGraphDiagramFormat()) {
+			response.setModelGraph(renderer.generateModelGraph(model, matches));
+		} else {
+			ModelDiagramResponse modelDiagramResponse = renderer.generateModelDiagram(model, matches);
+			response.setPatternMatchedModelDiagram(modelDiagramResponse.getModelDiagram());
+			response.setPatternMatchedModelDiagramSource(modelDiagramResponse.getModelDiagramSource());
+		}
 	}
 
 	protected void runEgl(IEglModule module, RunEpsilonRequest request, EpsilonExecutionResponse response)
@@ -310,6 +318,14 @@ public class RunEpsilonController {
 		model.setName("M");
 		module.getContext().getModelRepository().addModel(model);
 		module.execute();
+	}
+
+	protected void setTargetModelDiagram(RunEpsilonRequest request, EpsilonExecutionResponse response, Model model) throws Exception {
+		if (request.usesGraphDiagramFormat()) {
+			response.setModelGraph(renderer.generateModelGraph(model));
+		} else {
+			response.setTargetModelDiagram(renderer.generateModelDiagram(model).getModelDiagram());
+		}
 	}
 
 	protected Model getFirstModel(RunEpsilonRequest request) throws Exception {

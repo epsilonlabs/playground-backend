@@ -1,0 +1,227 @@
+// Produces a JSON-ready graph of a model whose metamodel has graphical syntax annotations.
+// This is the graph counterpart of annotatedmodel2plantuml.egl.
+import "shared.eol";
+import "model2plantuml.eol";
+import "graph.eol";
+
+M.supportedAnnotations = Set{"node", "edge", "text"};
+
+var graph = newGraph();
+
+var preambles = `@node`.all.includingAll(`@edge`.all).preamble.flatten().asOrderedSet().excluding(null)
+	.collect(p|p.split(",")).flatten().collect(p|p.trim()).asOrderedSet();
+if (preambles.exists(p|p.toLowerCase() == "left to right direction")) {
+	graph.put("direction", "RIGHT");
+}
+
+var containedNodes = `@node`.all.select(n|n.contents.isDefined()).^^contents.flatten().asOrderedSet();
+var topLevelNodes = `@node`.all.excludingAll(containedNodes);
+
+for (n in topLevelNodes) {
+	n.addGraphNode(null);
+}
+
+var createdNodes = `@node`.all.select(n|n.isCreated());
+var createdEdges = `@edge`.all.select(e|e.isCreated());
+
+for (e in createdEdges) {
+	var source = e.^source.getNodeId();
+	var target = e.^target.getNodeId();
+	if (e.needsEdgeNode()) {
+		// Route the edge through a junction node, so that notes can be attached to it
+		graph.addNode(e.getNodeId(), "junction");
+		var first = graph.addEdge(source, e.getNodeId());
+		e.setGraphEdgeAttributes(first);
+		first.put("targetDecoration", "none");
+		first.remove("label");
+		var second = graph.addEdge(e.getNodeId(), target);
+		e.setGraphEdgeAttributes(second);
+		second.put("sourceDecoration", "none");
+	}
+	else {
+		e.setGraphEdgeAttributes(graph.addEdge(source, target));
+	}
+}
+
+for (n in createdNodes) {
+	for (f in n.`@edge`) {
+		for (v in f.getValues()) {
+			f.setItem(v);
+			if (f.created.isDefined() and f.created.asBoolean() == false) continue;
+			var source;
+			var target;
+			if (f.source.isDefined()) source = f.source;
+			else source = n;
+			if (f.target.isDefined()) target = f.target;
+			else target = v;
+			if (target.isTypeOf(`@node`) and target.isCreated() and source.isTypeOf(`@node`) and source.isCreated()) {
+				f.setGraphEdgeAttributes(graph.addEdge(source.getNodeId(), target.getNodeId()));
+			}
+		}
+	}
+}
+
+graph.addValidationNotes();
+graph.addPatternNotes();
+
+return graph;
+
+operation `@edge` getNodeId() {
+	return 'e' + `@edge`.all.indexOf(self);
+}
+
+operation `@edge` needsEdgeNode() {
+	if (unsatisfiedConstraints.isDefined()) {
+		return unsatisfiedConstraints.exists(uc|uc.instance = self);
+	}
+	if (matches.isDefined()) {
+		return matches.exists(m|m.roleBindings.values.flatten().includes(self));
+	}
+	return false;
+}
+
+operation `@node` getNodeId() {
+	return "n" + `@node`.all.indexOf(self);
+}
+
+operation `@node` getNodeShape() {
+	return self.shape ?: "rectangle";
+}
+
+operation Any hasGraphNode() {
+	return createdNodes.includes(self) or createdEdges.includes(self);
+}
+
+operation Any notWhitespace() {
+	return self.isDefined() and self.toString().trim().size() > 0;
+}
+
+// Sets the label, decorations, direction and style of an edge
+// from the @edge annotation of a class or a reference
+operation Any setGraphEdgeAttributes(edge : Map) {
+	var label = self.getGraphLabel();
+	if (label.isDefined() and label.notWhitespace()) edge.put("label", label);
+
+	edge.put("sourceDecoration", self.getGraphDecoration(true));
+	edge.put("targetDecoration", self.getGraphDecoration(false));
+	edge.put("direction", self.direction.isDefined() ? self.direction + "" : "down");
+
+	if (self.visible.isDefined() and self.visible.asBoolean() == false) edge.put("hidden", true);
+
+	var style = Map{};
+	if (self.color.isDefined()) style.put("color", (self.color + "").toCssColor());
+	if (self.pattern.isDefined()) style.put("pattern", self.pattern + "");
+	if (self.thickness.isDefined()) style.put("thickness", self.thickness.asInteger());
+	if (not style.isEmpty()) edge.put("style", style);
+}
+
+operation Any getGraphDecoration(source : Boolean) : String {
+	var decoration = source ? self.sourceDecoration : self.targetDecoration;
+	switch (decoration) {
+		case "none": return "none";
+		case "arrow": return "arrow";
+		case "arrow.filled": return "arrow";
+		case "arrow.empty": return "arrow.empty";
+		case "diamond": return "diamond";
+		case "diamond.empty": return "diamond.empty";
+		case "rhomb": return "diamond.empty";
+		default: return source ? "none" : "arrow";
+	}
+}
+
+operation `@node` getColor() {
+	if (self.color.isDefined()) return self.color;
+	else if (self.image.isDefined()) return "white";
+	else return self.eClass().getColor();
+}
+
+operation `@node` getLineColor() {
+	if (self.`line.color`.isDefined()) return self.`line.color`;
+	else if (self.lineColor.isDefined()) return self.lineColor;
+	else if (self.image.isDefined()) return "white";
+	else return self.getColor().darken();
+}
+
+operation `@node` getGraphStyle() : Map {
+	var style = Map{"backgroundColor" = (self.getColor() + "").toCssColor(), "borderColor" = (self.getLineColor() + "").toCssColor()};
+
+	if (self.halign.isDefined()) style.put("halign", self.halign + "");
+	else if (self.image.isDefined()) style.put("halign", "center");
+
+	for (name in Sequence{"fontName", "fontColor", "fontSize", "fontStyle", "hyperlinkColor", "roundCorner", "diagonalCorner", "lineThickness", "lineStyle", "padding", "margin", "maximumWidth", "shadowing"}) {
+		var value = M.propertyGetter.invoke(self, name, System.context);
+		if (value.notWhitespace()) {
+			value = value + "";
+			if (name.endsWith("Color")) value = value.toCssColor();
+			style.put(name, value);
+		}
+	}
+	return style;
+}
+
+operation `@node` isCreated() {
+	if (self.~created.isDefined()) return self.~created;
+	else return false;
+}
+
+@cached
+operation `@edge` isCreated() {
+	var created = self.created;
+	if (created.isDefined()) created = created.asBoolean();
+	else created = true;
+	return created and self.^source.isDefined() and self.^source.isCreated() and self.^target.isDefined() and self.^target.isCreated();
+}
+
+// Fallback for unannotated elements and @text elements
+operation Any isCreated() {
+	return false;
+}
+
+operation Any getGraphLabel() {
+	var label;
+	if (M.owns(self)) label = self.^label;
+	else label = self.label;
+
+	if (label.isUndefined()) return null;
+	label = label + "";
+
+	if (not (self.wrap.isDefined() and not self.wrap.asBoolean())) {
+		var wrapLength = self.wrapLength.isDefined() ? self.wrapLength.asInteger() : 30;
+		label = label.wrap(wrapLength, "\n");
+	}
+
+	return label;
+}
+
+// Adds a node for this element (and the nodes and text of its contents) to the graph
+operation `@node` addGraphNode(parentId) {
+	var created = self.created;
+	if (created.isUndefined() or created.asString() == "true") self.~created = true;
+	else return;
+
+	var nodeId = self.getNodeId();
+	if (not self.~instances.isDefined()) {
+		self.~instances = 1;
+	}
+	else {
+		nodeId = nodeId + "_" + self.~instances;
+		self.~instances = self.~instances + 1;
+	}
+
+	var node = graph.addNode(nodeId, "shape");
+	node.put("shape", self.getNodeShape() + "");
+	node.put("type", self.eClass().name);
+	if (self.^label.isDefined()) node.put("label", self.getGraphLabel());
+	if (self.image.isDefined()) node.put("image", self.image + "");
+	if (parentId.isDefined()) node.put("parent", parentId);
+	node.put("style", self.getGraphStyle());
+
+	if (self.contents.isDefined() and self.~instances == 1) {
+		var lines = Sequence{};
+		for (content in self.^^contents) {
+			if (content.isTypeOf(`@node`)) content.addGraphNode(nodeId);
+			else if (content.isTypeOf(`@text`)) lines.add(content.^label + "");
+		}
+		if (lines.notEmpty()) node.put("compartments", Sequence{lines});
+	}
+}

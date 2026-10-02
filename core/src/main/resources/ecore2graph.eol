@@ -1,0 +1,164 @@
+// Produces a JSON-ready graph of a class diagram of the metamodel.
+// This is the graph counterpart of ecore2plantuml.egl.
+import "shared.eol";
+import "graph.eol";
+
+var graph = newGraph();
+
+for (e in EEnum.all) {
+	var node = graph.addNode(e.getNodeId(), "enum");
+	node.put("label", e.name);
+	node.put("compartments", Sequence{e.eLiterals.collect(l|l.name)});
+	var color = e.getEnumColor();
+	node.put("style", Map{"backgroundColor" = color.toCssColor(), "borderColor" = color.darken().toCssColor()});
+}
+
+for (c in EClass.all) {
+	var node = graph.addNode(c.getNodeId(), "class");
+	node.put("label", c.name);
+	if (c.isAbstract) node.put("abstract", true);
+	node.put("compartments", Sequence{c.eStructuralFeatures.collect(f|f.getLabel().trim())});
+	var color = c.getColor();
+	node.put("style", Map{"backgroundColor" = color.toCssColor(), "borderColor" = color.darken().toCssColor()});
+}
+
+for (c in EClass.all) {
+	for (s in c.eSuperTypes) {
+		c.addInheritanceEdge(s);
+	}
+}
+
+for (r in getUnidirectionalReferences().includingAll(getBidirectionalReferences())) {
+	r.addReferenceEdge();
+}
+
+for (a in getAttributeReferences()) {
+	a.addAttributeEdge();
+}
+
+graph.addMissingNodes();
+
+return graph;
+
+operation EClassifier getNodeId() : String {
+	return self.name;
+}
+
+operation Any hasGraphNode() : Boolean {
+	return false;
+}
+
+operation EClass addInheritanceEdge(supertype : EClass) {
+	var direction = self.getAnnotationValue("diagram", "inheritance.direction");
+	if (direction == null) direction = "up";
+	if (direction == "none") return;
+
+	var edge = graph.addEdge(self.getNodeId(), supertype.getNodeId());
+	edge.put("targetDecoration", "arrow.empty");
+	edge.put("direction", direction);
+}
+
+operation EAttribute addAttributeEdge() {
+	var direction = self.getAnnotationValue("diagram", "direction");
+	if (direction == null) direction = "left";
+	if (direction == "none") return;
+
+	var edge = graph.addEdge(self.eContainer().getNodeId(), self.eType.getNodeId());
+	edge.put("targetDecoration", "none");
+	edge.put("direction", direction);
+}
+
+operation EReference addReferenceEdge() {
+	var direction = self.getAnnotationValue("diagram", "direction");
+
+	if (direction == null and self.eOpposite.isDefined()) {
+		var oppositeDirection = self.eOpposite.getAnnotationValue("diagram", "direction");
+		switch (oppositeDirection) {
+			case "up": direction = "down";
+			case "down": direction = "up";
+			case "left": direction = "right";
+			case "right": direction = "left";
+			case "none": direction = "none";
+		}
+		if (direction == null and self.eOpposite.isContainment()) {
+			direction = "up";
+		}
+	}
+
+	if (direction == null) direction = self.isContainment ? "down" : "right";
+	if (direction == "none") return;
+
+	var edge = graph.addEdge(self.eContainer().getNodeId(), self.eType.getNodeId());
+	edge.put("sourceDecoration", self.isContainment ? "diamond" : (self.eOpposite.isDefined() ? "arrow" : "none"));
+	edge.put("targetDecoration", (self.eOpposite.isDefined() and self.eOpposite.isContainment) ? "diamond" : "arrow");
+	edge.put("direction", direction);
+}
+
+operation EStructuralFeature getLabel() {
+	var label = self.name;
+	if (self.isDerived()) label = "/" + label;
+	if (self.eType.isDefined()) label += " : " + self.eType.name;
+	label += self.getMultiplicityLabel();
+	return label;
+}
+
+operation EStructuralFeature getMultiplicityLabel() {
+	var label = "";
+	if (self.isMany) {
+		label += "[";
+		if (self.lowerBound <> 0) label += self.lowerBound + "..";
+		if (self.upperBound == -1) {
+			label += "*";
+		}
+		else {
+			label += self.upperBound;
+		}
+		label += "]";
+	}
+	return label;
+}
+
+@cached
+operation getUnidirectionalReferences() {
+	var bidirectionalReferences = getBidirectionalReferences();
+	return getVisibleReferences().excludingAll(bidirectionalReferences).
+		excludingAll(bidirectionalReferences.eOpposite);
+}
+
+@cached
+operation getBidirectionalReferences() {
+	var references = getVisibleReferences();
+	return references.select(r|r.eOpposite.isDefined() and references.indexOf(r) < references.indexOf(r.eOpposite));
+}
+
+@cached
+operation getAttributeReferences() {
+	return EAttribute.all.select(a|a.eType.isTypeOf(EEnum));
+}
+
+@cached
+operation getVisibleReferences() {
+	return EReference.all;
+}
+
+operation EEnum getEnumColor() {
+	// If a color is specified for the enumeration, use it
+	var color = self.getAnnotationValue("diagram", "color");
+	if (color != null) return color;
+
+	// If the container package is monochrome use that colour
+	var monochrome = self.eContainer().getMonochrome();
+
+	// If monochrome is true, return a default color
+	if (monochrome == "true") {
+		return "floralwhite";
+	}
+	// Else if a non-false value is specified treat it as the selected color
+	else if (monochrome <> null and monochrome <> "false") {
+		return monochrome;
+	}
+	// Else return a fixed color
+	else {
+		return getUninstantiableColor();
+	}
+}

@@ -1,6 +1,8 @@
 package org.eclipse.epsilon.labs.playground.standalone;
 
+import org.eclipse.epsilon.labs.playground.fn.emfatic2graph.Emfatic2GraphController;
 import org.eclipse.epsilon.labs.playground.fn.emfatic2plantuml.Emfatic2PlantUMLController;
+import org.eclipse.epsilon.labs.playground.fn.flexmi2graph.Flexmi2GraphController;
 import org.eclipse.epsilon.labs.playground.fn.flexmi2plantuml.Flexmi2PlantUMLController;
 import org.eclipse.epsilon.labs.playground.fn.run.RunEpsilonController;
 
@@ -25,6 +27,12 @@ public class BackendConfigurationController {
     @Value("${playground.emfatic2plantuml.url:`" + Emfatic2PlantUMLController.PATH + "`}")
     private String emfatic2PlantUMLUrl;
 
+    @Value("${playground.flexmi2graph.url:`" + Flexmi2GraphController.PATH + "`}")
+    private String flexmi2GraphUrl;
+
+    @Value("${playground.emfatic2graph.url:`" + Emfatic2GraphController.PATH + "`}")
+    private String emfatic2GraphUrl;
+
     @Value("${playground.short.url:`" + ShortURLController.PATH + "`}")
     private String shortenerUrl;
 
@@ -40,6 +48,8 @@ public class BackendConfigurationController {
         createService(config, "RunEpsilonFunction", runEpsilonUrl);
         createService(config, "FlexmiToPlantUMLFunction", flexmi2PlantUMLUrl);
         createService(config, "EmfaticToPlantUMLFunction", emfatic2PlantUMLUrl);
+        createService(config, "FlexmiToGraphFunction", flexmi2GraphUrl);
+        createService(config, "EmfaticToGraphFunction", emfatic2GraphUrl);
         createService(config, "ShortURLFunction", shortenerUrl);
         createService(config, "Yjs", liveShareUrl);
         createService(config, "Kroki", krokiUrl);

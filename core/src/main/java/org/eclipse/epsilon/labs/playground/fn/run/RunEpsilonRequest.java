@@ -20,6 +20,15 @@ public class RunEpsilonRequest {
 
     private String thirdFlexmi, thirdXmi, thirdEmfatic;
 
+    /**
+     * Format of the model diagrams in the response: either
+     * {@link #DIAGRAM_FORMAT_PLANTUML} (the default) or {@link #DIAGRAM_FORMAT_GRAPH}.
+     */
+    private String diagramFormat;
+
+    public static final String DIAGRAM_FORMAT_PLANTUML = "plantuml";
+    public static final String DIAGRAM_FORMAT_GRAPH = "graph";
+
     public String getLanguage() {
         return language;
     }
@@ -114,6 +123,18 @@ public class RunEpsilonRequest {
 
     public void setThirdEmfatic(String thirdEmfatic) {
         this.thirdEmfatic = thirdEmfatic;
+    }
+
+    public String getDiagramFormat() {
+        return diagramFormat;
+    }
+
+    public void setDiagramFormat(String diagramFormat) {
+        this.diagramFormat = diagramFormat;
+    }
+
+    public boolean usesGraphDiagramFormat() {
+        return DIAGRAM_FORMAT_GRAPH.equals(diagramFormat);
     }
 
     public String getJson() {

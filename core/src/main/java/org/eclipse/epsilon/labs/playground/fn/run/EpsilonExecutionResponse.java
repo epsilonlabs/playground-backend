@@ -5,6 +5,7 @@ import org.eclipse.epsilon.labs.playground.fn.AbstractPlaygroundResponse;
 import io.micronaut.serde.annotation.Serdeable;
 
 import java.util.List;
+import java.util.Map;
 
 @Serdeable
 public class EpsilonExecutionResponse extends AbstractPlaygroundResponse {
@@ -37,6 +38,21 @@ public class EpsilonExecutionResponse extends AbstractPlaygroundResponse {
     private String patternMatchedModelDiagramSource;
     private String generatedText;
     private List<GeneratedFile> generatedFiles;
+
+    /**
+     * Graph of the model diagram produced by the program, when the request uses
+     * the graph diagram format: the target model (ETL, EMG, EML, Flock), the
+     * validated model (EVL), or the pattern-matched model (EPL).
+     */
+    private Map<String, Object> modelGraph;
+
+    public Map<String, Object> getModelGraph() {
+        return modelGraph;
+    }
+
+    public void setModelGraph(Map<String, Object> modelGraph) {
+        this.modelGraph = modelGraph;
+    }
 
     public List<GeneratedFile> getGeneratedFiles() {
         return generatedFiles;

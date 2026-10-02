@@ -1,0 +1,64 @@
+// Produces a JSON-ready graph of an object diagram of the model.
+// This is the graph counterpart of model2plantuml.egl.
+import "shared.eol";
+import "model2plantuml.eol";
+import "graph.eol";
+
+var graph = newGraph();
+var elements = M.allInstances();
+
+for (e in elements) {
+	var node = graph.addNode(e.getNodeId(), "object");
+	node.put("label", ":" + e.eClass().name);
+	node.put("type", e.eClass().name);
+
+	var lines = Sequence{};
+	for (attr in e.eClass().getEAllAttributes()) {
+		var value = e.getGraphAttributeValue(attr);
+		if (value <> "") lines.add(attr.name + " = " + value);
+	}
+	node.put("compartments", Sequence{lines});
+
+	var color = e.eClass().getColor();
+	node.put("style", Map{"backgroundColor" = color.toCssColor(), "borderColor" = color.darken().toCssColor()});
+}
+
+// Generate an edge for every reference between elements omitting opposites
+for (e in elements) {
+	for (r in e.getReferenced()) {
+		for (v in r.at(0).select(v|elements.includes(v))) {
+			if (r.at(1).eOpposite.isUndefined() or r.at(1).eOpposite.name.compareTo(r.at(1).name) > 0) {
+				var edge = graph.addEdge(e.getNodeId(), v.getNodeId());
+				if (isAmbiguousReference(e, v, r.at(1))) edge.put("label", r.at(1).name);
+			}
+		}
+	}
+}
+
+graph.addValidationNotes();
+graph.addPatternNotes();
+
+return graph;
+
+operation Any hasGraphNode() : Boolean {
+	return elements.includes(self);
+}
+
+operation Any getNodeId() {
+	return "N" + elements.indexOf(self);
+}
+
+operation Any getReferenced() {
+	if (self.isUndefined()) return Sequence{};
+
+	var referenced : Sequence;
+	for (r in self.eClass().getEAllReferences()) {
+		referenced.add(Sequence{self.eGet(r).asSequence(), r});
+	}
+	return referenced;
+}
+
+// A reference needs a label if the source has other references that could point to the target
+operation isAmbiguousReference(s, t, r) : Boolean {
+	return s.eClass().getEAllReferences().exists(ref|ref.eType.isSuperTypeOf(t.eClass()) and r <> ref);
+}

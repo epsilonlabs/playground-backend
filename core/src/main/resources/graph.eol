@@ -1,0 +1,133 @@
+// Operations for building the JSON graphs returned by the *2graph endpoints.
+//
+// A graph is a map with a layout "direction" ("DOWN" or "RIGHT"), a sequence of
+// "nodes" and a sequence of "edges". Every node has an "id" and a "kind"
+// ("object", "class", "enum", "shape", "note" or "junction"), and may also have a
+// "label", a "type", a "shape", an "image", a "parent" node id, a sequence of
+// "compartments" (each a sequence of lines of text), an "abstract" flag, and a
+// "style" map. Every edge has an "id", a "source" and a "target" node id, a
+// "sourceDecoration" and a "targetDecoration" ("none", "arrow", "arrow.empty",
+// "diamond" or "diamond.empty"), and may also have a "label", a "direction"
+// hint ("up", "down", "left" or "right"), a "hidden" flag and a "style" map.
+//
+// Scripts that use these operations must define a hasGraphNode() operation
+// that tells whether an element appears in the graph, and a getNodeId()
+// operation that returns the id of its node.
+
+operation newGraph() : Map {
+	return Map{"direction" = "DOWN", "nodes" = Sequence{}, "edges" = Sequence{}};
+}
+
+operation Map addNode(id : String, kind : String) : Map {
+	var node = Map{"id" = id, "kind" = kind};
+	self.get("nodes").add(node);
+	return node;
+}
+
+operation Map addEdge(source : String, target : String) : Map {
+	var edges = self.get("edges");
+	var edge = Map{"id" = "edge" + edges.size(), "source" = source, "target" = target,
+		"sourceDecoration" = "none", "targetDecoration" = "arrow"};
+	edges.add(edge);
+	return edge;
+}
+
+operation Map hasNode(id : String) : Boolean {
+	return self.get("nodes").exists(n|n.get("id") = id);
+}
+
+operation Map addNote(id : String, label : String, stereotype : String) : Map {
+	var color = getNoteColor(stereotype);
+	var note = self.addNode(id, "note");
+	note.put("label", label);
+	note.put("style", Map{"backgroundColor" = color.toCssColor(), "borderColor" = color.darken().toCssColor()});
+	return note;
+}
+
+operation Map addNoteEdge(note : Map, target : String) : Map {
+	var edge = self.addEdge(note.get("id"), target);
+	edge.put("targetDecoration", "none");
+	edge.put("style", Map{"pattern" = "dashed"});
+	return edge;
+}
+
+operation getNoteColor(stereotype : String) : String {
+	switch (stereotype) {
+		case "_Pattern": return getPatternColor();
+		case "_Critique": return getCritiqueColor();
+		case "_Constraint": return getConstraintColor();
+		default: return "TECHNOLOGY";
+	}
+}
+
+// Adds a class node for every edge end that is not in the graph
+// (e.g. supertypes or reference types from other metamodels)
+operation Map addMissingNodes() {
+	for (edge in self.get("edges").clone()) {
+		for (id in Sequence{edge.get("source"), edge.get("target")}) {
+			if (not self.hasNode(id)) {
+				var node = self.addNode(id, "class");
+				node.put("label", id);
+				var color = getUninstantiableColor();
+				node.put("style", Map{"backgroundColor" = color.toCssColor(), "borderColor" = color.darken().toCssColor()});
+			}
+		}
+	}
+}
+
+// Adds a note for each unsatisfied constraint (if the model has been validated)
+operation Map addValidationNotes() {
+	if (unsatisfiedConstraints.isUndefined()) return;
+
+	if (unsatisfiedConstraints.isEmpty()) {
+		self.addNote("NOUC", "☑ The model is valid.", "_Success");
+	}
+
+	var i = 0;
+	for (uc in unsatisfiedConstraints) {
+		i = i + 1;
+		var note = self.addNote("UC" + i,
+			(uc.constraint.getConstraintIcon() + " " + uc.message).wrap(30, "\n"),
+			uc.constraint.getConstraintStereotype());
+		if (uc.instance.hasGraphNode()) {
+			self.addNoteEdge(note, uc.instance.getNodeId());
+		}
+	}
+}
+
+// Adds a note for each pattern match (if patterns have been matched),
+// linked to the elements bound to the roles of the match
+operation Map addPatternNotes() {
+	if (matches.isUndefined()) return;
+
+	var i = 0;
+	for (match in matches) {
+		i = i + 1;
+		var note = self.addNote("match" + i, match.pattern.name, "_Pattern");
+		for (role in match.roleBindings.keySet()) {
+			for (value in match.roleBindings.get(role).asSequence()) {
+				if (value.hasGraphNode()) {
+					var edge = self.addNoteEdge(note, value.getNodeId());
+					edge.put("label", role);
+					edge.get("style").put("pattern", "dotted");
+				}
+			}
+		}
+	}
+}
+
+// Returns a single-line, shortened version of an attribute value
+operation Any getGraphAttributeValue(attr) : String {
+	var value = self.eGet(attr) + "";
+	var chopped = false;
+	if (value.indexOf("\n").asVar("newLineIndex") > -1) {
+		value = value.substring(0, newLineIndex);
+		chopped = true;
+	}
+	if (value.length() > 25) {
+		value = value.substring(0, 25);
+		chopped = true;
+	}
+	if (chopped) value += " ...";
+	return value;
+}
