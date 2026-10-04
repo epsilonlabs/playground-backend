@@ -94,6 +94,41 @@ public class Flexmi2GraphTest extends PlaygroundTest {
     }
 
     @Test
+    public void preambleIsIgnoredForDirection() throws Exception {
+        var req = new Flexmi2GraphRequest();
+        req.setEmfatic(String.join("\n",
+            "package tree;",
+            "@node(shape=\"class\", label=\"name\", preamble=\"left to right direction\")",
+            "class Tree { attr String name; val Tree[*]#parent children; ref Tree#children parent; }"));
+        req.setFlexmi("<?nsuri tree?><tree name=\"t1\"/>");
+
+        ModelGraphResponse result = client.convert(req);
+        assertNull(result.getError());
+
+        Map<String, Object> graph = result.getModelGraph();
+        assertWellFormed(graph);
+        assertEquals("DOWN", graph.get("direction"));
+    }
+
+    @Test
+    public void packageDiagramDirectionLeftRight() throws Exception {
+        var req = new Flexmi2GraphRequest();
+        req.setEmfatic(String.join("\n",
+            "@diagram(direction=\"left-right\")",
+            "package tree;",
+            "@node(shape=\"class\", label=\"name\")",
+            "class Tree { attr String name; val Tree[*]#parent children; ref Tree#children parent; }"));
+        req.setFlexmi("<?nsuri tree?><tree name=\"t1\"/>");
+
+        ModelGraphResponse result = client.convert(req);
+        assertNull(result.getError());
+
+        Map<String, Object> graph = result.getModelGraph();
+        assertWellFormed(graph);
+        assertEquals("RIGHT", graph.get("direction"));
+    }
+
+    @Test
     public void graphicalSyntaxAnnotationValidation() throws Exception {
         var req = new Flexmi2GraphRequest();
         req.setEmfatic(getResourceAsString("/plantuml/graph.emf"));

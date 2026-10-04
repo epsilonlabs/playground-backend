@@ -59,6 +59,38 @@ public class Emfatic2GraphTest extends PlaygroundTest {
     }
 
     @Test
+    public void packageDiagramDirectionLeftRight() throws Exception {
+        var req = new Emfatic2GraphRequest();
+        req.setEmfatic(String.join("\n",
+            "@diagram(direction=\"left-right\")",
+            "package example;",
+            "class Foo { }"));
+
+        var response = client.render(req);
+        assertNull(response.getError());
+
+        Map<String, Object> graph = response.getMetamodelGraph();
+        assertWellFormed(graph);
+        assertEquals("RIGHT", graph.get("direction"));
+    }
+
+    @Test
+    public void packageDiagramDirectionTopDownIsDefault() throws Exception {
+        var req = new Emfatic2GraphRequest();
+        req.setEmfatic(String.join("\n",
+            "@diagram(direction=\"top-down\")",
+            "package example;",
+            "class Foo { }"));
+
+        var response = client.render(req);
+        assertNull(response.getError());
+
+        Map<String, Object> graph = response.getMetamodelGraph();
+        assertWellFormed(graph);
+        assertEquals("DOWN", graph.get("direction"));
+    }
+
+    @Test
     public void externalSupertype() throws Exception {
         var req = new Emfatic2GraphRequest();
         req.setEmfatic("package example; import \"http://www.eclipse.org/emf/2002/Ecore\"; class Foo extends ecore.EObject {}");

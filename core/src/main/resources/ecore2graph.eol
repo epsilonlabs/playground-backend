@@ -5,6 +5,11 @@ import "graph.eol";
 
 var graph = newGraph();
 
+var classifiers = EClass.all.includingAll(EEnum.all);
+if (classifiers.notEmpty()) {
+	graph.setGraphDirection(classifiers.first().eContainer());
+}
+
 for (e in EEnum.all) {
 	var node = graph.addNode(e.getNodeId(), "enum");
 	node.put("label", e.name);

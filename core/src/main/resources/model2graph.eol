@@ -7,6 +7,10 @@ import "graph.eol";
 var graph = newGraph();
 var elements = M.allInstances();
 
+if (elements.notEmpty()) {
+	graph.setGraphDirection(elements.first().eClass().eContainer());
+}
+
 for (e in elements) {
 	var node = graph.addNode(e.getNodeId(), "object");
 	node.put("label", ":" + e.eClass().name);

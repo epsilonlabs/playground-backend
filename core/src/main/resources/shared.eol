@@ -59,6 +59,20 @@ operation Any /*EPackage*/ getMonochrome() {
 	}
 }
 
+@cached
+operation Any /*EPackage*/ getDiagramDirection() {
+	var direction = self.getAnnotationValue("diagram", "direction");
+	if (direction != null) {
+		return direction;
+	}
+	else if (self.eContainer() != null) {
+		return self.eContainer().getDiagramDirection();
+	}
+	else {
+		return null;
+	}
+}
+
 operation Any /*EModelElement*/ getAnnotationValue(name : String, detail : String) : Any {
 	var ann = self.eAnnotations.selectOne(a|a.source = name and a.details.exists(d|d.key = detail));
 	var det;

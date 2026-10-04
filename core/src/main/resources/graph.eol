@@ -32,6 +32,22 @@ operation Map addEdge(source : String, target : String) : Map {
 	return edge;
 }
 
+// Sets the graph's overall layout direction from an explicit @diagram(direction=...)
+// annotation ("left-right" or "top-down") on a package element. PlantUML preamble
+// directives (e.g. "left to right direction") are PlantUML-specific and are
+// intentionally not read when producing a JSON graph.
+operation Map setGraphDirection(pack) {
+	if (pack.isUndefined() or pack == null) return;
+
+	var direction = pack.getDiagramDirection();
+	if (direction == null) return;
+
+	switch (direction.toLowerCase()) {
+		case "left-right": self.put("direction", "RIGHT");
+		case "top-down": self.put("direction", "DOWN");
+	}
+}
+
 operation Map hasNode(id : String) : Boolean {
 	return self.get("nodes").exists(n|n.get("id") = id);
 }

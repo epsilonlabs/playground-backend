@@ -8,10 +8,9 @@ M.supportedAnnotations = Set{"node", "edge", "text"};
 
 var graph = newGraph();
 
-var preambles = `@node`.all.includingAll(`@edge`.all).preamble.flatten().asOrderedSet().excluding(null)
-	.collect(p|p.split(",")).flatten().collect(p|p.trim()).asOrderedSet();
-if (preambles.exists(p|p.toLowerCase() == "left to right direction")) {
-	graph.put("direction", "RIGHT");
+var annotatedElements = `@node`.all.includingAll(`@edge`.all);
+if (annotatedElements.notEmpty()) {
+	graph.setGraphDirection(annotatedElements.first().eClass().eContainer());
 }
 
 var containedNodes = `@node`.all.select(n|n.contents.isDefined()).^^contents.flatten().asOrderedSet();
